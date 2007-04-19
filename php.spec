@@ -71,6 +71,11 @@ Patch201:	php-5.0.4-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 Patch210:	php-CVE-2007-0455.diff
+Patch211:	php-5.1.6-CVE-2007-1001.patch
+Patch212:	php-5.2.1-CVE-2007-1285.patch
+Patch213:	php-5.1.6-CVE-2007-1583.patch
+Patch214:	php-5.1.6-CVE-2007-1718.patch
+Patch215:	php-5.2.1-CVE-2007-1454.patch
 # http://www.suhosin.org/
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
@@ -489,6 +494,11 @@ support to PHP.
 
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch210 -p0 -b .php-CVE-2007-0455.droplet
+%patch211 -p1 -b .php-CVE-2007-1001.droplet
+%patch212 -p1 -b .php-CVE-2007-1285.droplet
+%patch213 -p1 -b .php-CVE-2007-1583.droplet
+%patch214 -p1 -b .php-CVE-2007-1718.droplet
+%patch215 -p1 -b .php-CVE-2007-1454.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
@@ -790,5 +800,3 @@ update-alternatives --remove php %{_bindir}/php-cli
 %defattr(-,root,root)
 %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/*_zlib.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zlib.so
-
-
