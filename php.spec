@@ -8,12 +8,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.1
-Release:	%mkrel 5
+Version:	5.2.2
+Release:	%mkrel 0.RC2.0
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Patch0:		php-4.3.0-init.patch
 Patch1:		php-5.2.0-shared.diff
 Patch2:		php-4.3.0-imap.patch
@@ -54,7 +54,6 @@ Patch101:	php-5.1.0b1-cxx.diff
 Patch102:	php-4.3.3-install.patch
 Patch103:	php-5.0.4-norpath.patch
 Patch105:	php-umask.diff
-Patch106:	php-5.2.1-strreplace.patch
 # Fixes for extension modules
 Patch111:	php-4.3.1-odbc.patch
 Patch112:	php-4.3.11-shutdown.patch
@@ -65,20 +64,13 @@ Patch115:	php-5.0.4-dlopen.patch
 Patch120:	php-5.1.0RC4-tests-dashn.diff
 Patch121:	php-5.1.0b1-tests-wddx.diff
 # Fix bugs
-Patch200:	php-bug-22414.patch
 # http://bugs.php.net/bug.php?id=29119
 Patch201:	php-5.0.4-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
-Patch210:	php-CVE-2007-0455.diff
-Patch211:	php-5.1.6-CVE-2007-1001.patch
-Patch212:	php-5.2.1-CVE-2007-1285.patch
-Patch213:	php-5.1.6-CVE-2007-1583.patch
-Patch214:	php-5.1.6-CVE-2007-1718.patch
-Patch215:	php-5.2.1-CVE-2007-1454.patch
 # http://www.suhosin.org/
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-%{version}rc2-%{suhosin_version}.patch.gz
+Source4:	suhosin-patch-%{version}rc2-%{suhosin_version}.patch.gz.sig
 BuildRequires:	apache-devel >= 2.0.54
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -435,7 +427,7 @@ support to PHP.
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p1 -b .init.droplet
@@ -476,7 +468,6 @@ support to PHP.
 %patch102 -p1 -b .install.droplet
 %patch103 -p1 -b .norpath.droplet
 %patch105 -p0 -b .umask.droplet
-%patch106 -p1 -b .strreplace
 %patch111 -p1 -b .odbc.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
@@ -486,19 +477,12 @@ support to PHP.
 %patch121 -p1 -b .tests-wddx.droplet
 
 # make the tests worky
-%patch200 -p1 -b .bug-22414.droplet
 %patch201 -p0 -b .bug29119.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
 
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
-%patch210 -p0 -b .php-CVE-2007-0455.droplet
-%patch211 -p1 -b .php-CVE-2007-1001.droplet
-%patch212 -p1 -b .php-CVE-2007-1285.droplet
-%patch213 -p1 -b .php-CVE-2007-1583.droplet
-%patch214 -p1 -b .php-CVE-2007-1718.droplet
-%patch215 -p1 -b .php-CVE-2007-1454.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
