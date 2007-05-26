@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -25,8 +25,8 @@ Patch8:		php-5.1.2-phpize.diff
 Patch9:		php-5.1.0RC4-remove_bogus_iconv_deps.diff
 Patch10:	php-5.1.0RC1-phpbuilddir.diff
 # for kolab2
-Patch11:	php-5.1.3-imap-annotation.diff
-Patch12:	php-5.0.4-imap-status-current.diff
+Patch11:	php-imap-annotation.diff
+Patch12:	php-imap-status-current.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
