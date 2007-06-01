@@ -8,8 +8,8 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.2
-Release:	%mkrel 2
+Version:	5.2.3
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -69,9 +69,11 @@ Patch201:	php-5.0.4-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-BuildRequires:	apache-devel >= 2.0.54
+#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.2.2-%{suhosin_version}.patch.gz
+Source4:	suhosin-patch-5.2.2-%{suhosin_version}.patch.gz.sig
+BuildRequires:	apache-devel >= 2.2.4
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
 BuildRequires:	bison
@@ -376,7 +378,7 @@ Group:		Development/C
 Requires(post): %{libname} >= %{epoch}:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	apache-base >= 2.0.54
+Requires:	apache-base >= 2.2.4
 Requires:	autoconf2.5
 Requires:	automake1.7
 Requires:	bison
@@ -452,7 +454,7 @@ support to PHP.
 # Stolen from PLD
 %patch20 -p1 -b .mail.droplet
 %patch21 -p1 -b .sybase-fix.droplet
-%patch25 -p1 -b .dba-link.droplet
+%patch25 -p0 -b .dba-link.droplet
 
 %patch27 -p1 -b .zlib-for-getimagesize.droplet
 %patch28 -p1 -b .zlib.droplet
@@ -634,14 +636,14 @@ cp config.nice configure_command; chmod 644 configure_command
 
 # make php-fcgi
 cp -af php_config.h.fcgi main/php_config.h
-%make -f Makefile.fcgi sapi/cgi/php
+%make -f Makefile.fcgi sapi/cgi/php-cgi
 cp -rp sapi/cgi sapi/fcgi
 perl -pi -e "s|sapi/cgi|sapi/fcgi|g" sapi/fcgi/php
 rm -rf sapi/cgi/.libs; rm -f sapi/cgi/*.lo sapi/cgi/php
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
-%make -f Makefile.cgi sapi/cgi/php
+%make -f Makefile.cgi sapi/cgi/php-cgi
 
 cp -af php_config.h.apxs main/php_config.h
 
@@ -662,8 +664,8 @@ make -f Makefile.apxs install \
 	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/" \
 	INSTALL_CLI="\$(LIBTOOL) --silent --mode=install install sapi/cli/php %{buildroot}%{_bindir}/php"
 
-./libtool --silent --mode=install install sapi/fcgi/php %{buildroot}%{_bindir}/php-fcgi
-./libtool --silent --mode=install install sapi/cgi/php %{buildroot}%{_bindir}/php-cgi
+./libtool --silent --mode=install install sapi/fcgi/php-cgi %{buildroot}%{_bindir}/php-fcgi
+./libtool --silent --mode=install install sapi/cgi/php-cgi %{buildroot}%{_bindir}/php-cgi
 
 cp -dpR php-devel/* %{buildroot}%{_usrsrc}/php-devel/
 install -m0644 run-tests*.php %{buildroot}%{_usrsrc}/php-devel/
