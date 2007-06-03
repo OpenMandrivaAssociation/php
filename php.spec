@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -69,10 +69,8 @@ Patch201:	php-5.0.4-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
-#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-#Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-5.2.2-%{suhosin_version}.patch.gz
-Source4:	suhosin-patch-5.2.2-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 BuildRequires:	apache-devel >= 2.2.4
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
