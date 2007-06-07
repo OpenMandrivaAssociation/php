@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -554,6 +554,14 @@ EOF
 chmod 755 php-devel/buildext
 
 %build
+%if %mdkversion >= 200710
+export CFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
+export CXXFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
+export FFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
+%else
+export CFLAGS="%{optflags} -fPIC -L%{_libdir}"
+%endif
+
 # this _has_ to be executed!
 #export WANT_AUTOCONF_2_5=1
 
@@ -566,7 +574,6 @@ perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
 export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
-export CFLAGS="%{optflags} -fPIC -L%{_libdir}"
 
 # never use "--disable-rpath", it does the opposite
 
