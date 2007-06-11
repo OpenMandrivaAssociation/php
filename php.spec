@@ -34,6 +34,9 @@ Patch13:	php5-apache2-filters.diff
 Patch14:	php-5.1.3-extension_dep_macro_revert.diff
 # remove libedit once and for all
 Patch15:	php-5.1.2-no_libedit.diff
+Patch16:	php-freetds_mssql.diff
+Patch17:	php-xmlrpc_no_rpath.diff
+Patch18:	php-really_external_sqlite2.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-4.3.0-mail.patch
@@ -71,6 +74,8 @@ Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Source5:	maxlifetime
+Source6:	php.crond
 BuildRequires:	apache-devel >= 2.2.4
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -425,6 +430,830 @@ Epoch:		%{epoch}
 This is a dynamic shared object (DSO) for PHP that will add zlib compression
 support to PHP.
 
+%package	bcmath
+Summary:	The bcmath module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	bcmath
+This is a dynamic shared object (DSO) for PHP that will add bc style precision
+math functions support.
+
+For arbitrary precision mathematics PHP offers the Binary Calculator which
+supports numbers of any size and precision, represented as strings.
+
+%package	bz2
+Summary:	Bzip2 extension module for PHP
+Group:		Development/PHP
+BuildRequires:	bzip2-devel
+Epoch:		0
+
+%description	bz2
+This is a dynamic shared object (DSO) for PHP that will add bzip2 compression
+support to PHP.
+
+The bzip2 functions are used to transparently read and write bzip2 (.bz2)
+compressed files.
+
+%package	calendar
+Summary:	Calendar extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	calendar
+This is a dynamic shared object (DSO) for PHP that will add calendar support.
+
+The calendar extension presents a series of functions to simplify converting
+between different calendar formats. The intermediary or standard it is based on
+is the Julian Day Count. The Julian Day Count is a count of days starting from
+January 1st, 4713 B.C. To convert between calendar systems, you must first
+convert to Julian Day Count, then to the calendar system of your choice. Julian
+Day Count is very different from the Julian Calendar! For more information on
+Julian Day Count, visit http://www.hermetic.ch/cal_stud/jdn.htm. For more
+information on calendar systems visit
+http://www.boogle.com/info/cal-overview.html. Excerpts from this page are
+included in these instructions, and are in quotes.
+
+%package	ctype
+Summary:	Ctype extension module for PHP
+Group:		Development/PHP
+Epoch:		3
+
+%description	ctype
+This is a dynamic shared object (DSO) for PHP that will add ctype support.
+
+The functions provided by this extension check whether a character or string
+falls into a certain character class according to the current locale (see also
+setlocale()).
+
+%package	curl
+Summary:	Curl extension module for PHP
+Group:		Development/PHP
+BuildRequires:	curl-devel >= 7.9.8
+Epoch:		0
+
+%description	curl
+This is a dynamic shared object (DSO) for PHP that will add curl support.
+
+PHP supports libcurl, a library created by Daniel Stenberg, that allows you to
+connect and communicate to many different types of servers with many different
+types of protocols. libcurl currently supports the http, https, ftp, gopher,
+telnet, dict, file, and ldap protocols. libcurl also supports HTTPS
+certificates, HTTP POST, HTTP PUT, FTP uploading (this can also be done with
+PHP's ftp extension), HTTP form based upload, proxies, cookies, and
+user+password authentication.
+
+%package	dba
+Summary:	DBA extension module for PHP
+Group:		Development/PHP
+BuildRequires:	gdbm-devel
+BuildRequires:	db4-devel
+Epoch:		0
+
+%description	dba
+This is a dynamic shared object (DSO) for PHP that will add flat-file databases
+(DBA) support.
+
+These functions build the foundation for accessing Berkeley DB style databases.
+
+This is a general abstraction layer for several file-based databases. As such,
+functionality is limited to a common subset of features supported by modern
+databases such as Sleepycat Software's DB2. (This is not to be confused with
+IBM's DB2 software, which is supported through the ODBC functions.)
+
+%package	dbase
+Summary:	DBase extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	dbase
+This is a dynamic shared object (DSO) for PHP that will add DBase support.
+
+These functions allow you to access records stored in dBase-format (dbf)
+databases.
+
+dBase files are simple sequential files of fixed length records. Records are
+appended to the end of the file and delete records are kept until you call
+dbase_pack().
+
+%package	dom
+Summary:	Dom extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libxml2-devel
+Requires:	php-simplexml
+Epoch:		0
+
+%description	dom
+This is a dynamic shared object (DSO) for PHP that will add dom support.
+
+The DOM extension is the replacement for the DOM XML extension from PHP 4. The
+extension still contains many old functions, but they should no longer be used.
+In particular, functions that are not object-oriented should be avoided.
+
+The extension allows you to operate on an XML document with the DOM API.
+
+%package	exif
+Summary:	EXIF extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	exif
+This is a dynamic shared object (DSO) for PHP that will add EXIF tags support
+in image files.
+
+With the exif extension you are able to work with image meta data. For example,
+you may use exif functions to read meta data of pictures taken from digital
+cameras by working with information stored in the headers of the JPEG and TIFF
+images.
+
+%package	ftp
+Summary:	FTP extension module for PHP
+Group:		Development/PHP
+BuildRequires:	openssl-devel
+Epoch:		3
+
+%description	ftp
+This is a dynamic shared object (DSO) for PHP that will add FTP support.
+
+The functions in this extension implement client access to file servers
+speaking the File Transfer Protocol (FTP) as defined in
+http://www.faqs.org/rfcs/rfc959. This extension is meant for detailed access to
+an FTP server providing a wide range of control to the executing script. If you
+only wish to read from or write to a file on an FTP server, consider using the
+ftp:// wrapper  with the filesystem functions  which provide a simpler and more
+intuitive interface.
+
+%package	gd
+Summary:	GD extension module for PHP
+Group:		Development/PHP
+BuildRequires:	gd-devel >= 2.0.33
+BuildRequires:	freetype2-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libxpm-devel
+BuildRequires:	XFree86-devel
+Epoch:		0
+
+%description	gd
+This is a dynamic shared object (DSO) for PHP that will add GD support,
+allowing you to create and manipulate images with PHP using the gd library.
+
+PHP is not limited to creating just HTML output. It can also be used to create
+and manipulate image files in a variety of different image formats, including
+gif, png, jpg, wbmp, and xpm. Even more convenient, PHP can output image
+streams directly to a browser. You will need to compile PHP with the GD library
+of image functions for this to work. GD and PHP may also require other
+libraries, depending on which image formats you want to work with.
+
+You can use the image functions in PHP to get the size of JPEG, GIF, PNG, SWF,
+TIFF and JPEG2000 images.
+
+This package provides two flavours of the gd php extension, one built
+against the shared system gd library (gd.so, default) and the other
+(gd-bundled.so) built with gd library that comes bundled with php and that
+has additional features.
+
+%package	gettext
+Summary:	Gettext extension module for PHP
+Group:		Development/PHP
+BuildRequires:	gettext-devel
+Epoch:		3
+
+%description	gettext
+This is a dynamic shared object (DSO) for PHP that will add gettext support.
+
+The gettext functions implement an NLS (Native Language Support) API which can
+be used to internationalize your PHP applications. Please see the gettext
+documentation for your system for a thorough explanation of these functions or
+view the docs at http://www.gnu.org/software/gettext/manual/gettext.html.
+
+%package	gmp
+Summary:	Gmp extension module for PHP
+Group:		Development/PHP
+BuildRequires:	gmp-devel
+Epoch:		0
+
+%description	gmp
+This is a dynamic shared object (DSO) for PHP that will add arbitrary length
+number support using the GNU MP library.
+
+%package	hash
+Summary:	HASH Message Digest Framework
+Group:		Development/PHP
+Epoch:		0
+
+%description	hash
+Native implementations of common message digest algorithms using a generic
+factory method.
+
+Message Digest (hash) engine. Allows direct or incremental processing of
+arbitrary length messages using a variety of hashing algorithms.
+
+%package	iconv
+Summary:	Iconv extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	iconv
+This is a dynamic shared object (DSO) for PHP that will add iconv support.
+
+This module contains an interface to iconv character set conversion facility.
+With this module, you can turn a string represented by a local character set
+into the one represented by another character set, which may be the Unicode
+character set. Supported character sets depend on the iconv implementation of
+your system. Note that the iconv function on some systems may not work as you
+expect. In such case, it'd be a good idea to install the GNU libiconv library.
+It will most likely end up with more consistent results.
+
+%package	imap
+Summary:	IMAP extension module for PHP
+Group:		Development/PHP
+BuildRequires:	imap-devel >= 2006
+BuildRequires:	libc-client-php-devel >= 2006
+Epoch:		0
+
+%description	imap
+This is a dynamic shared object (DSO) for PHP that will add IMAP support.
+
+These functions are not limited to the IMAP protocol, despite their name. The
+underlying c-client library also supports NNTP, POP3 and local mailbox access
+methods.
+
+%package	ldap
+Summary:	LDAP extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libldap-devel
+BuildRequires:	libsasl-devel
+Epoch:		0
+
+%description	ldap
+This is a dynamic shared object (DSO) for PHP that will add LDAP support.
+
+LDAP is the Lightweight Directory Access Protocol, and is a protocol used to
+access "Directory Servers". The Directory is a special kind of database that
+holds information in a tree structure.
+
+The concept is similar to your hard disk directory structure, except that in
+this context, the root directory is "The world" and the first level
+subdirectories are "countries". Lower levels of the directory structure contain
+entries for companies, organisations or places, while yet lower still we find
+directory entries for people, and perhaps equipment or documents.
+
+%package	mbstring
+Summary:	MBstring extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	mbstring
+This is a dynamic shared object (DSO) for PHP that will add multibyte string
+support.
+
+mbstring provides multibyte specific string functions that help you deal with
+multibyte encodings in PHP. In addition to that, mbstring handles character
+encoding conversion between the possible encoding pairs. mbstring is designed
+to handle Unicode-based encodings such as UTF-8 and UCS-2 and many single-byte
+encodings for convenience.
+
+%package	mcrypt
+Summary:	Mcrypt extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libmcrypt-devel
+BuildRequires:	libtool-devel
+Epoch:		0
+
+%description	mcrypt
+This is a dynamic shared object (DSO) for PHP that will add mcrypt support.
+
+This is an interface to the mcrypt library, which supports a wide variety of
+block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64,
+SAFER-SK128, TWOFISH, TEA, RC2 and GOST in CBC, OFB, CFB and ECB cipher modes.
+Additionally, it supports RC6 and IDEA which are considered "non-free".
+
+%package	mhash
+Summary:	Mhash extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libmhash-devel
+Epoch:		0
+
+%description	mhash
+This is a dynamic shared object (DSO) for PHP that will add mhash support.
+
+These functions are intended to work with mhash. Mhash can be used to create
+checksums, message digests, message authentication codes, and more.
+
+This is an interface to the mhash library. mhash supports a wide variety of
+hash algorithms such as MD5, SHA1, GOST, and many others. For a complete list
+of supported hashes, refer to the documentation of mhash. The general rule is
+that you can access the hash algorithm from PHP with MHASH_HASHNAME. For
+example, to access TIGER you use the PHP constant MHASH_TIGER.
+
+%package	mime_magic
+Summary:	The MIME Magic module for PHP
+Group:		Development/PHP
+BuildRequires:	apache-conf
+Epoch:		0
+
+%description	mime_magic
+This is a dynamic shared object (DSO) that adds MIME Magic support to PHP.
+
+The functions in this module try to guess the content type and encoding of a
+file by looking for certain magic byte sequences at specific positions within
+the file. While this is not a bullet proof approach the heuristics used do a
+very good job.
+
+This extension is derived from Apache mod_mime_magic, which is itself based on
+the file command maintained by Ian F. Darwin. See the source code for further
+historic and copyright information.
+
+%package	ming
+Summary:	Ming extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libming-devel
+Epoch:		0
+
+%description	ming
+This is a dynamic shared object (DSO) for PHP that will add ming (Flash - .swf
+files) support.
+
+%package	mssql
+Summary:	MS SQL extension module for PHP
+Group:		Development/PHP
+Requires:       freetds_mssql >= 0.62.4
+BuildRequires:  freetds_mssql-devel >= 0.62.4
+Epoch:		0
+
+%description	mssql
+This is a dynamic shared object (DSO) for PHP that will add MS SQL databases
+support using the FreeTDS library.
+
+%package	mysql
+Summary:	MySQL database module for PHP
+Group:		Development/PHP
+BuildRequires:	MySQL-devel >= 4.0.10
+Epoch:		0
+
+%description	mysql
+This is a dynamic shared object (DSO) for PHP that will add MySQL database
+support.
+
+These functions allow you to access MySQL database servers. More information
+about MySQL can be found at http://www.mysql.com/.
+
+Documentation for MySQL can be found at http://dev.mysql.com/doc/.
+
+%package	mysqli
+Summary:	MySQL database module for PHP
+Group:		Development/PHP
+BuildRequires:	MySQL-devel >= 4.1.7
+Epoch:		0
+
+%description	mysqli
+This is a dynamic shared object (DSO) for PHP that will add MySQL database
+support.
+
+The mysqli extension allows you to access the functionality provided by MySQL
+4.1 and above. More information about the MySQL Database server can be found at
+http://www.mysql.com/
+
+Documentation for MySQL can be found at http://dev.mysql.com/doc/.
+
+%package	ncurses
+Summary:	Ncurses module for PHP
+Group:		Development/PHP
+BuildRequires:	ncurses-devel
+Epoch:		0
+
+%description	ncurses
+This PHP module adds support for ncurses functions (only for cli and cgi
+SAPIs).
+
+%package	odbc
+Summary:	ODBC extension module for PHP
+Group:		Development/PHP
+BuildRequires:	unixODBC-devel >= 2.2.1
+Epoch:		0
+
+%description	odbc
+This is a dynamic shared object (DSO) for PHP that will add ODBC support.
+
+In addition to normal ODBC support, the Unified ODBC functions in PHP allow you
+to access several databases that have borrowed the semantics of the ODBC API to
+implement their own API. Instead of maintaining multiple database drivers that
+were all nearly identical, these drivers have been unified into a single set of
+ODBC functions.
+
+%package	pcntl
+Summary:	Process Control extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	pcntl
+This is a dynamic shared object (DSO) for PHP that will add process spawning
+and control support. It supports functions like fork(), waitpid(), signal()
+etc.
+
+Process Control support in PHP implements the Unix style of process creation,
+program execution, signal handling and process termination. Process Control
+should not be enabled within a webserver environment and unexpected results may
+happen if any Process Control functions are used within a webserver
+environment.
+
+%package	pdo
+Summary:	PHP Data Objects Interface
+Group:		Development/PHP
+Epoch:		0
+
+%description	pdo
+PDO provides a uniform data access interface, sporting advanced features such
+as prepared statements and bound parameters. PDO drivers are dynamically
+loadable and may be developed independently from the core, but still accessed
+using the same API.
+
+Read the documentation at http://www.php.net/pdo for more information.
+
+%package	pdo_dblib
+Summary:	Sybase Interface driver for PDO
+Group:		Development/PHP
+Requires:       freetds_mssql >= 0.62.4
+BuildRequires:  freetds_mssql-devel >= 0.62.4
+Requires:	php-pdo >= 0:%{version}
+Epoch:		0
+
+%description	pdo_dblib
+PDO_DBLIB is a driver that implements the PHP Data Objects (PDO) interface to
+enable access from PHP to Microsoft SQL Server and Sybase databases through the
+FreeTDS libary.
+
+%package	pdo_mysql
+Summary:	MySQL Interface driver for PDO
+Group:		Development/PHP
+Requires:	php-pdo >= 0:%{version}
+Epoch:		0
+
+%description	pdo_mysql
+PDO_MYSQL is a driver that implements the PHP Data Objects (PDO) interface to
+enable access from PHP to MySQL 3.x and 4.x databases.
+ 
+PDO_MYSQL will take advantage of native prepared statement support present in
+MySQL 4.1 and higher. If you're using an older version of the mysql client
+libraries, PDO will emulate them for you.
+
+%package	pdo_odbc
+Summary:	ODBC v3 Interface driver for PDO
+Group:		Development/PHP
+BuildRequires:	unixODBC-devel
+Requires:	php-pdo >= 0:%{version}
+Epoch:		0
+
+%description	pdo_odbc
+PDO_ODBC is a driver that implements the PHP Data Objects (PDO) interface to
+enable access from PHP to databases through ODBC drivers or through the IBM DB2
+Call Level Interface (DB2 CLI) library. PDO_ODBC currently supports three
+different "flavours" of database drivers:
+ 
+ o ibm-db2  - Supports access to IBM DB2 Universal Database, Cloudscape, and
+              Apache Derby servers through the free DB2 client. ibm-db2 is not
+	      supported in Mandriva.
+
+ o unixODBC - Supports access to database servers through the unixODBC driver
+              manager and the database's own ODBC drivers. 
+
+ o generic  - Offers a compile option for ODBC driver managers that are not
+              explicitly supported by PDO_ODBC. 
+
+%package	pdo_pgsql
+Summary:	PostgreSQL interface driver for PDO
+Group:		Development/PHP
+BuildRequires:	postgresql-devel
+Requires:	php-pdo >= 0:%{version}
+Epoch:		0
+
+%description	pdo_pgsql
+PDO_PGSQL is a driver that implements the PHP Data Objects (PDO) interface to
+enable access from PHP to PostgreSQL databases.
+
+%package	pdo_sqlite
+Summary:	SQLite v3 Interface driver for PDO
+Group:		Development/PHP
+BuildRequires:	sqlite3-devel
+Requires:	php-pdo >= 0:%{version}
+Epoch:		0
+
+%description	pdo_sqlite
+PDO_SQLITE is a driver that implements the PHP Data Objects (PDO) interface to
+enable access to SQLite 3 databases.
+
+This extension provides an SQLite v3 driver for PDO. SQLite V3 is NOT
+compatible with the bundled SQLite 2 in PHP 5, but is a significant step
+forwards, featuring complete utf-8 support, native support for blobs, native
+support for prepared statements with bound parameters and improved concurrency.
+
+%package	pgsql
+Summary:	PostgreSQL database module for PHP
+Group:		Development/PHP
+BuildRequires:	postgresql-devel
+BuildRequires:	openssl-devel
+Epoch:		0
+
+%description	pgsql
+This is a dynamic shared object (DSO) for PHP that will add PostgreSQL database
+support.
+
+PostgreSQL database is Open Source product and available without cost.
+Postgres, developed originally in the UC Berkeley Computer Science Department,
+pioneered many of the object-relational concepts now becoming available in some
+commercial databases. It provides SQL92/SQL99 language support, transactions,
+referential integrity, stored procedures and type extensibility. PostgreSQL is
+an open source descendant of this original Berkeley code.
+
+%package	posix
+Summary:	POSIX extension module for PHP
+Group:		Development/PHP
+Epoch:		3
+
+%description	posix
+This is a dynamic shared object (DSO) for PHP that will add POSIX functions
+support to PHP.
+
+This module contains an interface to those functions defined in the IEEE 1003.1
+(POSIX.1) standards document which are not accessible through other means.
+POSIX.1 for example defined the open(), read(), write() and close() functions,
+too, which traditionally have been part of PHP 3 for a long time. Some more
+system specific functions have not been available before, though, and this
+module tries to remedy this by providing easy access to these functions.
+
+%package	pspell
+Summary:	Pspell extension module for PHP
+Group:		Development/PHP
+BuildRequires:	aspell-devel
+Epoch:		0
+
+%description	pspell
+This is a dynamic shared object (DSO) for PHP that will add pspell support to
+PHP.
+
+These functions allow you to check the spelling of a word and offer
+suggestions.
+
+%package	readline
+Summary:	Readline extension module for PHP
+Group:		Development/PHP
+BuildRequires:	ncurses-devel
+BuildRequires:	readline-devel
+BuildRequires:	gpm-devel
+Epoch:		0
+
+%description	readline
+This PHP module adds support for readline functions (only for cli and cgi
+SAPIs).
+
+The readline() functions implement an interface to the GNU Readline library.
+These are functions that provide editable command lines. An example being the
+way Bash allows you to use the arrow keys to insert characters or scroll
+through command history. Because of the interactive nature of this library, it
+will be of little use for writing Web applications, but may be useful when
+writing scripts used from a command line.
+
+%package	recode
+Summary:	Recode extension module for PHP
+Group:		Development/PHP
+BuildRequires:	recode-devel
+BuildRequires:	gettext-devel
+Epoch:		0
+
+%description	recode
+This is a dynamic shared object (DSO) for PHP that will add recode support
+using the recode library.
+
+This module contains an interface to the GNU Recode library. The GNU Recode
+library converts files between various coded character sets and surface
+encodings. When this cannot be achieved exactly, it may get rid of the
+offending characters or fall back on approximations. The library recognises or
+produces nearly 150 different character sets and is able to convert files
+between almost any pair. Most RFC 1345 character sets are supported.
+
+%package	session
+Summary:	Session extension module for PHP
+Group:		Development/PHP
+Requires(pre): rpm-helper
+Requires(postun): rpm-helper
+Epoch:		3
+
+%description	session
+This is a dynamic shared object (DSO) for PHP that will add session support.
+
+Session support in PHP consists of a way to preserve certain data across
+subsequent accesses. This enables you to build more customized applications and
+increase the appeal of your web site.
+
+A visitor accessing your web site is assigned a unique id, the so-called
+session id. This is either stored in a cookie on the user side or is propagated
+in the URL.
+
+%package	shmop
+Summary:	Shared Memory Operations extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	shmop
+This is a dynamic shared object (DSO) for PHP that will add Shared Memory
+Operations support.
+
+Shmop is an easy to use set of functions that allows PHP to read, write, create
+and delete Unix shared memory segments.
+
+%package	simplexml
+Summary:	SimpleXML extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libxml2-devel
+Epoch:		0
+
+%description	simplexml
+This is a dynamic shared object (DSO) for PHP that will add SimpleXML support.
+
+The SimpleXML extension provides a very simple and easily usable toolset to
+convert XML to an object that can be processed with normal property selectors
+and array iterators.
+
+%package	snmp
+Summary:	NET-SNMP extension module for PHP
+Group:		Development/PHP
+Requires:	net-snmp-mibs
+BuildRequires:	net-snmp-devel
+BuildRequires:	openssl-devel
+BuildRequires:	elfutils-devel
+Epoch:		0
+
+%description	snmp
+This is a dynamic shared object (DSO) for PHP that will add SNMP support using
+the NET-SNMP libraries.
+
+In order to use the SNMP functions you need to install the NET-SNMP package.
+
+%package	soap
+Summary:	Soap extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libxml2-devel
+Epoch:		0
+
+%description	soap
+This is a dynamic shared object (DSO) for PHP that will add soap support.
+
+The SOAP extension can be used to write SOAP Servers and Clients. It supports
+subsets of SOAP 1.1, SOAP 1.2 and WSDL 1.1 specifications.
+
+%package	sockets
+Summary:	Sockets extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	sockets
+This is a dynamic shared object (DSO) for PHP that will add sockets support.
+
+The socket extension implements a low-level interface to the socket
+communication functions based on the popular BSD sockets, providing the
+possibility to act as a socket server as well as a client.
+
+%package	sqlite
+Summary:	SQLite database bindings for PHP
+Group:		Development/PHP
+Requires:	php-pdo >= 0:%{version}
+BuildRequires:	sqlite-devel
+Epoch:		0
+
+%description	sqlite
+This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
+C library that implements an embeddable SQL database engine. Programs that link
+with the SQLite library can have SQL database access without running a separate
+RDBMS process.
+
+SQLite is not a client library used to connect to a big database server. SQLite
+is the server. The SQLite library reads and writes directly to and from the
+database files on disk.
+
+%package	sysvmsg
+Summary:	SysV msg extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	sysvmsg
+This is a dynamic shared object (DSO) for PHP that will add SysV message queues
+support.
+
+%package	sysvsem
+Summary:	SysV sem extension module for PHP
+Group:		Development/PHP
+Epoch:		3
+
+%description	sysvsem
+This is a dynamic shared object (DSO) for PHP that will add SysV semaphores
+support.
+
+%package	sysvshm
+Summary:	SysV shm extension module for PHP
+Group:		Development/PHP
+Epoch:		3
+
+%description	sysvshm
+This is a dynamic shared object (DSO) for PHP that will add SysV Shared Memory
+support.
+
+%package	tidy
+Summary:	Tidy HTML Repairing and Parsing for PHP
+Group:		Development/PHP
+BuildRequires:	tidy-devel
+Epoch:		0
+
+%description	tidy
+Tidy is a binding for the Tidy HTML clean and repair utility which allows you
+to not only clean and otherwise manipluate HTML documents, but also traverse
+the document tree using the Zend Engine 2 OO semantics.
+
+%package	tokenizer
+Summary:	Tokenizer extension module for PHP
+Group:		Development/PHP
+Epoch:		0
+
+%description	tokenizer
+This is a dynamic shared object (DSO) for PHP that will add Tokenizer support.
+
+The tokenizer functions provide an interface to the PHP tokenizer embedded in
+the Zend Engine. Using these functions you may write your own PHP source
+analyzing or modification tools without having to deal with the language
+specification at the lexical level.
+
+%package	xml
+Summary:	XML extension module for PHP
+Group:		Development/PHP
+BuildRequires:	expat-devel
+Epoch:		0
+
+%description	xml
+This is a dynamic shared object (DSO) for PHP that will add XML support. This
+extension lets you create XML parsers and then define handlers for different
+XML events.
+
+%package	xmlreader
+Summary:	Xmlreader extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libxml2-devel
+Epoch:		0
+
+%description	xmlreader
+XMLReader represents a reader that provides non-cached, forward-only access to
+XML data. It is based upon the xmlTextReader api from libxml
+
+%package	xmlrpc
+Summary:	Xmlrpc extension module for PHP
+Group:		Development/PHP
+BuildRequires:	expat-devel
+BuildRequires:	libxmlrpc-devel
+Epoch:		0
+
+%description	xmlrpc
+This is a dynamic shared object (DSO) for PHP that will add XMLRPC support.
+
+These functions can be used to write XML-RPC servers and clients. You can find
+more information about XML-RPC at http://www.xmlrpc.com/, and more
+documentation on this extension and its functions at
+http://xmlrpc-epi.sourceforge.net/.
+
+%package	xmlwriter
+Summary:	Provides fast, non-cached, forward-only means to write XML data
+Group:		Development/PHP
+BuildRequires:	libxml2-devel
+Epoch:		0
+
+%description	xmlwriter
+This extension wraps the libxml xmlWriter API. Represents a writer that
+provides a non-cached, forward-only means of generating streams or files
+containing XML data.
+
+%package	xsl
+Summary:	Xsl extension module for PHP
+Group:		Development/PHP
+BuildRequires:	libxslt-devel
+BuildRequires:	libxml2-devel
+Epoch:		0
+
+%description	xsl
+This is a dynamic shared object (DSO) for PHP that will add xsl support.
+
+The XSL extension implements the XSL standard, performing XSLT transformations
+using the libxslt library
+
+%package	wddx
+Summary:	WDDX serialization functions
+Group:		Development/PHP
+Requires:	php-xml
+BuildRequires:  expat-devel
+Epoch:		0
+
+%description	wddx
+This is a dynamic shared object (DSO) that adds wddx support to PHP. 
+
+These functions are intended for work with WDDX (http://www.openwddx.org/)
+
 %prep
 
 %setup -q -n php-%{version}
@@ -447,7 +1276,9 @@ support to PHP.
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
 %patch15 -p0 -b .no_libedit.droplet
-
+%patch16 -p1 -b .freetds_mssql.droplet
+%patch17 -p0 -b .xmlrpc_no_rpath.droplet
+%patch18 -p0 -b .really_external_sqlite2.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p1 -b .mail.droplet
@@ -488,6 +1319,15 @@ support to PHP.
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
+cp %{SOURCE5} maxlifetime
+cp %{SOURCE6} php.crond
+
+# lib64 hack
+perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
+
+# nuke bogus checks becuase i fixed this years ago in our recode package
+rm -f ext/recode/config9.m4
+
 # Change perms otherwise rpm would get fooled while finding requires
 find -name "*.inc" | xargs chmod 644
 find -name "*.php*" | xargs chmod 644
@@ -516,10 +1356,7 @@ rm -f php-devel/sapi/pi3web/php.sym
 find php-devel -name "*.droplet" | xargs rm -f
 
 # don't ship MS Windows source
-rm -rf php-devel/extensions/com
-rm -rf php-devel/extensions/dotnet
-rm -rf php-devel/extensions/printer
-rm -rf php-devel/extensions/w32api
+rm -rf php-devel/extensions/com_dotnet
 
 # likewise with these:
 find php-devel -name "*.dsp" | xargs rm -f
@@ -539,9 +1376,26 @@ find -type f | \
     grep -v "\.zip" | \
     xargs dos2unix -U
 
+# maek sure using system libs
+rm -rf ext/pcre/pcrelib
+rm -rf ext/pdo_sqlite/sqlite
+rm -rf ext/xmlrpc/libxmlrpc
+
+%build
+
+export CFLAGS="%{optflags}"
+export CXXFLAGS="%{optflags}"
+export FFLAGS="%{optflags}"
+
+%if %mdkversion >= 200710
+export CFLAGS="$CFLAGS -fstack-protector"
+export CXXFLAGS="$CXXFLAGS -fstack-protector"
+export FFLAGS="$FFLAGS -fstack-protector"
+%endif
+
 cat > php-devel/buildext <<EOF
 #!/bin/bash
-gcc -Wall -fPIC -shared %{optflags} \\
+gcc -Wall -fPIC -shared $CFLAGS \\
     -I. \`%{_bindir}/php-config --includes\` \\
     -I%{_includedir}/libxml2 \\
     -I%{_includedir}/freetype \\
@@ -552,15 +1406,6 @@ gcc -Wall -fPIC -shared %{optflags} \\
 EOF
 
 chmod 755 php-devel/buildext
-
-%build
-%if %mdkversion >= 200710
-export CFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
-export CXXFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
-export FFLAGS="%{optflags} -fPIC -L%{_libdir} -fstack-protector"
-%else
-export CFLAGS="%{optflags} -fPIC -L%{_libdir}"
-%endif
 
 # this _has_ to be executed!
 #export WANT_AUTOCONF_2_5=1
@@ -574,6 +1419,8 @@ perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
 export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
+export CFLAGS="$CFLAGS -fPIC -L%{_libdir}"
+export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 
 # never use "--disable-rpath", it does the opposite
 
@@ -600,7 +1447,6 @@ for i in cgi cli fcgi apxs; do
     --enable-shared=yes \
     --enable-static=no \
     --with-libdir=%{_lib} \
-    --disable-all \
     --with-config-file-path=%{_sysconfdir} \
     --with-config-file-scan-dir=%{_sysconfdir}/php.d \
     --disable-debug --enable-pic \
@@ -621,7 +1467,62 @@ for i in cgi cli fcgi apxs; do
     --enable-memory-limit \
     --with-versioning \
     --with-mod_charset \
-    --without-pear
+    --without-pear \
+    --enable-bcmath=shared \
+    --with-bz2=shared,%{_prefix} \
+    --enable-calendar=shared \
+    --enable-ctype=shared \
+    --with-curl=shared,%{_prefix} --with-curlwrappers \
+    --enable-dba=shared --with-gdbm --with-db4 --with-cdb --with-flatfile --with-inifile \
+    --enable-dbase=shared \
+    --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --enable-exif=shared \
+    --disable-filter \
+    --disable-json \
+    --with-openssl-dir=%{_prefix} --enable-ftp=shared \
+    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf \
+    --with-gettext=shared,%{_prefix} \
+    --with-gmp=shared,%{_prefix} \
+    --enable-hash=shared,%{_prefix} \
+    --with-iconv=shared \
+    --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
+    --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
+    --enable-mbstring=shared,%{_prefix} --enable-mbregex \
+    --with-mcrypt=shared,%{_prefix} \
+    --with-mhash=shared,%{_prefix} \
+    --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
+    --with-ming=shared,%{_prefix} \
+    --with-mssql=shared,%{_prefix} \
+    --with-mysql=shared,%{_prefix} --with-mysql-sock=%{_localstatedir}/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
+    --with-mysqli=shared,%{_bindir}/mysql_config \
+    --with-ncurses=shared,%{_prefix} \
+    --with-unixODBC=shared,%{_prefix} \
+    --enable-pcntl=shared \
+    --enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
+    --with-pgsql=shared,%{_prefix} \
+    --enable-posix=shared \
+    --with-pspell=shared,%{_prefix} \
+    --with-readline=shared,%{_prefix} \
+    --with-recode=shared,%{_prefix} \
+    --enable-session=shared,%{_prefix} \
+    --enable-shmop=shared,%{_prefix} \
+    --enable-simplexml=shared,%{_prefix} \
+    --with-snmp=shared,%{_prefix} --enable-ucd-snmp-hack \
+    --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --enable-sockets=shared,%{_prefix} \
+    --with-sqlite=shared,%{_prefix} \
+    --enable-sysvmsg=shared,%{_prefix} \
+    --enable-sysvsem=shared,%{_prefix} \
+    --enable-sysvshm=shared,%{_prefix} \
+    --with-tidy=shared,%{_prefix} \
+    --enable-tokenizer=shared,%{_prefix} \
+    --enable-xml=shared,%{_prefix} --with-expat-dir=shared,%{_prefix} \
+    --enable-xmlreader=shared,%{_prefix} \
+    --with-xmlrpc=shared,%{_prefix} --with-expat-dir=shared,%{_prefix} \
+    --enable-xmlwriter=shared,%{_prefix} \
+    --with-xsl=shared,%{_prefix} \
+    --enable-wddx=shared \
+    --enable-reflection=shared
 
 cp -f Makefile Makefile.$i
 
@@ -644,7 +1545,9 @@ cp -af php_config.h.fcgi main/php_config.h
 %make -f Makefile.fcgi sapi/cgi/php-cgi
 cp -rp sapi/cgi sapi/fcgi
 perl -pi -e "s|sapi/cgi|sapi/fcgi|g" sapi/fcgi/php
-rm -rf sapi/cgi/.libs; rm -f sapi/cgi/*.lo sapi/cgi/php
+
+# cleanup
+rm -rf sapi/cgi/.libs; rm -f sapi/cgi/*.lo sapi/cgi/php-cgi
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
@@ -661,6 +1564,8 @@ install -d %{buildroot}%{_sysconfdir}/php.d
 install -d %{buildroot}%{_libdir}/php/extensions
 install -d %{buildroot}%{_usrsrc}/php-devel
 install -d %{buildroot}%{_mandir}/man1
+install -d %{buildroot}%{_sysconfdir}/cron.d
+install -d %{buildroot}%{_localstatedir}/php
 
 #perl -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" .libs/*.la*
 
@@ -683,8 +1588,74 @@ install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
 ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
 
 # extensions
-echo "extension = openssl.so" > %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
-echo "extension = zlib.so" > %{buildroot}%{_sysconfdir}/php.d/21_zlib.ini
+echo "extension = openssl.so"	> %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
+echo "extension = zlib.so"	> %{buildroot}%{_sysconfdir}/php.d/21_zlib.ini
+echo "extension = bcmath.so"	> %{buildroot}%{_sysconfdir}/php.d/66_bcmath.ini
+echo "extension = bz2.so"	> %{buildroot}%{_sysconfdir}/php.d/10_bz2.ini
+echo "extension = calendar.so"	> %{buildroot}%{_sysconfdir}/php.d/11_calendar.ini
+echo "extension = ctype.so"	> %{buildroot}%{_sysconfdir}/php.d/12_ctype.ini
+echo "extension = curl.so"	> %{buildroot}%{_sysconfdir}/php.d/13_curl.ini
+echo "extension = dba.so"	> %{buildroot}%{_sysconfdir}/php.d/14_dba.ini
+echo "extension = dbase.so"	> %{buildroot}%{_sysconfdir}/php.d/15_dbase.ini
+echo "extension = dom.so"	> %{buildroot}%{_sysconfdir}/php.d/18_dom.ini
+echo "extension = exif.so"	> %{buildroot}%{_sysconfdir}/php.d/19_exif.ini
+echo "extension = ftp.so"	> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
+echo "extension = gd.so"	> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
+echo "extension = gettext.so"	> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
+echo "extension = gmp.so"	> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
+echo "extension = hash.so"	> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
+echo "extension = iconv.so"	> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
+echo "extension = imap.so"	> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
+echo "extension = ldap.so"	> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
+echo "extension = mbstring.so"	> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
+echo "extension = mcrypt.so"	> %{buildroot}%{_sysconfdir}/php.d/30_mcrypt.ini
+echo "extension = mhash.so"	> %{buildroot}%{_sysconfdir}/php.d/31_mhash.ini
+cat > %{buildroot}%{_sysconfdir}/php.d/31_mime_magic.ini << EOF
+extension = mime_magic.so
+
+[mime_magic]
+
+mime_magic.magicfile = %{_sysconfdir}/httpd/conf/magic
+EOF
+echo "extension = ming.so"		> %{buildroot}%{_sysconfdir}/php.d/33_ming.ini
+echo "extension = mssql.so"		> %{buildroot}%{_sysconfdir}/php.d/35_mssql.ini
+echo "extension = mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/36_mysql.ini
+echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqli.ini
+echo "extension = ncurses.so"		> %{buildroot}%{_sysconfdir}/php.d/38_ncurses.ini
+echo "extension = odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/39_odbc.ini
+echo "extension = pcntl.so"		> %{buildroot}%{_sysconfdir}/php.d/40_pcntl.ini
+echo "extension = pdo.so"		> %{buildroot}%{_sysconfdir}/php.d/70_pdo.ini
+echo "extension = pdo_dblib.so"		> %{buildroot}%{_sysconfdir}/php.d/71_pdo_dblib.ini
+echo "extension = pdo_mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/73_pdo_mysql.ini
+echo "extension = pdo_odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/75_pdo_odbc.ini
+echo "extension = pdo_pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/76_pdo_pgsql.ini
+echo "extension = pdo_sqlite.so"	> %{buildroot}%{_sysconfdir}/php.d/77_pdo_sqlite.ini
+echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
+echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
+echo "extension = pspell.so"		> %{buildroot}%{_sysconfdir}/php.d/44_pspell.ini
+echo "extension = readline.so"		> %{buildroot}%{_sysconfdir}/php.d/45_readline.ini
+echo "extension = recode.so"		> %{buildroot}%{_sysconfdir}/php.d/46_recode.ini
+echo "extension = session.so"		> %{buildroot}%{_sysconfdir}/php.d/47_session.ini
+echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
+echo "extension = simplexml.so"		> %{buildroot}%{_sysconfdir}/php.d/49_simplexml.ini
+echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
+echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
+echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
+echo "extension = sqlite.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite.ini
+echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
+echo "extension = sysvsem.so"		> %{buildroot}%{_sysconfdir}/php.d/57_sysvsem.ini
+echo "extension = sysvshm.so"		> %{buildroot}%{_sysconfdir}/php.d/58_sysvshm.ini
+echo "extension = tidy.so"		> %{buildroot}%{_sysconfdir}/php.d/59_tidy.ini
+echo "extension = tokenizer.so"		> %{buildroot}%{_sysconfdir}/php.d/60_tokenizer.ini
+echo "extension = xml.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xml.ini
+echo "extension = xmlreader.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xmlreader.ini
+echo "extension = xmlrpc.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xmlrpc.ini
+echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter.ini
+echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
+echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
+
+install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
+install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
 
 # fix docs
 cp Zend/LICENSE Zend/ZEND_LICENSE
@@ -736,6 +1707,12 @@ update-alternatives --remove php %{_bindir}/php-cgi
 update-alternatives --remove php %{_bindir}/php-fcgi
 update-alternatives --remove php %{_bindir}/php-cli
 
+%pre session
+%_pre_useradd apache /var/www /bin/sh
+
+%postun session
+%_postun_userdel apache
+
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
@@ -784,10 +1761,298 @@ update-alternatives --remove php %{_bindir}/php-cli
 
 %files openssl
 %defattr(-,root,root)
-%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/*_openssl.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_openssl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/openssl.so
 
 %files zlib
 %defattr(-,root,root)
-%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/*_zlib.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_zlib.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zlib.so
+
+%files bcmath 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_bcmath.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/bcmath.so
+
+%files bz2 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_bz2.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/bz2.so
+
+%files calendar 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_calendar.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/calendar.so
+
+%files ctype 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_ctype.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/ctype.so
+
+%files curl 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_curl.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/curl.so
+
+%files dba 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_dba.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/dba.so
+
+%files dbase 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_dbase.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/dbase.so
+
+%files dom 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_dom.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/dom.so
+
+%files exif 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_exif.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/exif.so
+
+%files ftp 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_ftp.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/ftp.so
+
+%files gd 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_gd.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/gd.so
+
+%files gettext 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_gettext.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/gettext.so
+
+%files gmp 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_gmp.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/gmp.so
+
+%files hash 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_hash.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/hash.so
+
+%files iconv 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_iconv.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/iconv.so
+
+%files imap 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_imap.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/imap.so
+
+%files ldap 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_ldap.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/ldap.so
+
+%files mbstring 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mbstring.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mbstring.so
+
+%files mcrypt 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mcrypt.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
+
+%files mhash 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mhash.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mhash.so
+
+%files mime_magic 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mime_magic.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mime_magic.so
+
+%files ming 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_ming.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/ming.so
+
+%files mssql
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mssql.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mssql.so
+
+%files mysql 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mysql.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mysql.so
+
+%files mysqli 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_mysqli.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
+
+%files ncurses 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_ncurses.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/ncurses.so
+
+%files odbc 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_odbc.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/odbc.so
+
+%files pcntl 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pcntl.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pcntl.so
+
+%files pdo
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pdo.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo.so
+
+%files pdo_dblib
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pdo_dblib.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo_dblib.so
+
+%files pdo_mysql
+%defattr(-,root,root)
+%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/*_pdo_mysql.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo_mysql.so
+
+%files pdo_odbc
+%defattr(-,root,root)
+%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/*_pdo_odbc.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo_odbc.so
+
+%files pdo_pgsql
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pdo_pgsql.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo_pgsql.so
+
+%files pdo_sqlite
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pdo_sqlite.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pdo_sqlite.so
+
+%files pgsql 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pgsql.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pgsql.so
+
+%files posix 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_posix.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/posix.so
+
+%files pspell 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_pspell.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/pspell.so
+
+%files readline 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_readline.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/readline.so
+
+%files recode 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_recode.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/recode.so
+
+%files session 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_session.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
+%attr(0755,root,root) %{_libdir}/php/extensions/session.so
+%attr(0755,root,root) %{_libdir}/php/maxlifetime
+%attr(01733,apache,apache) %dir %{_localstatedir}/php
+
+%files shmop 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_shmop.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/shmop.so
+
+%files simplexml 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_simplexml.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/simplexml.so
+
+%files snmp 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_snmp.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/snmp.so
+
+%files soap 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_soap.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/soap.so
+
+%files sockets 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_sockets.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
+
+%files sqlite 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_sqlite.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
+
+%files sysvmsg 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_sysvmsg.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sysvmsg.so
+
+%files sysvsem 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_sysvsem.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sysvsem.so
+
+%files sysvshm 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_sysvshm.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sysvshm.so
+
+%files tidy 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_tidy.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/tidy.so
+
+%files tokenizer 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_tokenizer.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/tokenizer.so
+
+%files xml 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_xml.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/xml.so
+
+%files xmlreader 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_xmlreader.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/xmlreader.so
+
+%files xmlrpc
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_xmlrpc.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/xmlrpc.so
+
+%files xmlwriter 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_xmlwriter.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/xmlwriter.so
+
+%files xsl 
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_xsl.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/xsl.so
+
+%files wddx
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*_wddx.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/wddx.so
