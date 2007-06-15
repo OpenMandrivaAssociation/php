@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -607,11 +607,6 @@ libraries, depending on which image formats you want to work with.
 
 You can use the image functions in PHP to get the size of JPEG, GIF, PNG, SWF,
 TIFF and JPEG2000 images.
-
-This package provides two flavours of the gd php extension, one built
-against the shared system gd library (gd.so, default) and the other
-(gd-bundled.so) built with gd library that comes bundled with php and that
-has additional features.
 
 %package	gettext
 Summary:	Gettext extension module for PHP
