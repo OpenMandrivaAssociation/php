@@ -9,21 +9,20 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 6
+Release:	%mkrel 7
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
-Patch0:		php-4.3.0-init.patch
-Patch1:		php-5.2.0-shared.diff
-Patch2:		php-4.3.0-imap.patch
-Patch3:		php-4.3.4RC3-64bit.patch
-Patch4:		php-5.1.2-lib64.diff
-Patch6:		php-4.3.11-libtool.diff
+Patch0:		php-init.diff
+Patch1:		php-shared.diff
+Patch3:		php-64bit.diff
+Patch4:		php-lib64.diff
+Patch6:		php-libtool.diff
 Patch7:		php-5.2.0-no_egg.diff
-Patch8:		php-5.1.2-phpize.diff
-Patch9:		php-5.1.0RC4-remove_bogus_iconv_deps.diff
-Patch10:	php-5.1.0RC1-phpbuilddir.diff
+Patch8:		php-phpize.diff
+Patch9:		php-remove_bogus_iconv_deps.diff
+Patch10:	php-phpbuilddir.diff
 # for kolab2
 Patch11:	php-imap-annotation.diff
 Patch12:	php-imap-status-current.diff
@@ -31,44 +30,44 @@ Patch12:	php-imap-status-current.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
 # P14 fixes the way we package the extensions to not check if the dep are installed or compiled in
-Patch14:	php-5.1.3-extension_dep_macro_revert.diff
+Patch14:	php-extension_dep_macro_revert.diff
 # remove libedit once and for all
-Patch15:	php-5.1.2-no_libedit.diff
+Patch15:	php-no_libedit.diff
 Patch16:	php-freetds_mssql.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
+Patch19:	php-pdo_odbc_libdir.diff
 #####################################################################
 # Stolen from PLD
-Patch20:	php-4.3.0-mail.patch
+Patch20:	php-mail.diff
 Patch21:	php-sybase-fix.patch
+Patch22:	php-filter-shared.diff
 Patch23:	php-5.2.0-mdv_logo.diff
 Patch25:	php-dba-link.patch
 Patch27:	php-zlib-for-getimagesize.patch
 Patch28:	php-zlib.patch
-# http://choon.net/opensource/php/php-5.0.5-mail-header.patch
-Patch29:	php-5.1.2-mail-header.diff
 # stolen from debian
-Patch30:	php-5.1.4-session.save_path.diff
-Patch31:	php-5.1.4-recode_size_t.diff
-Patch32:	php-5.1.4-exif_nesting_level.diff
+Patch30:	php-session.save_path.diff
+Patch31:	php-recode_size_t.diff
+Patch32:	php-exif_nesting_level.diff
 #####################################################################
 # Stolen from fedora
-Patch101:	php-5.1.0b1-cxx.diff
-Patch102:	php-4.3.3-install.patch
-Patch103:	php-5.0.4-norpath.patch
+Patch101:	php-cxx.diff
+Patch102:	php-install.diff
+Patch103:	php-norpath.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
-Patch111:	php-4.3.1-odbc.patch
-Patch112:	php-4.3.11-shutdown.patch
-Patch113:	php-5.2.0-libc-client-php.diff
+Patch111:	php-odbc.diff
+Patch112:	php-shutdown.diff
+Patch113:	php-libc-client-php.diff
 # Functional changes
-Patch115:	php-5.0.4-dlopen.patch
+Patch115:	php-dlopen.diff
 # Fixes for tests
 Patch120:	php-5.1.0RC4-tests-dashn.diff
-Patch121:	php-5.1.0b1-tests-wddx.diff
+Patch121:	php-tests-wddx.diff
 # Fix bugs
 # http://bugs.php.net/bug.php?id=29119
-Patch201:	php-5.0.4-bug29119.diff
+Patch201:	php-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
@@ -565,6 +564,16 @@ With the exif extension you are able to work with image meta data. For example,
 you may use exif functions to read meta data of pictures taken from digital
 cameras by working with information stored in the headers of the JPEG and TIFF
 images.
+
+%package	filter
+Summary:	Extension for safely dealing with input parameters
+Group:		Development/PHP
+BuildRequires:	pcre-devel
+Epoch:		0
+
+%description	filter
+The Input Filter extension is meant to address this issue by implementing a set
+of filters and mechanisms that users can use to safely access their input data.
 
 %package	ftp
 Summary:	FTP extension module for PHP
@@ -1191,6 +1200,7 @@ XML events.
 %package	xmlreader
 Summary:	Xmlreader extension module for PHP
 Group:		Development/PHP
+Requires:	php-dom
 BuildRequires:	libxml2-devel
 Epoch:		0
 
@@ -1254,11 +1264,10 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %setup -q -n php-%{version}
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
-%patch0 -p1 -b .init.droplet
+%patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
-%patch2 -p0 -b .imap.droplet
 %patch3 -p1 -b .64bit.droplet
-%patch4 -p1 -b .lib64.droplet
+%patch4 -p0 -b .lib64.droplet
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
@@ -1274,15 +1283,17 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch16 -p1 -b .freetds_mssql.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
+%patch19 -p0 -b .pdo_odbc_libdir.droplet
+
 #####################################################################
 # Stolen from PLD
-%patch20 -p1 -b .mail.droplet
+%patch20 -p0 -b .mail.droplet
 %patch21 -p1 -b .sybase-fix.droplet
+%patch22 -p0 -b .filter-shared.droplet
 %patch25 -p0 -b .dba-link.droplet
-
 %patch27 -p1 -b .zlib-for-getimagesize.droplet
 %patch28 -p1 -b .zlib.droplet
-%patch29 -p0 -b .mail-header.droplet
+
 # stolen from debian
 %patch30 -p0 -b .session.save_path.droplet
 %patch31 -p0 -b .recode_size_t.droplet
@@ -1291,13 +1302,13 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 #####################################################################
 # Stolen from fedora
 %patch101 -p0 -b .cxx.droplet
-%patch102 -p1 -b .install.droplet
-%patch103 -p1 -b .norpath.droplet
+%patch102 -p0 -b .install.droplet
+%patch103 -p0 -b .norpath.droplet
 %patch105 -p0 -b .umask.droplet
-%patch111 -p1 -b .odbc.droplet
+%patch111 -p0 -b .odbc.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
-%patch115 -p1 -b .dlopen.droplet
+%patch115 -p0 -b .dlopen.droplet
 #
 #%patch120 -p1 -b .tests-dashn.droplet
 %patch121 -p1 -b .tests-wddx.droplet
@@ -1467,12 +1478,12 @@ for i in cgi cli fcgi apxs; do
     --with-bz2=shared,%{_prefix} \
     --enable-calendar=shared \
     --enable-ctype=shared \
-    --with-curl=shared,%{_prefix} --with-curlwrappers \
+    --with-curl=shared,%{_prefix} --without-curlwrappers \
     --enable-dba=shared --with-gdbm --with-db4 --with-cdb --with-flatfile --with-inifile \
     --enable-dbase=shared \
     --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-exif=shared \
-    --disable-filter \
+    --enable-filter=shared --with-pcre-dir=%{_prefix} \
     --disable-json \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
     --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf \
@@ -1594,6 +1605,7 @@ echo "extension = dba.so"	> %{buildroot}%{_sysconfdir}/php.d/14_dba.ini
 echo "extension = dbase.so"	> %{buildroot}%{_sysconfdir}/php.d/15_dbase.ini
 echo "extension = dom.so"	> %{buildroot}%{_sysconfdir}/php.d/18_dom.ini
 echo "extension = exif.so"	> %{buildroot}%{_sysconfdir}/php.d/19_exif.ini
+echo "extension = filter.so"	> %{buildroot}%{_sysconfdir}/php.d/81_filter.ini
 echo "extension = ftp.so"	> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
 echo "extension = gd.so"	> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
 echo "extension = gettext.so"	> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
@@ -1764,112 +1776,117 @@ update-alternatives --remove php %{_bindir}/php-cli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_zlib.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zlib.so
 
-%files bcmath 
+%files bcmath
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/66_bcmath.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/bcmath.so
 
-%files bz2 
+%files bz2
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/10_bz2.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/bz2.so
 
-%files calendar 
+%files calendar
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/11_calendar.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/calendar.so
 
-%files ctype 
+%files ctype
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/12_ctype.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ctype.so
 
-%files curl 
+%files curl
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/13_curl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/curl.so
 
-%files dba 
+%files dba
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/14_dba.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dba.so
 
-%files dbase 
+%files dbase
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/15_dbase.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dbase.so
 
-%files dom 
+%files dom
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/18_dom.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dom.so
 
-%files exif 
+%files exif
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/19_exif.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/exif.so
 
-%files ftp 
+%files filter
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/81_filter.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/filter.so
+
+%files ftp
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/22_ftp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ftp.so
 
-%files gd 
+%files gd
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/23_gd.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gd.so
 
-%files gettext 
+%files gettext
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/24_gettext.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gettext.so
 
-%files gmp 
+%files gmp
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/25_gmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gmp.so
 
-%files hash 
+%files hash
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/54_hash.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/hash.so
 
-%files iconv 
+%files iconv
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/26_iconv.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/iconv.so
 
-%files imap 
+%files imap
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_imap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/imap.so
 
-%files ldap 
+%files ldap
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/28_ldap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ldap.so
 
-%files mbstring 
+%files mbstring
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/29_mbstring.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mbstring.so
 
-%files mcrypt 
+%files mcrypt
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/30_mcrypt.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
 
-%files mhash 
+%files mhash
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/31_mhash.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mhash.so
 
-%files mime_magic 
+%files mime_magic
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/31_mime_magic.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mime_magic.so
 
-%files ming 
+%files ming
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/33_ming.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ming.so
@@ -1879,27 +1896,27 @@ update-alternatives --remove php %{_bindir}/php-cli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/35_mssql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mssql.so
 
-%files mysql 
+%files mysql
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/36_mysql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysql.so
 
-%files mysqli 
+%files mysqli
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
 
-%files ncurses 
+%files ncurses
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/38_ncurses.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ncurses.so
 
-%files odbc 
+%files odbc
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/39_odbc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/odbc.so
 
-%files pcntl 
+%files pcntl
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/40_pcntl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pcntl.so
@@ -1934,32 +1951,32 @@ update-alternatives --remove php %{_bindir}/php-cli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/77_pdo_sqlite.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_sqlite.so
 
-%files pgsql 
+%files pgsql
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/42_pgsql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pgsql.so
 
-%files posix 
+%files posix
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/43_posix.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/posix.so
 
-%files pspell 
+%files pspell
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/44_pspell.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pspell.so
 
-%files readline 
+%files readline
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/45_readline.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/readline.so
 
-%files recode 
+%files recode
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_recode.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/recode.so
 
-%files session 
+%files session
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/47_session.ini
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
@@ -1967,67 +1984,67 @@ update-alternatives --remove php %{_bindir}/php-cli
 %attr(0755,root,root) %{_libdir}/php/maxlifetime
 %attr(01733,apache,apache) %dir %{_localstatedir}/php
 
-%files shmop 
+%files shmop
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/48_shmop.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/shmop.so
 
-%files simplexml 
+%files simplexml
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/49_simplexml.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/simplexml.so
 
-%files snmp 
+%files snmp
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/50_snmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/snmp.so
 
-%files soap 
+%files soap
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/51_soap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/soap.so
 
-%files sockets 
+%files sockets
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
 
-%files sqlite 
+%files sqlite
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
 
-%files sysvmsg 
+%files sysvmsg
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/56_sysvmsg.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvmsg.so
 
-%files sysvsem 
+%files sysvsem
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/57_sysvsem.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvsem.so
 
-%files sysvshm 
+%files sysvshm
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/58_sysvshm.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvshm.so
 
-%files tidy 
+%files tidy
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/59_tidy.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/tidy.so
 
-%files tokenizer 
+%files tokenizer
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/60_tokenizer.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/tokenizer.so
 
-%files xml 
+%files xml
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/62_xml.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xml.so
 
-%files xmlreader 
+%files xmlreader
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xmlreader.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlreader.so
@@ -2037,12 +2054,12 @@ update-alternatives --remove php %{_bindir}/php-cli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/62_xmlrpc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlrpc.so
 
-%files xmlwriter 
+%files xmlwriter
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/64_xmlwriter.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlwriter.so
 
-%files xsl 
+%files xsl
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xsl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xsl.so
