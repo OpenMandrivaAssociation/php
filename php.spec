@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 8
+Release:	%mkrel 9
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -121,9 +121,9 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.10
+Requires(post):	php-suhosin >= 0.9.20
 Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 1.2.1
+Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires(preun): php-ini >= %{version}
 Requires(preun): php-ftp >= %{epoch}:%{version}
@@ -141,9 +141,9 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.10
+Requires(preun): php-suhosin >= 0.9.20
 Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 1.2.1
+Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	php-ini >= %{version}
 Requires:	php-ftp >= %{epoch}:%{version}
@@ -161,9 +161,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.10
+Requires:	php-suhosin >= 0.9.20
 Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 1.2.1
+Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
@@ -205,9 +205,9 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.10
+Requires(post):	php-suhosin >= 0.9.20
 Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 1.2.1
+Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires(preun): php-ini >= %{version}
 Requires(preun): php-ftp >= %{epoch}:%{version}
@@ -225,9 +225,9 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.10
+Requires(preun): php-suhosin >= 0.9.20
 Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 1.2.1
+Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	php-ini >= %{version}
 Requires:	php-ftp >= %{epoch}:%{version}
@@ -245,9 +245,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.10
+Requires:	php-suhosin >= 0.9.20
 Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 1.2.1
+Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
@@ -289,9 +289,9 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.10
+Requires(post):	php-suhosin >= 0.9.20
 Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 1.2.1
+Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires(preun): php-ini >= %{version}
 Requires(preun): php-ftp >= %{epoch}:%{version}
@@ -309,9 +309,9 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.10
+Requires(preun): php-suhosin >= 0.9.20
 Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 1.2.1
+Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	php-ini >= %{version}
 Requires:	php-ftp >= %{epoch}:%{version}
@@ -329,9 +329,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.10
+Requires:	php-suhosin >= 0.9.20
 Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 1.2.1
+Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
@@ -682,6 +682,14 @@ This is a dynamic shared object (DSO) for PHP that will add IMAP support.
 These functions are not limited to the IMAP protocol, despite their name. The
 underlying c-client library also supports NNTP, POP3 and local mailbox access
 methods.
+
+%package	json
+Summary:	JavaScript Object Notation
+Group:		Development/PHP
+Epoch:		0
+
+%description	json
+Support for JSON (JavaScript Object Notation) serialization.
 
 %package	ldap
 Summary:	LDAP extension module for PHP
@@ -1475,7 +1483,7 @@ for i in cgi cli fcgi apxs; do
     --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-exif=shared \
     --enable-filter=shared --with-pcre-dir=%{_prefix} \
-    --disable-json \
+    --enable-json=shared \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
     --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf \
     --with-gettext=shared,%{_prefix} \
@@ -1651,6 +1659,7 @@ echo "extension = xmlrpc.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xmlrpc.ini
 echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter.ini
 echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
 echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
+echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
 
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
@@ -1851,6 +1860,11 @@ update-alternatives --remove php %{_bindir}/php-cli
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_imap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/imap.so
+
+%files json
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/82_json.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/json.so
 
 %files ldap
 %defattr(-,root,root)
