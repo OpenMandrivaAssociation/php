@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.3
-Release:	%mkrel 9
+Release:	%mkrel 10
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
