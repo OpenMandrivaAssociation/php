@@ -8,8 +8,8 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.3
-Release:	%mkrel 10
+Version:	5.2.4
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -17,9 +17,8 @@ Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch3:		php-64bit.diff
-Patch4:		php-lib64.diff
 Patch6:		php-libtool.diff
-Patch7:		php-5.2.0-no_egg.diff
+Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
@@ -36,7 +35,6 @@ Patch15:	php-no_libedit.diff
 Patch16:	php-freetds_mssql.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
-Patch19:	php-pdo_odbc_libdir.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -48,16 +46,13 @@ Patch27:	php-zlib-for-getimagesize.patch
 Patch28:	php-zlib.patch
 # stolen from debian
 Patch30:	php-session.save_path.diff
-Patch31:	php-recode_size_t.diff
 Patch32:	php-exif_nesting_level.diff
 #####################################################################
 # Stolen from fedora
 Patch101:	php-cxx.diff
 Patch102:	php-install.diff
-Patch103:	php-norpath.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
-Patch111:	php-odbc.diff
 Patch112:	php-shutdown.diff
 Patch113:	php-libc-client-php.diff
 # Functional changes
@@ -71,8 +66,9 @@ Patch201:	php-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch301:	suhosin-patch-5.2.4RC2-%{suhosin_version}.diff
 Source5:	maxlifetime
 Source6:	php.crond
 BuildRequires:	apache-devel >= 2.2.4
@@ -738,7 +734,7 @@ This is a dynamic shared object (DSO) for PHP that will add mcrypt support.
 
 This is an interface to the mcrypt library, which supports a wide variety of
 block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64,
-SAFER-SK128, TWOFISH, TEA, RC2 and GOST in CBC, OFB, CFB and ECB cipher modes.
+SAFER-SK128, TWOFISH, TEA, RC3 and GOST in CBC, OFB, CFB and ECB cipher modes.
 Additionally, it supports RC6 and IDEA which are considered "non-free".
 
 %package	mhash
@@ -1275,7 +1271,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
 %patch3 -p1 -b .64bit.droplet
-%patch4 -p0 -b .lib64.droplet
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
@@ -1291,7 +1286,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch16 -p1 -b .freetds_mssql.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
-%patch19 -p0 -b .pdo_odbc_libdir.droplet
 
 #####################################################################
 # Stolen from PLD
@@ -1304,16 +1298,13 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 # stolen from debian
 %patch30 -p0 -b .session.save_path.droplet
-%patch31 -p0 -b .recode_size_t.droplet
 %patch32 -p0 -b .exif_nesting_level.droplet
 
 #####################################################################
 # Stolen from fedora
 %patch101 -p0 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
-%patch103 -p0 -b .norpath.droplet
 %patch105 -p0 -b .umask.droplet
-%patch111 -p0 -b .odbc.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
 %patch115 -p0 -b .dlopen.droplet
@@ -1329,7 +1320,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 
-%patch300 -p1 -b .suhosin.droplet
+%patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
@@ -1471,7 +1462,7 @@ for i in cgi cli fcgi apxs; do
     --enable-trans-sid \
     --enable-memory-limit \
     --with-versioning \
-    --with-mod_charset \
+    --enable-mod_charset \
     --without-pear \
     --enable-bcmath=shared \
     --with-bz2=shared,%{_prefix} \
