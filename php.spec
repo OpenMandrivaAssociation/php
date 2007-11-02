@@ -8,12 +8,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.4
-Release:	%mkrel 2
+Version:	5.2.5
+Release:	%mkrel 0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch3:		php-64bit.diff
@@ -66,8 +66,9 @@ Patch201:	php-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
 # http://www.suhosin.org/
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.2.5RC2-%{suhosin_version}.diff
 Source5:	maxlifetime
 Source6:	php.crond
 BuildRequires:	apache-devel >= 2.2.4
@@ -1264,7 +1265,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1677,6 +1678,77 @@ cp sapi/cli/TODO TODO.cli
 # house cleaning
 rm -f %{buildroot}%{_bindir}/pear
 rm -f %{buildroot}%{_libdir}/*.a
+
+# don't pack useless stuff
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bcmath
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bz2
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/calendar
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ctype
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/curl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/date
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dba
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dbase
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dom
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/exif
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/filter
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ftp
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gd
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gettext
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gmp
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/hash
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/iconv
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/imap
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/json
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ldap
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/libxml
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mbstring
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mcrypt
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mhash
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mime_magic
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ming
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mssql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ncurses
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/odbc
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/openssl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcntl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcre
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_dblib
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_mysql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_odbc
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_pgsql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_sqlite
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pgsql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/posix
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pspell
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/readline
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/recode
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/reflection
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/session
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/shmop
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/simplexml
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/snmp
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/soap
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sockets
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tidy
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tokenizer
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/wddx
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xml
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlreader
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlrpc
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
+
 
 # fix one strange weirdo
 %{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
