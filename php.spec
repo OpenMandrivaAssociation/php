@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 0.RC2.1
+Release:	%mkrel 0.RC2.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1685,7 +1685,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bz2
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/calendar
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ctype
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/curl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/date
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dba
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dbase
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dom
@@ -1726,7 +1725,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pspell
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/readline
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/recode
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/reflection
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/session
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/shmop
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/simplexml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/snmp
@@ -1748,7 +1746,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
-
 
 # fix one strange weirdo
 %{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
