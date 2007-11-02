@@ -1724,7 +1724,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/posix
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pspell
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/readline
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/recode
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/reflection
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/shmop
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/simplexml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/snmp
