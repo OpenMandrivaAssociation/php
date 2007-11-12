@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1849,30 +1849,6 @@ if [ -f /var/lock/subsys/httpd ]; then
 fi
 
 %postun dbase
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post debug
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun debug
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post devel
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun devel
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
