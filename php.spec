@@ -595,7 +595,7 @@ BuildRequires:	freetype2-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libxpm-devel
-BuildRequires:	XFree86-devel
+BuildRequires:	X11-devel
 Epoch:		0
 
 %description	gd
