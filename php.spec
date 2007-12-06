@@ -35,6 +35,7 @@ Patch15:	php-no_libedit.diff
 Patch16:	php-freetds_mssql.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
+Patch19:	php-bdb46.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -1285,7 +1286,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch16 -p1 -b .freetds_mssql.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
-
+%patch19 -p0 -b .bdb46.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
