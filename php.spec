@@ -88,7 +88,6 @@ BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 Epoch:		%{epoch}
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in
