@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1389,6 +1389,12 @@ rm -rf ext/xmlrpc/libxmlrpc
 %build
 %serverbuild
 
+# http://bugs.php.net/bug.php?id=43487
+# http://qa.mandriva.com/show_bug.cgi?id=37171
+export CFLAGS="`echo ${CFLAGS}|sed 's/-O2/-O0/'` -fPIC -L%{_libdir}"
+export CXXFLAGS="`echo ${CXXFLAGS}|sed 's/-O2/-O0/'` -fPIC -L%{_libdir}"
+export RPM_OPT_FLAGS="${CFLAGS}"
+
 cat > php-devel/buildext <<EOF
 #!/bin/bash
 gcc -Wall -fPIC -shared $CFLAGS \\
@@ -1415,7 +1421,6 @@ perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
 export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
-export CFLAGS="$CFLAGS -fPIC -L%{_libdir}"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 
 # never use "--disable-rpath", it does the opposite
