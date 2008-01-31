@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 6
+Release:	%mkrel 7
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -53,6 +53,7 @@ Patch32:	php-exif_nesting_level.diff
 Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
+Patch106:	php-5.2.5-systzdata.patch
 # Fixes for extension modules
 Patch112:	php-shutdown.diff
 Patch113:	php-libc-client-php.diff
@@ -117,7 +118,7 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.20
+Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -137,7 +138,7 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.20
+Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -157,10 +158,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.20
+Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
-Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -201,7 +201,7 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.20
+Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -221,7 +221,7 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.20
+Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -241,10 +241,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.20
+Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
-Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -285,7 +284,7 @@ Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
 Requires(post):	php-simplexml >= %{version}
-Requires(post):	php-suhosin >= 0.9.20
+Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -305,7 +304,7 @@ Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
 Requires(preun): php-simplexml >= %{version}
-Requires(preun): php-suhosin >= 0.9.20
+Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -325,10 +324,9 @@ Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
 Requires:	php-simplexml >= %{version}
-Requires:	php-suhosin >= 0.9.20
+Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
-Requires:	php-timezonedb >= 2007.3
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -357,6 +355,8 @@ Provides:	libphp_common php-common
 Obsoletes:	libphp_common php-common
 Obsoletes:	php-pcre
 Provides:	php-pcre = %{epoch}:%{version}
+Obsoletes:	php-timezonedb
+Provides:	php-timezonedb = %{epoch}:%{version}
 Epoch:		%{epoch}
 
 %description -n	%{libname}
@@ -1305,6 +1305,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch101 -p0 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
 %patch105 -p0 -b .umask.droplet
+%patch106 -p1 -b .systzdata.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
 %patch115 -p0 -b .dlopen.droplet
@@ -1523,7 +1524,8 @@ for i in cgi cli fcgi apxs; do
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared \
-    --enable-reflection=shared
+    --enable-reflection=shared \
+    --with-system-tzdata=%{_datadir}/zoneinfo
 
 cp -f Makefile Makefile.$i
 
