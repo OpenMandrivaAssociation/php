@@ -9,7 +9,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 7
+Release:	%mkrel 8
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1392,9 +1392,18 @@ rm -rf ext/xmlrpc/libxmlrpc
 
 # http://bugs.php.net/bug.php?id=43487
 # http://qa.mandriva.com/show_bug.cgi?id=37171
-export CFLAGS="`echo ${CFLAGS}|sed 's/-O2/-O0/'` -fPIC -L%{_libdir}"
-export CXXFLAGS="`echo ${CXXFLAGS}|sed 's/-O2/-O0/'` -fPIC -L%{_libdir}"
-export RPM_OPT_FLAGS="${CFLAGS}"
+%ifarch %{ix86}
+GCC_VERSION=`gcc --version | grep "^gcc" | awk '{ print $3 }' | sed 's+\([0-9]\)\.\([0-9]\)\..*+\1\2+'`
+if [ $GCC_VERSION -ge 42 -a $GCC_VERSION -lt 43 ]; then
+    export CFLAGS="${CFLAGS} -fno-tree-vrp"
+    export CXXFLAGS="${CXXFLAGS} -fno-tree-vrp"
+    export RPM_OPT_FLAGS="${CFLAGS} -fno-tree-vrp"
+fi
+%endif
+
+export CFLAGS="${CFLAGS} -fPIC -L%{_libdir}"
+export CXXFLAGS="${CXXFLAGS} -fPIC -L%{_libdir}"
+export RPM_OPT_FLAGS="${CFLAGS} -fPIC -L%{_libdir}"
 
 cat > php-devel/buildext <<EOF
 #!/bin/bash
