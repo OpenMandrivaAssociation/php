@@ -67,6 +67,9 @@ Patch121:	php-tests-wddx.diff
 Patch201:	php-bug29119.diff
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
+# fix http://qa.mandriva.com/show_bug.cgi?id=37171, http://bugs.php.net/bug.php?id=43487
+# -ffloat-store fixes it too
+Patch209:	php-5.2.5-use-volatile-to-force-float-store.patch
 # http://www.suhosin.org/
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Source4:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
@@ -1321,6 +1324,8 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 
+%patch209 -p1 -b .force-store
+
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
@@ -1389,17 +1394,6 @@ rm -rf ext/xmlrpc/libxmlrpc
 
 %build
 %serverbuild
-
-# http://bugs.php.net/bug.php?id=43487
-# http://qa.mandriva.com/show_bug.cgi?id=37171
-%ifarch %{ix86}
-GCC_VERSION=`gcc --version | grep "^gcc" | awk '{ print $3 }' | sed 's+\([0-9]\)\.\([0-9]\)\..*+\1\2+'`
-if [ $GCC_VERSION -ge 42 -a $GCC_VERSION -lt 43 ]; then
-    export CFLAGS="${CFLAGS} -fno-tree-vrp"
-    export CXXFLAGS="${CXXFLAGS} -fno-tree-vrp"
-    export RPM_OPT_FLAGS="${CFLAGS} -fno-tree-vrp"
-fi
-%endif
 
 export CFLAGS="${CFLAGS} -fPIC -L%{_libdir}"
 export CXXFLAGS="${CXXFLAGS} -fPIC -L%{_libdir}"
