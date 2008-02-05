@@ -101,6 +101,7 @@ Epoch:		%{epoch}
 # rpm -qp --queryformat "[BuildConflicts:\t%{name}\n]" /RPMS/release/php-* \
 # /contrib/release/php-* | grep -v pear | grep -v manual | sort -u
 # simplexml needs to be compiled into the library as well...
+# http://bugs.php.net/bug.php?id=42604
 BuildConflicts:	php-adodb-ext
 BuildConflicts:	php-amf
 BuildConflicts:	php-apc
