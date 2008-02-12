@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 10
+Release:	%mkrel 11
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -552,8 +552,8 @@ Requires:	tcl
 Epoch:		%{epoch}
 
 %description	devel
-The php-devel package lets you compile dynamic extensions to PHP5. Included here
-is the source for the php extensions. Instead of recompiling the whole php
+The php-devel package lets you compile dynamic extensions to PHP5. Included
+here is the source for the php extensions. Instead of recompiling the whole php
 binary to add support for, say, oracle, install this package and use the new
 self-contained extensions support. For more information, read the file
 SELF-CONTAINED-EXTENSIONS.
@@ -1935,6 +1935,9 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
+
+# php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
+find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
 
 # fix one strange weirdo
 %{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
