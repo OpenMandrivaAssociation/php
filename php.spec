@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 11
+Release:	%mkrel 12
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -75,6 +75,7 @@ Patch208:	php-extraimapcheck.diff
 # fix http://qa.mandriva.com/show_bug.cgi?id=37171, http://bugs.php.net/bug.php?id=43487
 # -ffloat-store fixes it too
 Patch209:	php-5.2.5-use-volatile-to-force-float-store.patch
+Patch210:	php-CVE-2008-0599.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1519,7 +1520,8 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 
-%patch209 -p1 -b .force-store
+%patch209 -p1 -b .force-store.droplet
+%patch210 -p0 -b .CVE-2008-0599.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
