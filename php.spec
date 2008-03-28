@@ -76,6 +76,7 @@ Patch208:	php-extraimapcheck.diff
 # -ffloat-store fixes it too
 Patch209:	php-5.2.5-use-volatile-to-force-float-store.patch
 Patch210:	php-CVE-2008-0599.diff
+Patch211:	php-fix_integer_overflow_in_length_calculation.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1522,6 +1523,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %patch209 -p1 -b .force-store.droplet
 %patch210 -p0 -b .CVE-2008-0599.droplet
+%patch211 -p0 -b .fix_integer_overflow_in_length_calculation.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
