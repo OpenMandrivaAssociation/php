@@ -78,6 +78,7 @@ Patch121:	php-tests-wddx.diff
 Patch122:	php-bug42779.diff
 Patch123:	php-bug42838.diff
 Patch124:	php-bug42945.diff
+Patch125:	php-bug44191.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1535,6 +1536,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch122 -p0 -b .bug42779.droplet
 %patch123 -p0 -b .bug42838.droplet
 %patch124 -p0 -b .bug42945.droplet
+%patch125 -p0 -b .bug44191.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
