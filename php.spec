@@ -66,6 +66,7 @@ Patch112:	php-shutdown.diff
 Patch113:	php-libc-client-php.diff
 # Functional changes
 Patch115:	php-dlopen.diff
+# Fix bugs
 Patch116:	php-oci8_cvs_fixes.diff
 Patch117:	php-bug42272.diff
 Patch118:	php-bug42369.diff
@@ -73,6 +74,8 @@ Patch119:	php-mysql_cvs_fixes.diff
 Patch120:	php-mysqli_cvs_fixes.diff
 # Fixes for tests
 Patch121:	php-tests-wddx.diff
+# Fix bugs
+Patch122:	php-bug42779.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1525,6 +1528,9 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch120 -p0 -b .mysqli_cvs_fixes.droplet
 
 %patch121 -p1 -b .tests-wddx.droplet
+
+# upstream fixes
+%patch122 -p0 -b .bug42779.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
