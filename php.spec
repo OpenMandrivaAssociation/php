@@ -67,6 +67,7 @@ Patch113:	php-libc-client-php.diff
 # Functional changes
 Patch115:	php-dlopen.diff
 Patch116:	php-oci8_cvs_fixes.diff
+Patch117:	php-bug42272.diff
 # Fixes for tests
 Patch120:	php-5.1.0RC4-tests-dashn.diff
 Patch121:	php-tests-wddx.diff
@@ -1514,6 +1515,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch113 -p0 -b .libc-client-php.droplet
 %patch115 -p0 -b .dlopen.droplet
 %patch116 -p0 -b .oci8_cvs_fixes.droplet
+%patch117 -p0 -b .bug42272.droplet
 
 #%patch120 -p1 -b .tests-dashn.droplet
 %patch121 -p1 -b .tests-wddx.droplet
