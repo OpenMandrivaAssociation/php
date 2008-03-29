@@ -83,6 +83,7 @@ Patch126:	php-bug43105.diff
 Patch127:	php-bug43128.diff
 Patch128:	php-bug43182.diff
 Patch129:	php-bug43201.diff
+Patch130:	php-bug43216.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1545,6 +1546,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch127 -p0 -b .bug43128.droplet
 %patch128 -p0 -b .bug43182.droplet
 %patch129 -p0 -b .bug43201.droplet
+%patch130 -p0 -b .bug43216.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
