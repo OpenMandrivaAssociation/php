@@ -1,4 +1,4 @@
-%define build_test 0
+%define build_test 1
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
 
@@ -89,6 +89,7 @@ Patch132:	php-bug37076.diff
 Patch133:	php-bug43248.diff
 Patch134:	php-bug43276.diff
 Patch135:	php-bug43293.diff
+Patch136:	php-bug43808_43527_43003_42190_41599.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1557,6 +1558,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch133 -p0 -b .bug43248.droplet
 %patch134 -p0 -b .bug43276.droplet
 %patch135 -p0 -b .bug43293.droplet
+%patch136 -p0 -b .bug43808_43527_43003_42190_41599.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
