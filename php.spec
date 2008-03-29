@@ -96,6 +96,7 @@ Patch139:	php-bug43092.diff
 Patch140:	php-safe_mode_bypass.diff
 Patch141:	php-bug43364.diff
 Patch142:	php-Add_missing_Reflection_API_metadata_for_DOM_classes.diff
+Patch143:	php-bug43373.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1571,6 +1572,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch140 -p0 -b .safe_mode_bypass.droplet
 %patch141 -p0 -b .bug43364.droplet
 %patch142 -p0 -b .Add_missing_Reflection_API_metadata_for_DOM_classes.droplet
+%patch143 -p0 -b .bug43373.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
