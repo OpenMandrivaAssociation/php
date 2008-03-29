@@ -104,6 +104,7 @@ Patch147:	php-bug42850.diff
 Patch148:	php-bug43505.diff
 Patch149:	php-bug44046.diff
 Patch150:	php-bug43559.diff
+Patch151:	php-bug42177.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -1587,6 +1588,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch148 -p0 -b .bug43505.droplet
 %patch149 -p0 -b .bug44046.droplet
 %patch150 -p0 -b .bug43559.droplet
+%patch151 -p0 -b .bug42177.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
