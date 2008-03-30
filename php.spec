@@ -155,14 +155,23 @@ Patch198:	php-bug44166.diff
 Patch199:	php-bug43677.diff
 Patch200:	php-bug44445.diff
 Patch201:	php-bug44478.diff
-# Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
+Patch203:	php-bug44557.diff
+Patch204:	php-memleak_in_sign_and_verify_functions.diff
+Patch205:	php-bug42978.diff
+Patch206:	php-bug43457.diff
+Patch207:	php-bug43493.diff
 Patch208:	php-extraimapcheck.diff
 # fix http://qa.mandriva.com/show_bug.cgi?id=37171, http://bugs.php.net/bug.php?id=43487
 # -ffloat-store fixes it too
 Patch209:	php-5.2.5-use-volatile-to-force-float-store.patch
 Patch210:	php-CVE-2008-0599.diff
 Patch211:	php-fix_integer_overflow_in_length_calculation.diff
+Patch212:	php-bug43279.diff
+Patch213:	php-code_opcode-cache_friendly.diff
+Patch214:	php-bug43957.diff
+Patch215:	php-bug42736.diff
+Patch216:	php-bug41562.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1690,15 +1699,21 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch199 -p0 -b .bug43677.droplet
 %patch200 -p0 -b .bug44445.droplet
 %patch201 -p0 -b .bug44478.droplet
-
-# security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
-
+%patch203 -p0 -b .bug44557.droplet
+%patch204 -p0 -b .memleak_in_sign_and_verify_functions.droplet
+%patch205 -p0 -b .bug42978.droplet
+%patch206 -p0 -b .bug43457.droplet
+%patch207 -p0 -b .bug43493.droplet
 %patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
-
 %patch209 -p1 -b .force-store.droplet
 %patch210 -p0 -b .CVE-2008-0599.droplet
 %patch211 -p0 -b .CVE-2008-1384.droplet
+%patch212 -p0 -b .bug43279.droplet
+%patch213 -p0 -b .code_opcode-cache_friendly.droplet
+%patch214 -p0 -b .bug43957.droplet
+%patch215 -p0 -b .bug42736.droplet
+%patch216 -p0 -b .bug41562.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
