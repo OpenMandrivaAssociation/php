@@ -105,6 +105,56 @@ Patch148:	php-bug43505.diff
 Patch149:	php-bug44046.diff
 Patch150:	php-bug43559.diff
 Patch151:	php-bug42177.diff
+Patch152:	php-bug44487.diff
+Patch153:	php-memory_corruption_due_to_double_destruction_of_default_dir_handle.diff
+Patch154:	php-bug43533.diff
+Patch155:	php-non-ipv6_build_fix.diff
+Patch156:	php-bug43498.diff
+Patch157:	php-bug43927.diff
+Patch158:	php-fix_truncation_of_large_values_on_64-bit_systems_in_http_build_query.diff
+Patch159:	php-bug44092.diff
+Patch160:	php-bug44242.diff
+Patch161:	php-php_rand.h_buildfix.diff
+Patch162:	php-bug44028.diff
+Patch163:	php-bug43863.diff
+Patch164:	php-bug44152.diff
+Patch165:	php-bug44394.diff
+Patch166:	php-bug43614.diff
+Patch167:	php-bug43483.diff
+Patch168:	php-soap_cvs_fixes.diff
+Patch169:	php-bug43522.diff
+Patch170:	php-bug43580.diff
+Patch171:	php-bug43589.diff
+Patch172:	php-bug40189.diff
+Patch173:	php-bug43606.diff
+Patch174:	php-bug44355.diff
+Patch175:	php-bug44388.diff
+Patch176:	php-bug43620.diff
+Patch177:	php-bug43703.diff
+Patch178:	php-bug43646.diff
+Patch179:	php-bug44184.diff
+Patch180:	php-shared_memory_corruption_of_opcode_caches.diff
+Patch181:	php-segfault_when_trying_to_clone_uncloneable_object.diff
+Patch182:	php-bug43793.diff
+Patch183:	php-potential_memleak_due_to_destruction_of_filterparams_zval.diff
+Patch184:	php-bug43840.diff
+Patch185:	php-bug43841.diff
+Patch186:	php-bug43998.diff
+Patch187:	php-bug43954.diff
+Patch188:	php-bug44018.diff
+Patch189:	php-bug41828.diff
+Patch190:	php-bug44197.diff
+Patch191:	php-bug44141.diff
+Patch192:	php-bug44159.diff
+Patch193:	php-bug44171.diff
+Patch194:	php-bug44189.diff
+Patch195:	php-bug44200.diff
+Patch196:	php-bug44209.diff
+Patch197:	php-bug44216.diff
+Patch198:	php-bug44166.diff
+Patch199:	php-bug43677.diff
+Patch200:	php-bug44445.diff
+Patch201:	php-bug44478.diff
 # Fix bugs
 Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch208:	php-extraimapcheck.diff
@@ -753,6 +803,7 @@ The extension allows you to operate on an XML document with the DOM API.
 Summary:	EXIF extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-mbstring >= 0:%{version}
 Epoch:		0
 
 %description	exif
@@ -1589,6 +1640,56 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch149 -p0 -b .bug44046.droplet
 %patch150 -p0 -b .bug43559.droplet
 %patch151 -p0 -b .bug42177.droplet
+%patch152 -p0 -b .bug44487.droplet
+%patch153 -p0 -b .memory_corruption_due_to_double_destruction_of_default_dir_handle.droplet
+%patch154 -p0 -b .bug43533.droplet
+%patch155 -p0 -b .non-ipv6_build_fix.droplet
+%patch156 -p0 -b .bug43498.droplet
+%patch157 -p0 -b .bug43927.droplet
+%patch158 -p0 -b .fix_truncation_of_large_values_on_64-bit_systems_in_http_build_query.droplet
+%patch159 -p0 -b .bug44092.droplet
+%patch160 -p0 -b .bug44242.droplet
+%patch161 -p0 -b .php_rand.h_buildfix.droplet
+%patch162 -p0 -b .bug44028.droplet
+%patch163 -p0 -b .bug43863.droplet
+%patch164 -p0 -b .bug44152.droplet
+%patch165 -p0 -b .bug44394.droplet
+%patch166 -p0 -b .bug43614.droplet
+%patch167 -p0 -b .bug43483.droplet
+%patch168 -p0 -b .soap_cvs_fixes.droplet
+%patch169 -p0 -b .bug43522.droplet
+%patch170 -p0 -b .bug43580.droplet
+%patch171 -p0 -b .bug43589.droplet
+%patch172 -p0 -b .bug40189.droplet
+%patch173 -p0 -b .bug43606.droplet
+%patch174 -p0 -b .bug44355.droplet
+%patch175 -p0 -b .bug44388.droplet
+%patch176 -p0 -b .bug43620.droplet
+%patch177 -p0 -b .bug43703.droplet
+%patch178 -p0 -b .bug43646.droplet
+%patch179 -p0 -b .bug44184.droplet
+%patch180 -p0 -b .shared_memory_corruption_of_opcode_caches.droplet
+%patch181 -p0 -b .segfault_when_trying_to_clone_uncloneable_object.droplet
+%patch182 -p0 -b .bug43793.droplet
+%patch183 -p0 -b .potential_memleak_due_to_destruction_of_filterparams_zval.droplet
+%patch184 -p0 -b .bug43840.droplet
+%patch185 -p0 -b .bug43841.droplet
+%patch186 -p0 -b .bug43998.droplet
+%patch187 -p0 -b .bug43954.droplet
+%patch188 -p0 -b .bug44018.droplet
+%patch189 -p0 -b .bug41828.droplet
+%patch190 -p0 -b .bug44197.droplet
+%patch191 -p0 -b .bug44141.droplet
+%patch192 -p0 -b .bug44159.droplet
+%patch193 -p0 -b .bug44171.droplet
+%patch194 -p0 -b .bug44189.droplet
+%patch195 -p0 -b .bug44200.droplet
+%patch196 -p0 -b .bug44209.droplet
+%patch197 -p0 -b .bug44216.droplet
+%patch198 -p0 -b .bug44166.droplet
+%patch199 -p0 -b .bug43677.droplet
+%patch200 -p0 -b .bug44445.droplet
+%patch201 -p0 -b .bug44478.droplet
 
 # security fixes
 %patch202 -p0 -b .CVE-2005-3388.droplet
