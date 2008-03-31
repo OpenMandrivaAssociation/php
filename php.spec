@@ -172,9 +172,11 @@ Patch213:	php-code_opcode-cache_friendly.diff
 Patch214:	php-bug43957.diff
 Patch215:	php-bug42736.diff
 Patch216:	php-bug41562.diff
+Patch217:	php-bug44564.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Patch400:	php-corrected_tests.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -1714,10 +1716,13 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch214 -p0 -b .bug43957.droplet
 %patch215 -p0 -b .bug42736.droplet
 %patch216 -p0 -b .bug41562.droplet
+%patch217 -p0 -b .bug44564.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
+
+%patch400 -p1 -b .corrected_tests.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
