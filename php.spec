@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.5
-Release:	%mkrel 13
+Release:	%mkrel 14
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -148,7 +148,6 @@ Patch191:	php-bug44141.diff
 Patch192:	php-bug44159.diff
 Patch193:	php-bug44171.diff
 Patch194:	php-bug44189.diff
-Patch195:	php-bug44200.diff
 Patch196:	php-bug44209.diff
 Patch197:	php-bug44216.diff
 Patch198:	php-bug44166.diff
@@ -1694,7 +1693,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch192 -p0 -b .bug44159.droplet
 %patch193 -p0 -b .bug44171.droplet
 %patch194 -p0 -b .bug44189.droplet
-%patch195 -p0 -b .bug44200.droplet
 %patch196 -p0 -b .bug44209.droplet
 %patch197 -p0 -b .bug44216.droplet
 %patch198 -p0 -b .bug44166.droplet
