@@ -172,6 +172,18 @@ Patch214:	php-bug43957.diff
 Patch215:	php-bug42736.diff
 Patch216:	php-bug41562.diff
 Patch217:	php-bug44564.diff
+Patch218:	php-posix-autoconf-2.62_fix.diff
+Patch219:	php-bug44594.diff
+Patch220:	php-bug44603.diff
+Patch221:	php-bug44613.diff
+Patch222:	php-bug44663.diff
+Patch223:	php-possible_stack_buffer_overflow_in_FastCGI_SAPI.diff
+Patch224:	php-bug32979.diff
+Patch225:	php-bug44591.diff
+Patch226:	php-bug44650.diff
+Patch227:	php-bug44667.diff
+Patch228:	php-weired_behavior_in_CGI_parameter_parsing.diff
+Patch229:	php-bug44673.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1715,12 +1727,34 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch215 -p0 -b .bug42736.droplet
 %patch216 -p0 -b .bug41562.droplet
 %patch217 -p0 -b .bug44564.droplet
+%patch218 -p0 -b .posix-autoconf-2.62_fix.droplet
+%patch219 -p0 -b .bug44594.droplet
+%patch220 -p0 -b .bug44603.droplet
+%patch221 -p0 -b .bug44613.droplet
+%patch222 -p0 -b .bug44663.droplet
+%patch223 -p0 -b .possible_stack_buffer_overflow_in_FastCGI_SAPI.droplet
+%patch224 -p0 -b .bug32979.droplet
+%patch225 -p0 -b .bug44591.droplet
+%patch226 -p0 -b .bug44650.droplet
+%patch227 -p0 -b .bug44667.droplet
+%patch228 -p0 -b .weired_behavior_in_CGI_parameter_parsing.droplet
+%patch229 -p0 -b .bug44673.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
 %patch400 -p1 -b .corrected_tests.droplet
+
+# "temporary" autoconf-2.62 "fixes"
+perl -pi -e "s|have_broken_glibc_fopen_append|have_cv_broken_glibc_fopen_append|g" *.m4
+
+for i in `find -name "*.m4"`; do
+    perl -pi -e "s|cv_php_mbstring_stdarg|php_cv_mbstring_stdarg|g;\
+        s|php_can_support_proc_open|php_cv_can_support_proc_open|g" $i
+done
+
+#	s|pdo_inc_path|pdo_cv_inc_path|g;\
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
@@ -1924,11 +1958,11 @@ done
 perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/libphp5_common%{major}-%{version}/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
 cp config.nice configure_command; chmod 644 configure_command
 
-%make
+make
 
 # make php-fcgi
 cp -af php_config.h.fcgi main/php_config.h
-%make -f Makefile.fcgi sapi/cgi/php-cgi
+make -f Makefile.fcgi sapi/cgi/php-cgi
 cp -rp sapi/cgi sapi/fcgi
 perl -pi -e "s|sapi/cgi|sapi/fcgi|g" sapi/fcgi/php
 
@@ -1937,7 +1971,7 @@ rm -rf sapi/cgi/.libs; rm -f sapi/cgi/*.lo sapi/cgi/php-cgi
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
-%make -f Makefile.cgi sapi/cgi/php-cgi
+make -f Makefile.cgi sapi/cgi/php-cgi
 
 cp -af php_config.h.apxs main/php_config.h
 
