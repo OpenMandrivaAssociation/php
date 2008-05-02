@@ -12,8 +12,8 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.5
-Release:	%mkrel 14
+Version:	5.2.6
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -42,7 +42,6 @@ Patch15:	php-no_libedit.diff
 Patch16:	php-freetds_mssql.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
-Patch19:	php-bdb46.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -67,127 +66,21 @@ Patch113:	php-libc-client-php.diff
 # Functional changes
 Patch115:	php-dlopen.diff
 # Fix bugs
-Patch116:	php-oci8_cvs_fixes.diff
-Patch117:	php-bug42272.diff
-Patch118:	php-bug42369.diff
-Patch119:	php-mysql_cvs_fixes.diff
-Patch120:	php-mysqli_cvs_fixes.diff
-# Fixes for tests
-Patch121:	php-tests-wddx.diff
-# Fix bugs
-Patch122:	php-bug42779.diff
-Patch123:	php-bug42838.diff
-Patch124:	php-bug42945.diff
-Patch125:	php-bug44191.diff
-Patch126:	php-bug43105.diff
-Patch127:	php-bug43128.diff
-Patch128:	php-bug43182.diff
-Patch129:	php-bug43201.diff
-Patch130:	php-bug43216.diff
-Patch131:	php-bug43221.diff
-Patch132:	php-bug37076.diff
-Patch133:	php-bug43248.diff
-Patch134:	php-bug43276.diff
-Patch135:	php-bug43293.diff
-Patch136:	php-bug43808_43527_43003_42190_41599.diff
-Patch137:	php-bug43301.diff
-Patch138:	php-bug43994.diff
-Patch139:	php-bug43092.diff
-Patch140:	php-safe_mode_bypass.diff
-Patch141:	php-bug43364.diff
-Patch142:	php-Add_missing_Reflection_API_metadata_for_DOM_classes.diff
-Patch143:	php-bug43373.diff
-Patch144:	php-bug43386.diff
-Patch145:	php-bug43482.diff
-Patch146:	php-bug43495.diff
-Patch147:	php-bug42850.diff
-Patch148:	php-bug43505.diff
-Patch149:	php-bug44046.diff
-Patch150:	php-bug43559.diff
-Patch151:	php-bug42177.diff
-Patch152:	php-bug44487.diff
-Patch153:	php-memory_corruption_due_to_double_destruction_of_default_dir_handle.diff
-Patch154:	php-bug43533.diff
-Patch155:	php-non-ipv6_build_fix.diff
-Patch156:	php-bug43498.diff
-Patch157:	php-bug43927.diff
-Patch158:	php-fix_truncation_of_large_values_on_64-bit_systems_in_http_build_query.diff
-Patch159:	php-bug44092.diff
-Patch160:	php-bug44242.diff
-Patch161:	php-php_rand.h_buildfix.diff
-Patch162:	php-bug44028.diff
-Patch163:	php-bug43863.diff
-Patch164:	php-bug44152.diff
-Patch165:	php-bug44394.diff
-Patch166:	php-bug43614.diff
-Patch167:	php-bug43483.diff
-Patch168:	php-soap_cvs_fixes.diff
-Patch169:	php-bug43522.diff
-Patch170:	php-bug43580.diff
-Patch171:	php-bug43589.diff
-Patch172:	php-bug40189.diff
-Patch173:	php-bug43606.diff
-Patch174:	php-bug44355.diff
-Patch175:	php-bug44388.diff
-Patch176:	php-bug43620.diff
-Patch177:	php-bug43703.diff
-Patch178:	php-bug43646.diff
-Patch179:	php-bug44184.diff
-Patch180:	php-shared_memory_corruption_of_opcode_caches.diff
-Patch181:	php-segfault_when_trying_to_clone_uncloneable_object.diff
-Patch182:	php-bug43793.diff
-Patch183:	php-potential_memleak_due_to_destruction_of_filterparams_zval.diff
-Patch184:	php-bug43840.diff
-Patch185:	php-bug43841.diff
-Patch186:	php-bug43998.diff
-Patch187:	php-bug43954.diff
-Patch188:	php-bug44018.diff
-Patch189:	php-bug41828.diff
-Patch190:	php-bug44197.diff
-Patch191:	php-bug44141.diff
-Patch192:	php-bug44159.diff
-Patch193:	php-bug44171.diff
-Patch194:	php-bug44189.diff
-Patch196:	php-bug44209.diff
-Patch197:	php-bug44216.diff
-Patch198:	php-bug44166.diff
-Patch199:	php-bug43677.diff
-Patch200:	php-bug44445.diff
-Patch201:	php-bug44478.diff
-Patch202:	php-5.1.0RC6-CVE-2005-3388.diff
-Patch203:	php-bug44557.diff
-Patch204:	php-memleak_in_sign_and_verify_functions.diff
-Patch205:	php-bug42978.diff
-Patch206:	php-bug43457.diff
-Patch207:	php-bug43493.diff
-Patch208:	php-extraimapcheck.diff
+Patch120:	php-tests-wddx.diff
+Patch121:	php-bug43221.diff
+Patch122:	php-bug37076.diff
+Patch123:	php-bug43589.diff
+Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
+Patch225:	php-extraimapcheck.diff
 # fix http://qa.mandriva.com/show_bug.cgi?id=37171, http://bugs.php.net/bug.php?id=43487
 # -ffloat-store fixes it too
-Patch209:	php-5.2.5-use-volatile-to-force-float-store.patch
-Patch210:	php-CVE-2008-0599.diff
-Patch211:	php-fix_integer_overflow_in_length_calculation.diff
-Patch212:	php-bug43279.diff
-Patch213:	php-code_opcode-cache_friendly.diff
-Patch214:	php-bug43957.diff
-Patch215:	php-bug42736.diff
-Patch216:	php-bug41562.diff
-Patch217:	php-bug44564.diff
-Patch218:	php-posix-autoconf-2.62_fix.diff
-Patch219:	php-bug44594.diff
-Patch220:	php-bug44603.diff
-Patch221:	php-bug44613.diff
-Patch222:	php-bug44663.diff
-Patch223:	php-possible_stack_buffer_overflow_in_FastCGI_SAPI.diff
-Patch224:	php-bug32979.diff
-Patch225:	php-bug44591.diff
-Patch226:	php-bug44650.diff
-Patch227:	php-bug44667.diff
-Patch228:	php-weired_behavior_in_CGI_parameter_parsing.diff
-Patch229:	php-bug44673.diff
+Patch226:	php-5.2.5-use-volatile-to-force-float-store.patch
+Patch227:	php-bug43279.diff
+Patch228:	php-posix-autoconf-2.62_fix.diff
+Patch229:	php-bug44594.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch400:	php-corrected_tests.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -1598,7 +1491,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch16 -p1 -b .freetds_mssql.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
-%patch19 -p0 -b .bdb46.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
@@ -1623,128 +1515,20 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch115 -p0 -b .dlopen.droplet
 
 # upstream fixes
-%patch116 -p0 -b .oci8_cvs_fixes.droplet
-%patch117 -p0 -b .bug42272.droplet
-%patch118 -p0 -b .bug42369.droplet
-%patch119 -p0 -b .mysql_cvs_fixes.droplet
-%patch120 -p0 -b .mysqli_cvs_fixes.droplet
-
-%patch121 -p1 -b .tests-wddx.droplet
-
-# upstream fixes
-%patch122 -p0 -b .bug42779.droplet
-%patch123 -p0 -b .bug42838.droplet
-%patch124 -p0 -b .bug42945.droplet
-%patch125 -p0 -b .bug44191.droplet
-%patch126 -p0 -b .bug43105.droplet
-%patch127 -p0 -b .bug43128.droplet
-%patch128 -p0 -b .bug43182.droplet
-%patch129 -p0 -b .bug43201.droplet
-%patch130 -p0 -b .bug43216.droplet
-%patch131 -p0 -b .bug43221.droplet
-%patch132 -p0 -b .bug37076.droplet
-%patch133 -p0 -b .bug43248.droplet
-%patch134 -p0 -b .bug43276.droplet
-%patch135 -p0 -b .bug43293.droplet
-%patch136 -p0 -b .bug43808_43527_43003_42190_41599.droplet
-%patch137 -p0 -b .bug43301.droplet
-%patch138 -p0 -b .bug43994.droplet
-%patch139 -p0 -b .bug43092.droplet
-%patch140 -p0 -b .safe_mode_bypass.droplet
-%patch141 -p0 -b .bug43364.droplet
-%patch142 -p0 -b .Add_missing_Reflection_API_metadata_for_DOM_classes.droplet
-%patch143 -p0 -b .bug43373.droplet
-%patch144 -p0 -b .bug43386.droplet
-%patch145 -p0 -b .bug43482.droplet
-%patch146 -p0 -b .bug43495.droplet
-%patch147 -p0 -b .bug42850.droplet
-%patch148 -p0 -b .bug43505.droplet
-%patch149 -p0 -b .bug44046.droplet
-%patch150 -p0 -b .bug43559.droplet
-%patch151 -p0 -b .bug42177.droplet
-%patch152 -p0 -b .bug44487.droplet
-%patch153 -p0 -b .memory_corruption_due_to_double_destruction_of_default_dir_handle.droplet
-%patch154 -p0 -b .bug43533.droplet
-%patch155 -p0 -b .non-ipv6_build_fix.droplet
-%patch156 -p0 -b .bug43498.droplet
-%patch157 -p0 -b .bug43927.droplet
-%patch158 -p0 -b .fix_truncation_of_large_values_on_64-bit_systems_in_http_build_query.droplet
-%patch159 -p0 -b .bug44092.droplet
-%patch160 -p0 -b .bug44242.droplet
-%patch161 -p0 -b .php_rand.h_buildfix.droplet
-%patch162 -p0 -b .bug44028.droplet
-%patch163 -p0 -b .bug43863.droplet
-%patch164 -p0 -b .bug44152.droplet
-%patch165 -p0 -b .bug44394.droplet
-%patch166 -p0 -b .bug43614.droplet
-%patch167 -p0 -b .bug43483.droplet
-%patch168 -p0 -b .soap_cvs_fixes.droplet
-%patch169 -p0 -b .bug43522.droplet
-%patch170 -p0 -b .bug43580.droplet
-%patch171 -p0 -b .bug43589.droplet
-%patch172 -p0 -b .bug40189.droplet
-%patch173 -p0 -b .bug43606.droplet
-%patch174 -p0 -b .bug44355.droplet
-%patch175 -p0 -b .bug44388.droplet
-%patch176 -p0 -b .bug43620.droplet
-%patch177 -p0 -b .bug43703.droplet
-%patch178 -p0 -b .bug43646.droplet
-%patch179 -p0 -b .bug44184.droplet
-%patch180 -p0 -b .shared_memory_corruption_of_opcode_caches.droplet
-%patch181 -p0 -b .segfault_when_trying_to_clone_uncloneable_object.droplet
-%patch182 -p0 -b .bug43793.droplet
-%patch183 -p0 -b .potential_memleak_due_to_destruction_of_filterparams_zval.droplet
-%patch184 -p0 -b .bug43840.droplet
-%patch185 -p0 -b .bug43841.droplet
-%patch186 -p0 -b .bug43998.droplet
-%patch187 -p0 -b .bug43954.droplet
-%patch188 -p0 -b .bug44018.droplet
-%patch189 -p0 -b .bug41828.droplet
-%patch190 -p0 -b .bug44197.droplet
-%patch191 -p0 -b .bug44141.droplet
-%patch192 -p0 -b .bug44159.droplet
-%patch193 -p0 -b .bug44171.droplet
-%patch194 -p0 -b .bug44189.droplet
-%patch196 -p0 -b .bug44209.droplet
-%patch197 -p0 -b .bug44216.droplet
-%patch198 -p0 -b .bug44166.droplet
-%patch199 -p0 -b .bug43677.droplet
-%patch200 -p0 -b .bug44445.droplet
-%patch201 -p0 -b .bug44478.droplet
-%patch202 -p0 -b .CVE-2005-3388.droplet
-%patch203 -p0 -b .bug44557.droplet
-%patch204 -p0 -b .memleak_in_sign_and_verify_functions.droplet
-%patch205 -p0 -b .bug42978.droplet
-%patch206 -p0 -b .bug43457.droplet
-%patch207 -p0 -b .bug43493.droplet
-%patch208 -p0 -b .open_basedir_and_safe_mode_checks.droplet
-%patch209 -p1 -b .force-store.droplet
-%patch210 -p0 -b .CVE-2008-0599.droplet
-%patch211 -p0 -b .CVE-2008-1384.droplet
-%patch212 -p0 -b .bug43279.droplet
-%patch213 -p0 -b .code_opcode-cache_friendly.droplet
-%patch214 -p0 -b .bug43957.droplet
-%patch215 -p0 -b .bug42736.droplet
-%patch216 -p0 -b .bug41562.droplet
-%patch217 -p0 -b .bug44564.droplet
-%patch218 -p0 -b .posix-autoconf-2.62_fix.droplet
-%patch219 -p0 -b .bug44594.droplet
-%patch220 -p0 -b .bug44603.droplet
-%patch221 -p0 -b .bug44613.droplet
-%patch222 -p0 -b .bug44663.droplet
-%patch223 -p0 -b .possible_stack_buffer_overflow_in_FastCGI_SAPI.droplet
-%patch224 -p0 -b .bug32979.droplet
-%patch225 -p0 -b .bug44591.droplet
-%patch226 -p0 -b .bug44650.droplet
-%patch227 -p0 -b .bug44667.droplet
-%patch228 -p0 -b .weired_behavior_in_CGI_parameter_parsing.droplet
-%patch229 -p0 -b .bug44673.droplet
+%patch120 -p1 -b .tests-wddx.droplet
+%patch121 -p0 -b .bug43221.droplet
+%patch122 -p0 -b .bug37076.droplet
+%patch123 -p0 -b .bug43589.droplet
+%patch224 -p0 -b .CVE-2005-3388.droplet
+%patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
+%patch226 -p1 -b .force-store.droplet
+%patch227 -p0 -b .bug43279.droplet
+%patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
+%patch229 -p0 -b .bug44594.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
-
-%patch400 -p1 -b .corrected_tests.droplet
 
 # "temporary" autoconf-2.62 "fixes"
 perl -pi -e "s|have_broken_glibc_fopen_append|have_cv_broken_glibc_fopen_append|g" *.m4
