@@ -1645,7 +1645,7 @@ for i in cgi cli fcgi apxs; do
     --includedir=%{_includedir} \
     --libdir=%{_libdir} \
     --libexecdir=%{_libexecdir} \
-    --localstatedir=%{_localstatedir} \
+    --localstatedir=%{_localstatedir}/lib \
     --mandir=%{_mandir} \
     --enable-shared=yes \
     --enable-static=no \
@@ -1696,7 +1696,7 @@ for i in cgi cli fcgi apxs; do
     --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
     --with-ming=shared,%{_prefix} \
     --with-mssql=shared,%{_prefix} \
-    --with-mysql=shared,%{_prefix} --with-mysql-sock=%{_localstatedir}/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
+    --with-mysql=shared,%{_prefix} --with-mysql-sock=%{_localstatedir}/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
     --with-ncurses=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
@@ -1769,7 +1769,7 @@ install -d %{buildroot}%{_libdir}/php/extensions
 install -d %{buildroot}%{_usrsrc}/php-devel
 install -d %{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_sysconfdir}/cron.d
-install -d %{buildroot}%{_localstatedir}/php
+install -d %{buildroot}%{_localstatedir}/lib/php
 
 #perl -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" .libs/*.la*
 
@@ -3022,7 +3022,7 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
 %attr(0755,root,root) %{_libdir}/php/extensions/session.so
 %attr(0755,root,root) %{_libdir}/php/maxlifetime
-%attr(01733,apache,apache) %dir %{_localstatedir}/php
+%attr(01733,apache,apache) %dir %{_localstatedir}/lib/php
 
 %files shmop
 %defattr(-,root,root)
