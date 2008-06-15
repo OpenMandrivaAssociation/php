@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1634,7 +1634,6 @@ for i in cgi cli fcgi apxs; do
     `[ $i = cgi ] && echo --enable-discard-path --disable-cli --enable-force-cgi-redirect` \
     `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
-    --cache-file=config.cache \
     --build=%{_build} \
     --prefix=%{_prefix} \
     --exec-prefix=%{_prefix} \
