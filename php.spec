@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -39,7 +39,7 @@ Patch13:	php5-apache2-filters.diff
 Patch14:	php-extension_dep_macro_revert.diff
 # remove libedit once and for all
 Patch15:	php-no_libedit.diff
-Patch16:	php-freetds_mssql.diff
+Patch16:	php-freetds.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
 #####################################################################
@@ -970,8 +970,8 @@ files) support.
 %package	mssql
 Summary:	MS SQL extension module for PHP
 Group:		Development/PHP
-Requires:       freetds_mssql >= 0.62.4
-BuildRequires:  freetds_mssql-devel >= 0.62.4
+Requires:       freetds >= 0.63
+BuildRequires:  freetds-devel >= 0.63
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -1073,8 +1073,8 @@ Read the documentation at http://www.php.net/pdo for more information.
 %package	pdo_dblib
 Summary:	Sybase Interface driver for PDO
 Group:		Development/PHP
-Requires:       freetds_mssql >= 0.62.4
-BuildRequires:  freetds_mssql-devel >= 0.62.4
+Requires:       freetds >= 0.63
+BuildRequires:  freetds-devel >= 0.63
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
@@ -1488,7 +1488,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
 %patch15 -p0 -b .no_libedit.droplet
-%patch16 -p1 -b .freetds_mssql.droplet
+%patch16 -p1 -b .freetds.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
 #####################################################################
