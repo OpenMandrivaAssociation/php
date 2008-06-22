@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1333,6 +1333,16 @@ SQLite is not a client library used to connect to a big database server. SQLite
 is the server. The SQLite library reads and writes directly to and from the
 database files on disk.
 
+%package	sybase
+Summary:	Sybase extension module for PHP
+Group:		Development/PHP
+Requires:	%{libname} >= %{epoch}:%{version}
+Epoch:		0
+
+%description	sybase
+This is a dynamic shared object (DSO) for PHP that will add Sybase support to
+PHP.
+
 %package	sysvmsg
 Summary:	SysV msg extension module for PHP
 Group:		Development/PHP
@@ -1713,6 +1723,7 @@ for i in cgi cli fcgi apxs; do
     --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-sockets=shared,%{_prefix} \
     --with-sqlite=shared,%{_prefix} \
+    --with-sybase=shared,%{_prefix} \
     --enable-sysvmsg=shared,%{_prefix} \
     --enable-sysvsem=shared,%{_prefix} \
     --enable-sysvshm=shared,%{_prefix} \
@@ -1759,7 +1770,7 @@ make -f Makefile.cgi sapi/cgi/php-cgi
 cp -af php_config.h.apxs main/php_config.h
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 install -d %{buildroot}%{_libdir}
 install -d %{buildroot}%{_bindir}
@@ -1845,6 +1856,7 @@ echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
 echo "extension = sqlite.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite.ini
+echo "extension = sybase.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
 echo "extension = sysvsem.so"		> %{buildroot}%{_sysconfdir}/php.d/57_sysvsem.ini
 echo "extension = sysvshm.so"		> %{buildroot}%{_sysconfdir}/php.d/58_sysvshm.ini
@@ -1936,6 +1948,7 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sockets
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
@@ -2613,6 +2626,18 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%post sybase
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun sybase
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
 %post sysvmsg
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -3051,6 +3076,11 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
+
+%files sybase
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_sybase.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sybase.so
 
 %files sysvmsg
 %defattr(-,root,root)
