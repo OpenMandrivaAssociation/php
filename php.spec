@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 7
+Release:	%mkrel 8
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -62,7 +62,8 @@ Patch105:	php-umask.diff
 Patch106:	php-5.2.5-systzdata.patch
 # Fixes for extension modules
 Patch112:	php-shutdown.diff
-Patch113:	php-libc-client-php.diff
+Patch113:	php-libc-client.diff
+Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
 # Fix bugs
@@ -844,8 +845,7 @@ It will most likely end up with more consistent results.
 %package	imap
 Summary:	IMAP extension module for PHP
 Group:		Development/PHP
-BuildRequires:	imap-devel >= 2006
-BuildRequires:	libc-client-php-devel >= 2006
+BuildRequires:	c-client-devel >= 2007
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -1522,6 +1522,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch106 -p1 -b .systzdata.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
+%patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
 
 # upstream fixes
