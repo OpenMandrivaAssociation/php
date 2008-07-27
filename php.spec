@@ -80,6 +80,7 @@ Patch227:	php-bug43279.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
 Patch230:	php-CVE-2008-2829.patch
+Patch231:	php-5.2.x-CVE-2008-2665_CVE-2008-2666.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1538,6 +1539,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
 %patch230 -p0 -b .cve-2008-2829.droplet
+%patch231 -p0 -b .CVE-2008-2665_CVE-2008-2666.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
