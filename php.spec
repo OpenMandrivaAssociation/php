@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 10
+Release:	%mkrel 11
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1661,7 +1661,7 @@ for i in cgi cli fcgi apxs; do
     --includedir=%{_includedir} \
     --libdir=%{_libdir} \
     --libexecdir=%{_libexecdir} \
-    --localstatedir=%{_localstatedir}/lib \
+    --localstatedir=/var/lib \
     --mandir=%{_mandir} \
     --enable-shared=yes \
     --enable-static=no \
@@ -1712,7 +1712,7 @@ for i in cgi cli fcgi apxs; do
     --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
     --with-ming=shared,%{_prefix} \
     --with-mssql=shared,%{_prefix} \
-    --with-mysql=shared,%{_prefix} --with-mysql-sock=%{_localstatedir}/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
+    --with-mysql=shared,%{_prefix} --with-mysql-sock=/var/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
     --with-ncurses=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
@@ -1786,7 +1786,7 @@ install -d %{buildroot}%{_libdir}/php/extensions
 install -d %{buildroot}%{_usrsrc}/php-devel
 install -d %{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_sysconfdir}/cron.d
-install -d %{buildroot}%{_localstatedir}/lib/php
+install -d %{buildroot}/var/lib/php
 
 #perl -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" .libs/*.la*
 
@@ -3057,7 +3057,7 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
 %attr(0755,root,root) %{_libdir}/php/extensions/session.so
 %attr(0755,root,root) %{_libdir}/php/maxlifetime
-%attr(01733,apache,apache) %dir %{_localstatedir}/lib/php
+%attr(01733,apache,apache) %dir /var/lib/php
 
 %files shmop
 %defattr(-,root,root)
