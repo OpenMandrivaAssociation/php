@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 12
+Release:	%mkrel 13
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -893,6 +893,7 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
+BuildRequires:	mbfl-devel
 Epoch:		0
 
 %description	mbstring
@@ -1706,7 +1707,7 @@ for i in cgi cli fcgi apxs; do
     --with-iconv=shared \
     --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
     --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
-    --enable-mbstring=shared,%{_prefix} --enable-mbregex \
+    --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} \
     --with-mcrypt=shared,%{_prefix} \
     --with-mhash=shared,%{_prefix} \
     --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
