@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 13
+Release:	%mkrel 14
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -766,11 +766,12 @@ intuitive interface.
 %package	gd
 Summary:	GD extension module for PHP
 Group:		Development/PHP
-BuildRequires:	gd-devel >= 2.0.33
 BuildRequires:	freetype2-devel
+BuildRequires:	gd-devel >= 2.0.33
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libxpm-devel
+BuildRequires:	t1lib-devel
 BuildRequires:	X11-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
@@ -1700,7 +1701,7 @@ for i in cgi cli fcgi apxs; do
     --enable-filter=shared --with-pcre-dir=%{_prefix} \
     --enable-json=shared \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
-    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf \
+    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
     --with-gettext=shared,%{_prefix} \
     --with-gmp=shared,%{_prefix} \
     --enable-hash=shared,%{_prefix} \
