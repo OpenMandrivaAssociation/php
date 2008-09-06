@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 15
+Release:	%mkrel 16
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -42,6 +42,7 @@ Patch15:	php-no_libedit.diff
 Patch16:	php-freetds.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
+Patch19:	php-xml_expat_fix.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -1506,6 +1507,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch16 -p1 -b .freetds.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
+%patch19 -p0 -b .xml_expat_fix.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
@@ -1643,6 +1645,7 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
+export XML_SHARED_LIBADD="$XML_SHARED_LIBADD -lexpat"
 
 # never use "--disable-rpath", it does the opposite
 
@@ -1738,9 +1741,9 @@ for i in cgi cli fcgi apxs; do
     --enable-sysvshm=shared,%{_prefix} \
     --with-tidy=shared,%{_prefix} \
     --enable-tokenizer=shared,%{_prefix} \
-    --enable-xml=shared,%{_prefix} --with-expat-dir=shared,%{_prefix} \
+    --enable-xml=shared,%{_prefix} --with-expat-dir=%{_prefix} \
     --enable-xmlreader=shared,%{_prefix} \
-    --with-xmlrpc=shared,%{_prefix} --with-expat-dir=shared,%{_prefix} \
+    --with-xmlrpc=shared,%{_prefix} --with-expat-dir=%{_prefix} \
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared \
