@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.6
-Release:	%mkrel 16
+Release:	%mkrel 17
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -29,9 +29,6 @@ Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
-# for kolab2
-Patch11:	php-imap-annotation.diff
-Patch12:	php-imap-status-current.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -55,6 +52,10 @@ Patch28:	php-zlib.patch
 # stolen from debian
 Patch30:	php-session.save_path.diff
 Patch32:	php-exif_nesting_level.diff
+# for kolab2
+Patch50:	php-imap-annotation.diff
+Patch51:	php-imap-status-current.diff
+Patch52:	php-imap-myrights.diff
 #####################################################################
 # Stolen from fedora
 Patch101:	php-cxx.diff
@@ -1496,10 +1497,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
-
-# for kolab2
-%patch11 -p1 -b .imap-annotation.droplet
-%patch12 -p1 -b .imap-status-current.droplet
 #
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
@@ -1520,6 +1517,11 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 # stolen from debian
 %patch30 -p0 -b .session.save_path.droplet
 %patch32 -p0 -b .exif_nesting_level.droplet
+
+# for kolab2
+%patch50 -p1 -b .imap-annotation.droplet
+%patch51 -p1 -b .imap-status-current.droplet
+%patch52 -p1 -b .imap-myrights.droplet
 
 #####################################################################
 # Stolen from fedora
@@ -1550,6 +1552,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
+
 
 # "temporary" autoconf-2.62 "fixes"
 perl -pi -e "s|have_broken_glibc_fopen_append|have_cv_broken_glibc_fopen_append|g" *.m4
