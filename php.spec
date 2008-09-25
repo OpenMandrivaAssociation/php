@@ -2037,21 +2037,6 @@ TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
 %postun -n %{libname} -p /sbin/ldconfig
 %endif
 
-%pre cgi
-update-alternatives --remove php %{_bindir}/php-cgi
-update-alternatives --remove php %{_bindir}/php-fcgi
-update-alternatives --remove php %{_bindir}/php-cli
-
-%pre fcgi
-update-alternatives --remove php %{_bindir}/php-cgi
-update-alternatives --remove php %{_bindir}/php-fcgi
-update-alternatives --remove php %{_bindir}/php-cli
-
-%pre cli
-update-alternatives --remove php %{_bindir}/php-cgi
-update-alternatives --remove php %{_bindir}/php-fcgi
-update-alternatives --remove php %{_bindir}/php-cli
-
 %post bcmath
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
