@@ -68,6 +68,7 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
+Patch116:	php-ming-0.4.2.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
@@ -966,7 +967,7 @@ historic and copyright information.
 %package	ming
 Summary:	Ming extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libming-devel
+BuildRequires:	ming-devel >= 0.4.0
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -1533,6 +1534,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch113 -p0 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
+%patch116 -p1 -b .ming-0.4.2.droplet
 
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
