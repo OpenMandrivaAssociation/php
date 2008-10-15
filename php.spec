@@ -12,12 +12,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.6
-Release:	%mkrel 18
+Version:	5.2.7
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -36,7 +36,6 @@ Patch13:	php5-apache2-filters.diff
 Patch14:	php-extension_dep_macro_revert.diff
 # remove libedit once and for all
 Patch15:	php-no_libedit.diff
-Patch16:	php-freetds.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
 Patch19:	php-xml_expat_fix.diff
@@ -72,22 +71,16 @@ Patch116:	php-ming-0.4.2.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
-Patch122:	php-bug37076.diff
 Patch123:	php-bug43589.diff
 Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
-# fix http://qa.mandriva.com/show_bug.cgi?id=37171, http://bugs.php.net/bug.php?id=43487
-# -ffloat-store fixes it too
-Patch226:	php-5.2.5-use-volatile-to-force-float-store.patch
-Patch227:	php-bug43279.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
 Patch230:	php-CVE-2008-2829.patch
-Patch231:	php-5.2.x-CVE-2008-2665_CVE-2008-2666.diff
-Patch232:	php-bug44712.diff
 # http://www.suhosin.org/
-Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Source300:	suhosin-patch-5.2.6-%{suhosin_version}.patch.gz.sig
+#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Patch300:	suhosin-patch-5.2.6-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -104,170 +97,6 @@ BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 Epoch:		%{epoch}
-%if %{build_test}
-# (oe) the tests might fail because files in /etc/php.d/ will be picked up, and
-# if there is an extension installed that may be conflicting we need to have
-# this huge list of build conflicts... the list is constructed like this:
-# rpm -qp --queryformat "[BuildConflicts:\t%{name}\n]" /RPMS/release/php-* \
-# /contrib/release/php-* | grep -v pear | grep -v manual | sort -u
-# simplexml needs to be compiled into the library as well...
-# http://bugs.php.net/bug.php?id=42604
-BuildConflicts:	php-adodb-ext
-BuildConflicts:	php-amf
-BuildConflicts:	php-apc
-BuildConflicts:	php-archive
-BuildConflicts:	php-auth_nds
-BuildConflicts:	php-bbcode
-BuildConflicts:	php-bcmath
-BuildConflicts:	php-braille
-BuildConflicts:	php-bz2
-BuildConflicts:	php-calendar
-BuildConflicts:	php-cgi
-BuildConflicts:	php-clamav
-BuildConflicts:	php-cli
-BuildConflicts:	php-colorer
-BuildConflicts:	php-courierauth
-BuildConflicts:	php-ctype
-BuildConflicts:	php-cups
-BuildConflicts:	php-curl
-BuildConflicts:	php-cyrus
-BuildConflicts:	php-dav
-BuildConflicts:	php-dba
-BuildConflicts:	php-dbase
-BuildConflicts:	php-dbx
-BuildConflicts:	php-devel
-BuildConflicts:	php-dio
-BuildConflicts:	php-dom
-BuildConflicts:	php-domxml
-BuildConflicts:	php-doublemetaphone
-BuildConflicts:	php-eaccelerator
-BuildConflicts:	php-ecasound
-BuildConflicts:	php-enchant
-BuildConflicts:	php-esmtp
-BuildConflicts:	php-event
-BuildConflicts:	php-exif
-BuildConflicts:	php-expect
-BuildConflicts:	php-fam
-BuildConflicts:	php-fcgi
-BuildConflicts:	php-ffmpeg
-BuildConflicts:	php-fileinfo
-BuildConflicts:	php-filepro
-BuildConflicts:	php-filter
-BuildConflicts:	php-firebird
-BuildConflicts:	php-ftp
-BuildConflicts:	php-gd
-BuildConflicts:	php-gd-bundled
-BuildConflicts:	php-geoip
-BuildConflicts:	php-gettext
-BuildConflicts:	php-gmp
-BuildConflicts:	php-gnupg
-BuildConflicts:	php-gnutls
-BuildConflicts:	php-gtk2
-BuildConflicts:	php-haru
-BuildConflicts:	php-hash
-BuildConflicts:	php-hidef
-BuildConflicts:	php-htscanner
-BuildConflicts:	php-iconv
-BuildConflicts:	php-id3
-BuildConflicts:	php-idn
-BuildConflicts:	php-imagick
-BuildConflicts:	php-imap
-BuildConflicts:	php-imlib2
-BuildConflicts:	php-ini
-BuildConflicts:	php-java-bridge
-BuildConflicts:	php-java-bridge-tomcat
-BuildConflicts:	php-json
-BuildConflicts:	php-ldap
-BuildConflicts:	php-magickwand
-BuildConflicts:	php-mailparse
-BuildConflicts:	php-mapscript
-BuildConflicts:	php-mbstring
-BuildConflicts:	php-mcache
-BuildConflicts:	php-mcal
-BuildConflicts:	php-mcrypt
-BuildConflicts:	php-mcve
-BuildConflicts:	php-mdbtools
-BuildConflicts:	php-memcache
-BuildConflicts:	php-mhash
-BuildConflicts:	php-mime_magic
-BuildConflicts:	php-ming
-BuildConflicts:	php-mnogosearch
-BuildConflicts:	php-mod_bt
-BuildConflicts:	php-mssql
-BuildConflicts:	php-mysql
-BuildConflicts:	php-mysqli
-BuildConflicts:	php-ncurses
-BuildConflicts:	php-netools
-BuildConflicts:	php-newt
-BuildConflicts:	php-odbc
-BuildConflicts:	php-oggvorbis
-BuildConflicts:	php-openssl
-BuildConflicts:	php-pam
-BuildConflicts:	php-pcntl
-BuildConflicts:	php-pdo
-BuildConflicts:	php-pdo_dblib
-BuildConflicts:	php-pdo_mysql
-BuildConflicts:	php-pdo_odbc
-BuildConflicts:	php-pdo_pgsql
-BuildConflicts:	php-pdo_sqlite
-BuildConflicts:	php-perl
-BuildConflicts:	php-pgsql
-BuildConflicts:	php-phar
-BuildConflicts:	php-phk
-BuildConflicts:	php-posix
-BuildConflicts:	php-ps
-BuildConflicts:	php-pspell
-BuildConflicts:	php-radius
-BuildConflicts:	php-readline
-BuildConflicts:	php-recode
-BuildConflicts:	php-rpmreader
-BuildConflicts:	php-rrdtool
-BuildConflicts:	php-ruli
-BuildConflicts:	php-sasl
-BuildConflicts:	php-session
-BuildConflicts:	php-shmop
-BuildConflicts:	php-shout
-BuildConflicts:	php-shp
-BuildConflicts:	php-simplexml
-BuildConflicts:	php-smbauth
-BuildConflicts:	php-snmp
-BuildConflicts:	php-soap
-BuildConflicts:	php-sockets
-BuildConflicts:	php-sqlite
-BuildConflicts:	php-sqlite3
-BuildConflicts:	php-ssh2
-BuildConflicts:	php-stats
-BuildConflicts:	php-stem
-BuildConflicts:	php-suhosin
-BuildConflicts:	php-svn
-BuildConflicts:	php-sybase
-BuildConflicts:	php-syck
-BuildConflicts:	php-sysvmsg
-BuildConflicts:	php-sysvsem
-BuildConflicts:	php-sysvshm
-BuildConflicts:	php-tclink
-BuildConflicts:	php-tcpwrap
-BuildConflicts:	php-teng
-BuildConflicts:	php-tidy
-BuildConflicts:	php-tk
-BuildConflicts:	php-tokenizer
-BuildConflicts:	php-translit
-BuildConflicts:	php-uuid
-BuildConflicts:	php-vld
-BuildConflicts:	php-wddx
-BuildConflicts:	php-xattr
-BuildConflicts:	php-xdebug
-BuildConflicts:	php-xdiff
-BuildConflicts:	php-xml
-BuildConflicts:	php-xmlreader
-BuildConflicts:	php-xmlrpc
-BuildConflicts:	php-xmlwriter
-BuildConflicts:	php-xsl
-BuildConflicts:	php-yaz
-BuildConflicts:	php-yp
-BuildConflicts:	php-zip
-BuildConflicts:	php-zlib
-%endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -1286,6 +1115,7 @@ Summary:	NET-SNMP extension module for PHP
 Group:		Development/PHP
 Requires:	net-snmp-mibs
 BuildRequires:	net-snmp-devel
+BuildRequires:	net-snmp-mibs
 BuildRequires:	openssl-devel
 BuildRequires:	elfutils-devel
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -1488,7 +1318,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1502,7 +1332,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
 %patch15 -p0 -b .no_libedit.droplet
-%patch16 -p1 -b .freetds.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
 %patch19 -p0 -b .xml_expat_fix.droplet
@@ -1539,22 +1368,16 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
-%patch122 -p0 -b .bug37076.droplet
 %patch123 -p0 -b .bug43589.droplet
 %patch224 -p0 -b .CVE-2005-3388.droplet
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
-%patch226 -p1 -b .force-store.droplet
-%patch227 -p0 -b .bug43279.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
 %patch230 -p0 -b .cve-2008-2829.droplet
-%patch231 -p0 -b .CVE-2008-2665_CVE-2008-2666.droplet
-%patch232 -p0 -b .bug44712.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
-
 
 # "temporary" autoconf-2.62 "fixes"
 perl -pi -e "s|have_broken_glibc_fopen_append|have_cv_broken_glibc_fopen_append|g" *.m4
@@ -1998,6 +1821,7 @@ export REPORT_EXIT_STATUS=2
 export TEST_PHP_DETAILED=0
 export TEST_PHP_ERROR_STYLE=EMACS
 export TEST_PHP_LOG_FORMAT=LEODC
+export PHP_INI_SCAN_DIR=/dev/null
 
 # FAILING TESTS:
 # unknown errors with ext/date/tests/oo_002.phpt probably because of php-5.2.5-systzdata.patch
