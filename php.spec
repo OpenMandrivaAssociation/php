@@ -13,11 +13,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.7
-Release:	%mkrel 0.0.RC1.1
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -76,7 +76,6 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
-Patch230:	php-CVE-2008-2829.patch
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.2.6-%{suhosin_version}.patch.gz.sig
 #Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1318,7 +1317,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}RC1
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1373,7 +1372,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
-%patch230 -p0 -b .cve-2008-2829.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
