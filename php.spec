@@ -8,16 +8,16 @@
 %define major 5
 %define libname %mklibname php5_common %{major}
 
-%define suhosin_version 0.9.6.2
+%define suhosin_version 0.9.6.3
 
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.7
-Release:	%mkrel 0.0.RC5.1
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC5.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -77,9 +77,8 @@ Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
 # http://www.suhosin.org/
-Source300:	suhosin-patch-5.2.6-%{suhosin_version}.patch.gz.sig
-#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch300:	suhosin-patch-5.2.6-%{suhosin_version}.patch.gz
+Source300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -1317,7 +1316,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}RC5
+%setup -q -n php-%{version}
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
