@@ -817,7 +817,7 @@ support using the FreeTDS library.
 %package	mysql
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-BuildRequires:	MySQL-devel >= 4.0.10
+BuildRequires:	mysql-devel >= 4.0.10
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -833,7 +833,7 @@ Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 %package	mysqli
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-BuildRequires:	MySQL-devel >= 4.1.7
+BuildRequires:	mysql-devel >= 4.1.7
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
