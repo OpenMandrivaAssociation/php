@@ -12,8 +12,8 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.7
-Release:	%mkrel 2
+Version:	5.2.8
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -76,7 +76,6 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
-Patch230:	php-5.2.7-magic_quotes_gpc_fix.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz
@@ -1372,7 +1371,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
-%patch230 -p0 -b .magic_quotes_gpc_fix.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
