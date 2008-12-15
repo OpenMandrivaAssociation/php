@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.8
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -46,6 +46,7 @@ Patch21:	php-sybase-fix.patch
 Patch22:	php-filter-shared.diff
 Patch23:	php-5.2.0-mdv_logo.diff
 Patch25:	php-dba-link.patch
+Patch26:	php-5.2.8-bdb4.7_fix.diff
 Patch27:	php-zlib-for-getimagesize.patch
 Patch28:	php-zlib.patch
 # stolen from debian
@@ -1339,6 +1340,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch21 -p1 -b .sybase-fix.droplet
 %patch22 -p0 -b .filter-shared.droplet
 %patch25 -p0 -b .dba-link.droplet
+%patch26 -p0 -b .bdb4.7_fix.droplet
 %patch27 -p0 -b .zlib-for-getimagesize.droplet
 %patch28 -p1 -b .zlib.droplet
 
