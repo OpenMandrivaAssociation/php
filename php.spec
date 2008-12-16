@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.8
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -29,6 +29,7 @@ Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
+Patch11:	php-5.2.8-format_not_a_string_literal_and_no_format_arguments.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -1327,6 +1328,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
+%patch11 -p0 -b .format_not_a_string_literal_and_no_format_arguments.droplet
 #
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
