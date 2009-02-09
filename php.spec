@@ -12,12 +12,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.8
-Release:	%mkrel 7
+Version:	5.2.9
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -29,7 +29,6 @@ Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
-Patch11:	php-5.2.8-format_not_a_string_literal_and_no_format_arguments.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -78,10 +77,10 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
-Patch230:   php-5.2.8-CAN-2008-5498.patch
 # http://www.suhosin.org/
-Source300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-5.2.7-%{suhosin_version}.patch.gz
+Source300:	suhosin-patch-5.2.8-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.2.8-%{suhosin_version}.patch.gz
+Patch301:	suhosin-patch-5.2.9RC1-%{suhosin_version}.patch
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -1319,7 +1318,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1329,14 +1328,13 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
-%patch11 -p0 -b .format_not_a_string_literal_and_no_format_arguments.droplet
 #
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
 %patch15 -p0 -b .no_libedit.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
-%patch19 -p0 -b .xml_expat_fix.droplet
+%patch19 -p1 -b .xml_expat_fix.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
@@ -1376,9 +1374,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
-%patch230 -p1 -b .CAN-2008-5498
-
-%patch300 -p1 -b .suhosin.droplet
+%patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
@@ -1445,9 +1441,9 @@ rm -rf ext/xmlrpc/libxmlrpc
 %build
 %serverbuild
 
-export CFLAGS="${CFLAGS} -fPIC -L%{_libdir} -fno-strict-aliasing"
-export CXXFLAGS="${CXXFLAGS} -fPIC -L%{_libdir} -fno-strict-aliasing"
-export RPM_OPT_FLAGS="${CFLAGS} -fPIC -L%{_libdir} -fno-strict-aliasing"
+export CFLAGS="`echo ${CFLAGS} | sed s/O2/O0/` -fPIC -L%{_libdir} -fno-strict-aliasing"
+export CXXFLAGS="${CFLAGS}"
+export RPM_OPT_FLAGS="${CFLAGS}"
 
 cat > php-devel/buildext <<EOF
 #!/bin/bash
