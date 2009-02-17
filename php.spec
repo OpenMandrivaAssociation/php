@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 0.0.RC2.1
+Release:	%mkrel 0.0.RC2.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -88,6 +88,7 @@ BuildRequires:	bison
 BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	libtool
+BuildRequires:	libtool-devel
 BuildRequires:	libxml2-devel >= 2.6
 BuildRequires:	libxslt-devel >= 1.1.0
 BuildRequires:	openssl >= 0.9.7
@@ -1461,6 +1462,14 @@ chmod 755 php-devel/buildext
 
 # this _has_ to be executed!
 #export WANT_AUTOCONF_2_5=1
+
+%if %{mdkversion} >= 200910
+# aclocal workaround - to be improved
+cat `aclocal-1.7 --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >>aclocal.m4
+
+# Force use of system libtool:
+cat `aclocal-1.7 --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
+%endif
 
 rm -f configure; libtoolize --copy --force; aclocal-1.7; autoconf --force; autoheader
 #./buildconf --force
