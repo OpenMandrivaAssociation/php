@@ -13,11 +13,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 0.0.RC3.2
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC3.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -1319,7 +1319,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 
 %prep
 
-%setup -q -n php-%{version}RC3
+%setup -q -n php-%{version}
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
