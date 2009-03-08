@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -29,6 +29,7 @@ Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
+Patch11:	php-5.2.9-system_onig_library_fix.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -728,6 +729,7 @@ Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
 BuildRequires:	mbfl-devel
+BuildRequires:	onig-devel
 Epoch:		0
 
 %description	mbstring
@@ -1329,6 +1331,8 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch8 -p1 -b .phpize.droplet
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
+%patch11 -p1 -b .system_onig_library_fix.droplet
+
 #
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
@@ -1547,7 +1551,7 @@ for i in cgi cli fcgi apxs; do
     --with-iconv=shared \
     --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
     --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
-    --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} \
+    --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
     --with-mcrypt=shared,%{_prefix} \
     --with-mhash=shared,%{_prefix} \
     --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
