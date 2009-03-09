@@ -8,12 +8,12 @@
 %define major 5
 %define libname %mklibname php5_common %{major}
 
-%define suhosin_version 0.9.6.3
+%define suhosin_version 0.9.7
 
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -79,9 +79,8 @@ Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
 # http://www.suhosin.org/
-Source300:	suhosin-patch-5.2.8-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-5.2.8-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.2.9RC1-%{suhosin_version}.patch
+Source300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -1379,7 +1378,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
-%patch301 -p1 -b .suhosin.droplet
+%patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
