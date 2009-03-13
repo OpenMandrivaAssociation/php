@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -39,7 +39,6 @@ Patch14:	php-extension_dep_macro_revert.diff
 Patch15:	php-no_libedit.diff
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
-Patch19:	php-xml_expat_fix.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -1242,7 +1241,7 @@ specification at the lexical level.
 %package	xml
 Summary:	XML extension module for PHP
 Group:		Development/PHP
-BuildRequires:	expat-devel
+BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -1309,7 +1308,7 @@ using the libxslt library
 Summary:	WDDX serialization functions
 Group:		Development/PHP
 Requires:	php-xml
-BuildRequires:  expat-devel
+BuildRequires:  libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
@@ -1338,7 +1337,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch15 -p0 -b .no_libedit.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
-%patch19 -p1 -b .xml_expat_fix.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
@@ -1484,7 +1482,6 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
-export XML_SHARED_LIBADD="$XML_SHARED_LIBADD -lexpat"
 
 # never use "--disable-rpath", it does the opposite
 
@@ -1580,12 +1577,12 @@ for i in cgi cli fcgi apxs; do
     --enable-sysvshm=shared,%{_prefix} \
     --with-tidy=shared,%{_prefix} \
     --enable-tokenizer=shared,%{_prefix} \
-    --enable-xml=shared,%{_prefix} --with-expat-dir=%{_prefix} \
+    --enable-xml=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-xmlreader=shared,%{_prefix} \
     --with-xmlrpc=shared,%{_prefix} --with-expat-dir=%{_prefix} \
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
-    --enable-wddx=shared \
+    --enable-wddx=shared --with-libxml-dir=%{_prefix} \
     --enable-reflection=shared \
     --with-system-tzdata=%{_datadir}/zoneinfo
 
