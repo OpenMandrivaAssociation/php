@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -77,6 +77,17 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
 Patch228:	php-posix-autoconf-2.62_fix.diff
 Patch229:	php-bug44594.diff
+Patch230:	php-5.2.x-new_curl-7.19.4_options.diff
+Patch231:	php-5.2.x-bug47616.diff
+Patch232:	php-5.2.x-memory_corruptions_in_zip_extension.diff
+Patch233:	php-5.2.x-bug47667.diff
+Patch234:	php-5.2.x-bug47644.diff
+Patch235:	php-5.2.x-bug47435.diff
+Patch236:	php-5.2.x-bug47598.diff
+Patch237:	php-5.2.x-bug47546.diff
+Patch238:	php-5.2.x-bug47430.diff
+Patch239:	php-5.2.x-bug45799.diff
+Patch240:	php-5.2.x-bug47639.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz
@@ -1317,6 +1328,16 @@ This is a dynamic shared object (DSO) that adds wddx support to PHP.
 
 These functions are intended for work with WDDX (http://www.openwddx.org/)
 
+%package	zip
+Summary:	A zip management extension for PHP
+Group:		Development/PHP
+#BuildRequires:	libzip-devel >= 0.9
+Epoch:		1
+
+%description	zip
+This is a dynamic shared object (DSO) for PHP that will add zip support to
+create and read zip files using the libzip library.
+
 %prep
 
 %setup -q -n php-%{version}
@@ -1330,7 +1351,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
 %patch11 -p1 -b .system_onig_library_fix.droplet
-
 #
 %patch13 -p0 -b .apache2-filters.droplet
 %patch14 -p1 -b .extension_dep_macro_revert.droplet
@@ -1376,6 +1396,18 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
 %patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
 %patch229 -p0 -b .bug44594.droplet
+%patch230 -p0 -b .new_curl-7.19.4_options.droplet
+%patch231 -p0 -b .bug47616.droplet
+%patch232 -p0 -b .memory_corruptions_in_zip_extension.droplet
+%patch233 -p0 -b .bug47667.droplet
+%patch234 -p0 -b .bug47644.droplet
+%patch235 -p0 -b .bug47435.droplet
+%patch236 -p0 -b .bug47598.droplet
+%patch237 -p0 -b .bug47546.droplet
+%patch238 -p0 -b .bug47430.droplet
+%patch239 -p0 -b .bug45799.droplet
+%patch240 -p0 -b .bug47639.droplet
+
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
@@ -1584,7 +1616,8 @@ for i in cgi cli fcgi apxs; do
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared --with-libxml-dir=%{_prefix} \
     --enable-reflection=shared \
-    --with-system-tzdata=%{_datadir}/zoneinfo
+    --with-system-tzdata=%{_datadir}/zoneinfo \
+    --enable-zip=shared
 
 cp -f Makefile Makefile.$i
 
@@ -1717,6 +1750,7 @@ echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter
 echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
 echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
 echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
+echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
 
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
@@ -1809,7 +1843,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlrpc
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
 
 # php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
 find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
@@ -2616,6 +2649,17 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%post zip
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun zip
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -2970,3 +3014,8 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_wddx.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/wddx.so
+
+%files zip
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/83_zip.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/zip.so
