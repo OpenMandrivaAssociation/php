@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.2.9
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -88,6 +88,8 @@ Patch237:	php-5.2.x-bug47546.diff
 Patch238:	php-5.2.x-bug47430.diff
 Patch239:	php-5.2.x-bug45799.diff
 Patch240:	php-5.2.x-bug47639.diff
+Patch241:	php-5.2.x-memleak.diff
+Patch242:	php-5.2.x-bug47772.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz
@@ -1407,6 +1409,8 @@ create and read zip files using the libzip library.
 %patch238 -p0 -b .bug47430.droplet
 %patch239 -p0 -b .bug45799.droplet
 %patch240 -p0 -b .bug47639.droplet
+%patch241 -p0 -b .memleak.droplet
+%patch242 -p0 -b .bug47772.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
