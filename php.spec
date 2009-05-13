@@ -12,12 +12,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.2.9
-Release:	%mkrel 6
+Version:	5.3.0
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -27,14 +27,10 @@ Patch3:		php-64bit.diff
 Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
-Patch9:		php-remove_bogus_iconv_deps.diff
 Patch10:	php-phpbuilddir.diff
-Patch11:	php-5.2.9-system_onig_library_fix.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
-# P14 fixes the way we package the extensions to not check if the dep are installed or compiled in
-Patch14:	php-extension_dep_macro_revert.diff
 # remove libedit once and for all
 Patch15:	php-no_libedit.diff
 Patch17:	php-xmlrpc_no_rpath.diff
@@ -42,9 +38,8 @@ Patch18:	php-really_external_sqlite2.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
-Patch21:	php-sybase-fix.patch
 Patch22:	php-filter-shared.diff
-Patch23:	php-5.2.0-mdv_logo.diff
+Patch23:	php-mdv_logo.diff
 Patch25:	php-dba-link.patch
 Patch26:	php-5.2.8-bdb4.7_fix.diff
 Patch27:	php-zlib-for-getimagesize.patch
@@ -68,31 +63,18 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
-Patch116:	php-ming-0.4.2.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
 Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch225:	php-extraimapcheck.diff
-Patch228:	php-posix-autoconf-2.62_fix.diff
-Patch229:	php-bug44594.diff
-Patch230:	php-5.2.x-new_curl-7.19.4_options.diff
-Patch231:	php-5.2.x-bug47616.diff
-Patch232:	php-5.2.x-memory_corruptions_in_zip_extension.diff
-Patch233:	php-5.2.x-bug47667.diff
-Patch234:	php-5.2.x-bug47644.diff
-Patch235:	php-5.2.x-bug47435.diff
-Patch236:	php-5.2.x-bug47598.diff
-Patch237:	php-5.2.x-bug47546.diff
-Patch238:	php-5.2.x-bug47430.diff
-Patch239:	php-5.2.x-bug45799.diff
-Patch240:	php-5.2.x-bug47639.diff
-Patch241:	php-5.2.x-memleak.diff
-Patch242:	php-5.2.x-bug47772.diff
+Patch226:	php-no-fvisibility_hidden_fix.diff
+Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.2.9-%{suhosin_version}.patch.gz
+Patch301:	suhosin-patch-5.3.0RC2-0.9.7.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
@@ -531,22 +513,6 @@ functionality is limited to a common subset of features supported by modern
 databases such as Sleepycat Software's DB2. (This is not to be confused with
 IBM's DB2 software, which is supported through the ODBC functions.)
 
-%package	dbase
-Summary:	DBase extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
-
-%description	dbase
-This is a dynamic shared object (DSO) for PHP that will add DBase support.
-
-These functions allow you to access records stored in dBase-format (dbf)
-databases.
-
-dBase files are simple sequential files of fixed length records. Records are
-appended to the end of the file and delete records are kept until you call
-dbase_pack().
-
 %package	dom
 Summary:	Dom extension module for PHP
 Group:		Development/PHP
@@ -563,6 +529,25 @@ In particular, functions that are not object-oriented should be avoided.
 
 The extension allows you to operate on an XML document with the DOM API.
 
+%package	enchant
+Summary:	Libenchant binder, support near all spelling tools
+Group:		Development/PHP
+Requires:	%{libname} >= %{epoch}:%{version}
+BuildRequires:	enchant-devel
+Epoch:		1
+
+%description	enchant
+Enchant is a binder for libenchant. Libenchant provides a common API for many
+spell libraries:
+
+ - aspell/pspell (intended to replace ispell)
+ - hspell (hebrew)
+ - ispell 
+ - myspell (OpenOffice project, mozilla)
+ - uspell (primarily Yiddish, Hebrew, and Eastern European languages)
+   A plugin system allows to add custom spell support.
+   see www.abisource.com/enchant/
+
 %package	exif
 Summary:	EXIF extension module for PHP
 Group:		Development/PHP
@@ -578,6 +563,20 @@ With the exif extension you are able to work with image meta data. For example,
 you may use exif functions to read meta data of pictures taken from digital
 cameras by working with information stored in the headers of the JPEG and TIFF
 images.
+
+%package	fileinfo
+Summary:	Fileinfo extension module for PHP
+Group:		Development/PHP
+Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	file
+BuildRequires:  file-devel
+
+%description	fileinfo
+This extension allows retrieval of information regarding vast majority of file.
+This information may include dimensions, quality, length etc...
+
+Additionally it can also be used to retrieve the mime type for a particular
+file and for text files proper language encoding.
 
 %package	filter
 Summary:	Extension for safely dealing with input parameters
@@ -705,6 +704,19 @@ These functions are not limited to the IMAP protocol, despite their name. The
 underlying c-client library also supports NNTP, POP3 and local mailbox access
 methods.
 
+%package	intl
+Summary:	Internationalization extension module for PHP
+Group:		Development/PHP
+BuildRequires:	icu-devel >= 3.4
+Requires:	%{libname} >= %{epoch}:%{version}
+Epoch:		0
+
+%description	intl
+This is a dynamic shared object (DSO) for PHP that will add
+Internationalization support.
+
+Internationalization extension implements ICU library functionality in PHP.
+
 %package	json
 Summary:	JavaScript Object Notation
 Group:		Development/PHP
@@ -769,55 +781,6 @@ block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64,
 SAFER-SK128, TWOFISH, TEA, RC3 and GOST in CBC, OFB, CFB and ECB cipher modes.
 Additionally, it supports RC6 and IDEA which are considered "non-free".
 
-%package	mhash
-Summary:	Mhash extension module for PHP
-Group:		Development/PHP
-BuildRequires:	libmhash-devel
-Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
-
-%description	mhash
-This is a dynamic shared object (DSO) for PHP that will add mhash support.
-
-These functions are intended to work with mhash. Mhash can be used to create
-checksums, message digests, message authentication codes, and more.
-
-This is an interface to the mhash library. mhash supports a wide variety of
-hash algorithms such as MD5, SHA1, GOST, and many others. For a complete list
-of supported hashes, refer to the documentation of mhash. The general rule is
-that you can access the hash algorithm from PHP with MHASH_HASHNAME. For
-example, to access TIGER you use the PHP constant MHASH_TIGER.
-
-%package	mime_magic
-Summary:	The MIME Magic module for PHP
-Group:		Development/PHP
-BuildRequires:	apache-conf
-Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
-
-%description	mime_magic
-This is a dynamic shared object (DSO) that adds MIME Magic support to PHP.
-
-The functions in this module try to guess the content type and encoding of a
-file by looking for certain magic byte sequences at specific positions within
-the file. While this is not a bullet proof approach the heuristics used do a
-very good job.
-
-This extension is derived from Apache mod_mime_magic, which is itself based on
-the file command maintained by Ian F. Darwin. See the source code for further
-historic and copyright information.
-
-%package	ming
-Summary:	Ming extension module for PHP
-Group:		Development/PHP
-BuildRequires:	ming-devel >= 0.4.0
-Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
-
-%description	ming
-This is a dynamic shared object (DSO) for PHP that will add ming (Flash - .swf
-files) support.
-
 %package	mssql
 Summary:	MS SQL extension module for PHP
 Group:		Development/PHP
@@ -862,17 +825,6 @@ The mysqli extension allows you to access the functionality provided by MySQL
 http://www.mysql.com/
 
 Documentation for MySQL can be found at http://dev.mysql.com/doc/.
-
-%package	ncurses
-Summary:	Ncurses module for PHP
-Group:		Development/PHP
-BuildRequires:	ncurses-devel
-Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
-
-%description	ncurses
-This PHP module adds support for ncurses functions (only for cli and cgi
-SAPIs).
 
 %package	odbc
 Summary:	ODBC extension module for PHP
@@ -969,10 +921,10 @@ different "flavours" of database drivers:
 	      supported in Mandriva.
 
  o unixODBC - Supports access to database servers through the unixODBC driver
-              manager and the database's own ODBC drivers. 
+              manager and the database's own ODBC drivers.
 
  o generic  - Offers a compile option for ODBC driver managers that are not
-              explicitly supported by PDO_ODBC. 
+              explicitly supported by PDO_ODBC.
 
 %package	pdo_pgsql
 Summary:	PostgreSQL interface driver for PDO
@@ -990,6 +942,7 @@ enable access from PHP to PostgreSQL databases.
 Summary:	SQLite v3 Interface driver for PDO
 Group:		Development/PHP
 BuildRequires:	sqlite3-devel
+BuildRequires:	lemon
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
@@ -1167,15 +1120,17 @@ The socket extension implements a low-level interface to the socket
 communication functions based on the popular BSD sockets, providing the
 possibility to act as a socket server as well as a client.
 
-%package	sqlite
+%package	sqlite3
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
 Requires:	php-pdo >= 0:%{version}
-BuildRequires:	sqlite-devel
+Obsoletes:	php-sqlite
+Provides:	php-sqlite = %{epoch}:%{version}
+BuildRequires:	sqlite3-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
-%description	sqlite
+%description	sqlite3
 This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
 C library that implements an embeddable SQL database engine. Programs that link
 with the SQLite library can have SQL database access without running a separate
@@ -1185,13 +1140,15 @@ SQLite is not a client library used to connect to a big database server. SQLite
 is the server. The SQLite library reads and writes directly to and from the
 database files on disk.
 
-%package	sybase
+%package	sybase_ct
 Summary:	Sybase extension module for PHP
 Group:		Development/PHP
+Obsoletes:	php-sybase
+Provides:	php-sybase = %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Epoch:		0
 
-%description	sybase
+%description	sybase_ct
 This is a dynamic shared object (DSO) for PHP that will add Sybase support to
 PHP.
 
@@ -1342,7 +1299,7 @@ create and read zip files using the libzip library.
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1350,19 +1307,15 @@ create and read zip files using the libzip library.
 %patch3 -p1 -b .64bit.droplet
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
-%patch9 -p0 -b .remove_bogus_iconv_deps.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
-%patch11 -p1 -b .system_onig_library_fix.droplet
 #
-%patch13 -p0 -b .apache2-filters.droplet
-%patch14 -p1 -b .extension_dep_macro_revert.droplet
+%patch13 -p1 -b .apache2-filters.droplet
 %patch15 -p0 -b .no_libedit.droplet
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
-%patch21 -p1 -b .sybase-fix.droplet
 %patch22 -p0 -b .filter-shared.droplet
 %patch25 -p0 -b .dba-link.droplet
 %patch26 -p0 -b .bdb4.7_fix.droplet
@@ -1374,9 +1327,9 @@ create and read zip files using the libzip library.
 %patch32 -p0 -b .exif_nesting_level.droplet
 
 # for kolab2
-%patch50 -p1 -b .imap-annotation.droplet
-%patch51 -p1 -b .imap-status-current.droplet
-%patch52 -p1 -b .imap-myrights.droplet
+#%patch50 -p1 -b .imap-annotation.droplet <- needs porting
+#%patch51 -p1 -b .imap-status-current.droplet <- needs porting
+#%patch52 -p1 -b .imap-myrights.droplet <- needs porting
 
 #####################################################################
 # Stolen from fedora
@@ -1388,43 +1341,20 @@ create and read zip files using the libzip library.
 %patch113 -p0 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
-%patch116 -p1 -b .ming-0.4.2.droplet
 
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
 %patch123 -p0 -b .bug43589.droplet
 %patch224 -p0 -b .CVE-2005-3388.droplet
-%patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet
-%patch228 -p0 -b .posix-autoconf-2.62_fix.droplet
-%patch229 -p0 -b .bug44594.droplet
-%patch230 -p0 -b .new_curl-7.19.4_options.droplet
-%patch231 -p0 -b .bug47616.droplet
-%patch232 -p0 -b .memory_corruptions_in_zip_extension.droplet
-%patch233 -p0 -b .bug47667.droplet
-%patch234 -p0 -b .bug47644.droplet
-%patch235 -p0 -b .bug47435.droplet
-%patch236 -p0 -b .bug47598.droplet
-%patch237 -p0 -b .bug47546.droplet
-%patch238 -p0 -b .bug47430.droplet
-%patch239 -p0 -b .bug45799.droplet
-%patch240 -p0 -b .bug47639.droplet
-%patch241 -p0 -b .memleak.droplet
-%patch242 -p0 -b .bug47772.droplet
+#%patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet <- does not apply anymore
+%patch226 -p0 -b .no-fvisibility_hidden.droplet
+%patch227 -p0 -b .enchant_lib64_fix.droplet
 
-%patch300 -p1 -b .suhosin.droplet
+%patch301 -p1 -b .suhosin.droplet
+
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
-
-# "temporary" autoconf-2.62 "fixes"
-perl -pi -e "s|have_broken_glibc_fopen_append|have_cv_broken_glibc_fopen_append|g" *.m4
-
-for i in `find -name "*.m4"`; do
-    perl -pi -e "s|cv_php_mbstring_stdarg|php_cv_mbstring_stdarg|g;\
-        s|php_can_support_proc_open|php_cv_can_support_proc_open|g" $i
-done
-
-#	s|pdo_inc_path|pdo_cv_inc_path|g;\
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
@@ -1451,7 +1381,6 @@ cp -dpR ext/* php-devel/extensions/
 rm -f php-devel/extensions/informix/stub.c
 rm -f php-devel/extensions/standard/.deps
 rm -f php-devel/extensions/skeleton/EXPERIMENTAL
-rm -f php-devel/extensions/ncurses/EXPERIMENTAL
 
 # SAPI
 cp -dpR sapi/* php-devel/sapi/ 
@@ -1502,7 +1431,7 @@ chmod 755 php-devel/buildext
 
 %if %{mdkversion} >= 200910
 # aclocal workaround - to be improved
-cat `aclocal-1.7 --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >>aclocal.m4
+cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >>aclocal.m4
 
 # Force use of system libtool:
 cat `aclocal-1.7 --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
@@ -1524,8 +1453,8 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # Configure php5
 for i in cgi cli fcgi apxs; do
 ./configure \
-    `[ $i = fcgi ] && echo --enable-fastcgi --with-fastcgi=%{_prefix} --disable-cli --enable-force-cgi-redirect` \
-    `[ $i = cgi ] && echo --enable-discard-path --disable-cli --enable-force-cgi-redirect` \
+    `[ $i = fcgi ] && echo --disable-cli` \
+    `[ $i = cgi ] && echo --disable-cli` \
     `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
     --build=%{_build} \
@@ -1548,10 +1477,12 @@ for i in cgi cli fcgi apxs; do
     --disable-debug --enable-pic \
     --enable-inline-optimization \
     --with-exec-dir=%{_bindir} \
+    --with-regex=php \
     --with-pcre=%{_prefix} --with-pcre-regex=%{_prefix} \
-    --with-ttf --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
+    --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
     --with-png-dir=%{_prefix} \
     --with-regex=php \
+    --disable-mysqlnd-threading \
     --enable-magic-quotes \
     --enable-safe-mode \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
@@ -1570,13 +1501,15 @@ for i in cgi cli fcgi apxs; do
     --enable-ctype=shared \
     --with-curl=shared,%{_prefix} --without-curlwrappers \
     --enable-dba=shared --with-gdbm --with-db4 --with-cdb --with-flatfile --with-inifile \
-    --enable-dbase=shared \
     --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --with-enchant=shared,%{_prefix} \
     --enable-exif=shared \
+    --enable-fileinfo=shared \
     --enable-filter=shared --with-pcre-dir=%{_prefix} \
+    --enable-intl=shared --with-icu-dir=%{_prefix} \
     --enable-json=shared \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
-    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-ttf=%{_prefix} --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
+    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
     --with-gettext=shared,%{_prefix} \
     --with-gmp=shared,%{_prefix} \
     --enable-hash=shared,%{_prefix} \
@@ -1585,17 +1518,14 @@ for i in cgi cli fcgi apxs; do
     --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
     --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
     --with-mcrypt=shared,%{_prefix} \
-    --with-mhash=shared,%{_prefix} \
-    --with-mime-magic=shared,%{_sysconfdir}/httpd/conf/magic \
-    --with-ming=shared,%{_prefix} \
     --with-mssql=shared,%{_prefix} \
     --with-mysql=shared,%{_prefix} --with-mysql-sock=/var/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
-    --with-ncurses=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
     --enable-pcntl=shared \
     --enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
     --with-pgsql=shared,%{_prefix} \
+    --disable-phar \
     --enable-posix=shared \
     --with-pspell=shared,%{_prefix} \
     --with-readline=shared,%{_prefix} \
@@ -1606,8 +1536,9 @@ for i in cgi cli fcgi apxs; do
     --with-snmp=shared,%{_prefix} --enable-ucd-snmp-hack \
     --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-sockets=shared,%{_prefix} \
-    --with-sqlite=shared,%{_prefix} \
-    --with-sybase=shared,%{_prefix} \
+    --without-sqlite \
+    --with-sqlite3=shared,%{_prefix} \
+    --with-sybase-ct=shared,%{_prefix} \
     --enable-sysvmsg=shared,%{_prefix} \
     --enable-sysvsem=shared,%{_prefix} \
     --enable-sysvshm=shared,%{_prefix} \
@@ -1687,41 +1618,33 @@ install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
 ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
 
 # extensions
-echo "extension = openssl.so"	> %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
-echo "extension = zlib.so"	> %{buildroot}%{_sysconfdir}/php.d/21_zlib.ini
-echo "extension = bcmath.so"	> %{buildroot}%{_sysconfdir}/php.d/66_bcmath.ini
-echo "extension = bz2.so"	> %{buildroot}%{_sysconfdir}/php.d/10_bz2.ini
-echo "extension = calendar.so"	> %{buildroot}%{_sysconfdir}/php.d/11_calendar.ini
-echo "extension = ctype.so"	> %{buildroot}%{_sysconfdir}/php.d/12_ctype.ini
-echo "extension = curl.so"	> %{buildroot}%{_sysconfdir}/php.d/13_curl.ini
-echo "extension = dba.so"	> %{buildroot}%{_sysconfdir}/php.d/14_dba.ini
-echo "extension = dbase.so"	> %{buildroot}%{_sysconfdir}/php.d/15_dbase.ini
-echo "extension = dom.so"	> %{buildroot}%{_sysconfdir}/php.d/18_dom.ini
-echo "extension = exif.so"	> %{buildroot}%{_sysconfdir}/php.d/19_exif.ini
-echo "extension = filter.so"	> %{buildroot}%{_sysconfdir}/php.d/81_filter.ini
-echo "extension = ftp.so"	> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
-echo "extension = gd.so"	> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
-echo "extension = gettext.so"	> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
-echo "extension = gmp.so"	> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
-echo "extension = hash.so"	> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
-echo "extension = iconv.so"	> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
-echo "extension = imap.so"	> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
-echo "extension = ldap.so"	> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
-echo "extension = mbstring.so"	> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
-echo "extension = mcrypt.so"	> %{buildroot}%{_sysconfdir}/php.d/30_mcrypt.ini
-echo "extension = mhash.so"	> %{buildroot}%{_sysconfdir}/php.d/31_mhash.ini
-cat > %{buildroot}%{_sysconfdir}/php.d/31_mime_magic.ini << EOF
-extension = mime_magic.so
-
-[mime_magic]
-
-mime_magic.magicfile = %{_sysconfdir}/httpd/conf/magic
-EOF
-echo "extension = ming.so"		> %{buildroot}%{_sysconfdir}/php.d/33_ming.ini
+echo "extension = openssl.so"		> %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
+echo "extension = zlib.so"		> %{buildroot}%{_sysconfdir}/php.d/21_zlib.ini
+echo "extension = bcmath.so"		> %{buildroot}%{_sysconfdir}/php.d/66_bcmath.ini
+echo "extension = bz2.so"		> %{buildroot}%{_sysconfdir}/php.d/10_bz2.ini
+echo "extension = calendar.so"		> %{buildroot}%{_sysconfdir}/php.d/11_calendar.ini
+echo "extension = ctype.so"		> %{buildroot}%{_sysconfdir}/php.d/12_ctype.ini
+echo "extension = curl.so"		> %{buildroot}%{_sysconfdir}/php.d/13_curl.ini
+echo "extension = dba.so"		> %{buildroot}%{_sysconfdir}/php.d/14_dba.ini
+echo "extension = dom.so"		> %{buildroot}%{_sysconfdir}/php.d/18_dom.ini
+echo "extension = exif.so"		> %{buildroot}%{_sysconfdir}/php.d/19_exif.ini
+echo "extension = filter.so"		> %{buildroot}%{_sysconfdir}/php.d/81_filter.ini
+echo "extension = ftp.so"		> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
+echo "extension = gd.so"		> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
+echo "extension = gettext.so"		> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
+echo "extension = gmp.so"		> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
+echo "extension = hash.so"		> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
+echo "extension = iconv.so"		> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
+echo "extension = imap.so"		> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
+echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
+echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
+echo "extension = mbstring.so"		> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
+echo "extension = mcrypt.so"		> %{buildroot}%{_sysconfdir}/php.d/30_mcrypt.ini
+echo "extension = fileinfo.so"		> %{buildroot}%{_sysconfdir}/php.d/32_fileinfo.ini
 echo "extension = mssql.so"		> %{buildroot}%{_sysconfdir}/php.d/35_mssql.ini
 echo "extension = mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/36_mysql.ini
 echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqli.ini
-echo "extension = ncurses.so"		> %{buildroot}%{_sysconfdir}/php.d/38_ncurses.ini
+echo "extension = enchant.so"		> %{buildroot}%{_sysconfdir}/php.d/38_enchant.ini
 echo "extension = odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/39_odbc.ini
 echo "extension = pcntl.so"		> %{buildroot}%{_sysconfdir}/php.d/40_pcntl.ini
 echo "extension = pdo.so"		> %{buildroot}%{_sysconfdir}/php.d/70_pdo.ini
@@ -1740,8 +1663,8 @@ echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
-echo "extension = sqlite.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite.ini
-echo "extension = sybase.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase.ini
+echo "extension = sqlite3.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite3.ini
+echo "extension = sybase_ct.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase_ct.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
 echo "extension = sysvsem.so"		> %{buildroot}%{_sysconfdir}/php.d/57_sysvsem.ini
 echo "extension = sysvshm.so"		> %{buildroot}%{_sysconfdir}/php.d/58_sysvshm.ini
@@ -1790,9 +1713,11 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/calendar
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ctype
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/curl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dba
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dbase
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dom
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/enchant
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ereg
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/exif
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/fileinfo
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/filter
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ftp
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gettext
@@ -1800,18 +1725,15 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gmp
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/hash
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/iconv
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/imap
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/intl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/json
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ldap
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/libxml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mbstring
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mcrypt
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mhash
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mime_magic
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ming
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mssql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ncurses
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/odbc
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/openssl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcntl
@@ -1823,6 +1745,7 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_odbc
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_pgsql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_sqlite
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pgsql
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/phar
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/posix
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pspell
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/readline
@@ -1833,8 +1756,10 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/soap
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sockets
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite3
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase-ct
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase_ct zip
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
@@ -1855,7 +1780,6 @@ find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
 %{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
 
 %multiarch_includes %{buildroot}%{_includedir}/php/main/build-defs.h
-%multiarch_includes %{buildroot}%{_includedir}/php/main/config.w32.h
 %multiarch_includes %{buildroot}%{_includedir}/php/main/php_config.h
 
 %if %{build_test}
@@ -1887,12 +1811,6 @@ ext/standard/tests/strings/setlocale_variation5.phpt"
 [[ -n "$disable_tests" ]] && \
 for f in $disable_tests; do
   [[ -f "$f" ]] && mv $f $f.disabled
-done
-
-for f in `find .. -name \*.diff -type f -print`; do
-    echo "TEST FAILURE: $f --"
-    cat "$f"
-    echo "-- $f result ends."
 done
 
 TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
@@ -1978,24 +1896,24 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
-%post dbase
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun dbase
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
 %post dom
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
 fi
 
 %postun dom
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
+%post enchant
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun enchant
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2020,6 +1938,18 @@ if [ -f /var/lock/subsys/httpd ]; then
 fi
 
 %postun fcgi
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
+%post fileinfo
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun fileinfo
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2110,6 +2040,18 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%post intl
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun intl
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
 %post imap
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -2170,42 +2112,6 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
-%post mhash
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun mhash
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post mime_magic
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun mime_magic
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post ming
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun ming
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
 %post mssql
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -2236,18 +2142,6 @@ if [ -f /var/lock/subsys/httpd ]; then
 fi
 
 %postun mysqli
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post ncurses
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun ncurses
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2485,24 +2379,24 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
-%post sqlite
+%post sqlite3
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
 fi
 
-%postun sqlite
+%postun sqlite3
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
     fi
 fi
 
-%post sybase
+%post sybase_ct
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
 fi
 
-%postun sybase
+%postun sybase_ct
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2671,7 +2565,7 @@ fi
 %files -n %{libname}
 %defattr(-,root,root)
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
-%doc php.ini-dist php.ini-recommended configure_command
+%doc php.ini-production php.ini-development configure_command
 %doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
 %doc README.PHP4-TO-PHP5-THIN-CHANGES README.UPDATE_5_2
 %doc README.EXTENSIONS README.EXT_SKEL README.input_filter
@@ -2705,7 +2599,6 @@ fi
 %{_libdir}/php/build
 %{_usrsrc}/php-devel
 %multiarch %{multiarch_includedir}/php/main/build-defs.h
-%multiarch %{multiarch_includedir}/php/main/config.w32.h
 %multiarch %{multiarch_includedir}/php/main/php_config.h
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
@@ -2751,20 +2644,25 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/14_dba.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dba.so
 
-%files dbase
-%defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/15_dbase.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/dbase.so
-
 %files dom
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/18_dom.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dom.so
 
+%files enchant
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/38_enchant.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/enchant.so
+
 %files exif
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/19_exif.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/exif.so
+
+%files fileinfo
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/32_fileinfo.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/fileinfo.so
 
 %files filter
 %defattr(-,root,root)
@@ -2806,6 +2704,11 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_imap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/imap.so
 
+%files intl
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_intl.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/intl.so
+
 %files json
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/82_json.ini
@@ -2826,21 +2729,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/30_mcrypt.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
 
-%files mhash
-%defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/31_mhash.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mhash.so
-
-%files mime_magic
-%defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/31_mime_magic.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mime_magic.so
-
-%files ming
-%defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/33_ming.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/ming.so
-
 %files mssql
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/35_mssql.ini
@@ -2855,11 +2743,6 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
-
-%files ncurses
-%defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/38_ncurses.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/ncurses.so
 
 %files odbc
 %defattr(-,root,root)
@@ -2954,15 +2837,15 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
 
-%files sqlite
+%files sqlite3
 %defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite3.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sqlite3.so
 
-%files sybase
+%files sybase_ct
 %defattr(-,root,root)
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_sybase.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/sybase.so
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_sybase_ct.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sybase_ct.so
 
 %files sysvmsg
 %defattr(-,root,root)
