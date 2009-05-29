@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 0.0.RC2.1
+Release:	%mkrel 0.0.RC2.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1351,10 +1351,10 @@ create and read zip files using the libzip library.
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 
-%patch301 -p1 -b .suhosin.droplet
+#%patch301 -p1 -b .suhosin.droplet
 
-%patch7 -p1 -b .no_egg.droplet
-%patch23 -p1 -b .mdv_logo.droplet
+#%patch7 -p1 -b .no_egg.droplet
+#%patch23 -p1 -b .mdv_logo.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
