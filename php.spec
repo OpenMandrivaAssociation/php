@@ -2569,7 +2569,7 @@ fi
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
 %doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
-%doc README.PHP4-TO-PHP5-THIN-CHANGES README.UPDATE_5_2
+%doc README.PHP4-TO-PHP5-THIN-CHANGES
 %doc README.EXTENSIONS README.EXT_SKEL README.input_filter
 %doc README.PARAMETER_PARSING_API README.STREAMS
 %attr(0755,root,root) %{_libdir}/libphp5_common.so.*
