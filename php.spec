@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 0.1
+Release:	%mkrel 0.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -56,7 +56,7 @@ Patch52:	php-imap-myrights.diff
 Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
-Patch106:	php-5.2.5-systzdata.patch
+Patch106:	php-5.2.6-systzdata.patch
 # Fixes for extension modules
 Patch112:	php-shutdown.diff
 Patch113:	php-libc-client.diff
