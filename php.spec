@@ -13,7 +13,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 0.2
+Release:	%mkrel 0.3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -56,7 +56,6 @@ Patch52:	php-imap-myrights.diff
 Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
-Patch106:	php-5.2.6-systzdata.patch
 # Fixes for extension modules
 Patch112:	php-shutdown.diff
 Patch113:	php-libc-client.diff
@@ -161,6 +160,7 @@ Requires:	php-xmlwriter >= %{version}
 Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
+Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -240,6 +240,7 @@ Requires:	php-xmlwriter >= %{version}
 Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
+Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -319,6 +320,7 @@ Requires:	php-xmlwriter >= %{version}
 Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
+Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
 Epoch:		%{epoch}
@@ -345,8 +347,6 @@ Provides:	libphp_common php-common
 Obsoletes:	libphp_common php-common
 Obsoletes:	php-pcre
 Provides:	php-pcre = %{epoch}:%{version}
-Obsoletes:	php-timezonedb
-Provides:	php-timezonedb = %{epoch}:%{version}
 Obsoletes:	php-simplexml
 Provides:	php-simplexml = 0:%{version}
 Epoch:		%{epoch}
@@ -1337,7 +1337,6 @@ create and read zip files using the libzip library.
 %patch101 -p0 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
 %patch105 -p0 -b .umask.droplet
-%patch106 -p1 -b .systzdata.droplet
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
@@ -1553,7 +1552,6 @@ for i in cgi cli fcgi apxs; do
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared --with-libxml-dir=%{_prefix} \
     --enable-reflection=shared \
-    --with-system-tzdata=%{_datadir}/zoneinfo \
     --enable-zip=shared
 
 cp -f Makefile Makefile.$i
