@@ -4,17 +4,17 @@
 
 %define _requires_exceptions BEGIN\\|mkinstalldirs\\|pear(\\|/usr/bin/tclsh
 
-%define epoch 3
-%define major 5
-%define libname %mklibname php5_common %{major}
+%define php5_common_major 5
+%define libname %mklibname php5_common %{php5_common_major}
 
-Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 1
+Release:	%mkrel 2
+Epoch:      3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
+Summary:	The PHP5 scripting language
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
@@ -31,6 +31,7 @@ Patch10:	php-phpbuilddir.diff
 Patch13:	php5-apache2-filters.diff
 # remove libedit once and for all
 Patch15:	php-no_libedit.diff
+Patch16:    php-xmlrpc_epi.patch 
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
 #####################################################################
@@ -85,7 +86,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pcre-devel >= 6.6 
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
-Epoch:		%{epoch}
+BuildRequires:  unixODBC-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -157,7 +158,6 @@ Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
-Epoch:		%{epoch}
 
 %description	cli
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -232,7 +232,6 @@ Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
-Epoch:		%{epoch}
 
 %description	cgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -307,7 +306,6 @@ Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
 Provides:	php php3 php4
 Obsoletes:	php php3 php4
-Epoch:		%{epoch}
 
 %description	fcgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -328,7 +326,6 @@ Obsoletes:	php-pcre
 Provides:	php-pcre = %{epoch}:%{version}
 Obsoletes:	php-simplexml
 Provides:	php-simplexml = 0:%{version}
-Epoch:		%{epoch}
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
@@ -341,24 +338,11 @@ Group:		Development/C
 Requires(post): %{libname} >= %{epoch}:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	apache-base >= 2.2.8
-Requires:	autoconf2.5
-Requires:	automake1.7
-Requires:	bison
-Requires:	byacc
-Requires:	chrpath
-Requires:	dos2unix
-Requires:	flex
-Requires:	libtool
-Requires:	libxml2-devel >= 2.6
-Requires:	libxslt-devel >= 1.1.0
-Requires:	openssl >= 0.9.7
-Requires:	openssl-devel >= 0.9.7
-Requires:	pam-devel
-Requires:	pcre-devel >= 6.6
-Requires:	re2c >= 0.9.11
-Requires:	tcl
-Epoch:		%{epoch}
+Requires: glibc-devel
+Requires: zlib1-devel
+Requires: libxml2-devel >= 2.6
+Requires: libxslt-devel >= 1.1.0
+Requires: pcre-devel >= 6.6
 
 %description	devel
 The php-devel package lets you compile dynamic extensions to PHP5. Included
@@ -371,7 +355,6 @@ SELF-CONTAINED-EXTENSIONS.
 Summary:	OpenSSL extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		%{epoch}
 
 %description	openssl
 This is a dynamic shared object (DSO) for PHP that will add OpenSSL support.
@@ -380,17 +363,22 @@ This is a dynamic shared object (DSO) for PHP that will add OpenSSL support.
 Summary:	Zlib extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		%{epoch}
 
 %description	zlib
 This is a dynamic shared object (DSO) for PHP that will add zlib compression
 support to PHP.
 
+%package	doc
+Summary:	Documentation for PHP
+Group:		Development/PHP
+
+%description	doc
+Documentation for php.
+
 %package	bcmath
 Summary:	The bcmath module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	bcmath
 This is a dynamic shared object (DSO) for PHP that will add bc style precision
@@ -404,7 +392,6 @@ Summary:	Bzip2 extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
 BuildRequires:	bzip2-devel
-Epoch:		0
 
 %description	bz2
 This is a dynamic shared object (DSO) for PHP that will add bzip2 compression
@@ -417,7 +404,6 @@ compressed files.
 Summary:	Calendar extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	calendar
 This is a dynamic shared object (DSO) for PHP that will add calendar support.
@@ -437,7 +423,6 @@ included in these instructions, and are in quotes.
 Summary:	Ctype extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	ctype
 This is a dynamic shared object (DSO) for PHP that will add ctype support.
@@ -451,7 +436,6 @@ Summary:	Curl extension module for PHP
 Group:		Development/PHP
 BuildRequires:	curl-devel >= 7.9.8
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	curl
 This is a dynamic shared object (DSO) for PHP that will add curl support.
@@ -470,7 +454,6 @@ Group:		Development/PHP
 BuildRequires:	gdbm-devel
 BuildRequires:	db4-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	dba
 This is a dynamic shared object (DSO) for PHP that will add flat-file databases
@@ -488,7 +471,6 @@ Summary:	Dom extension module for PHP
 Group:		Development/PHP
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	dom
 This is a dynamic shared object (DSO) for PHP that will add dom support.
@@ -504,7 +486,6 @@ Summary:	Libenchant binder, support near all spelling tools
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
 BuildRequires:	enchant-devel
-Epoch:		1
 
 %description	enchant
 Enchant is a binder for libenchant. Libenchant provides a common API for many
@@ -523,7 +504,6 @@ Summary:	EXIF extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	php-mbstring >= 0:%{version}
-Epoch:		0
 
 %description	exif
 This is a dynamic shared object (DSO) for PHP that will add EXIF tags support
@@ -553,7 +533,6 @@ Summary:	Extension for safely dealing with input parameters
 Group:		Development/PHP
 BuildRequires:	pcre-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	filter
 The Input Filter extension is meant to address this issue by implementing a set
@@ -564,7 +543,6 @@ Summary:	FTP extension module for PHP
 Group:		Development/PHP
 BuildRequires:	openssl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	ftp
 This is a dynamic shared object (DSO) for PHP that will add FTP support.
@@ -588,7 +566,6 @@ BuildRequires:	libxpm-devel
 BuildRequires:	t1lib-devel
 BuildRequires:	X11-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	gd
 This is a dynamic shared object (DSO) for PHP that will add GD support,
@@ -609,7 +586,6 @@ Summary:	Gettext extension module for PHP
 Group:		Development/PHP
 BuildRequires:	gettext-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	gettext
 This is a dynamic shared object (DSO) for PHP that will add gettext support.
@@ -624,7 +600,6 @@ Summary:	Gmp extension module for PHP
 Group:		Development/PHP
 BuildRequires:	gmp-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	gmp
 This is a dynamic shared object (DSO) for PHP that will add arbitrary length
@@ -634,7 +609,6 @@ number support using the GNU MP library.
 Summary:	HASH Message Digest Framework
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	hash
 Native implementations of common message digest algorithms using a generic
@@ -647,7 +621,6 @@ arbitrary length messages using a variety of hashing algorithms.
 Summary:	Iconv extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	iconv
 This is a dynamic shared object (DSO) for PHP that will add iconv support.
@@ -665,7 +638,6 @@ Summary:	IMAP extension module for PHP
 Group:		Development/PHP
 BuildRequires:	c-client-devel >= 2007
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	imap
 This is a dynamic shared object (DSO) for PHP that will add IMAP support.
@@ -679,7 +651,6 @@ Summary:	Internationalization extension module for PHP
 Group:		Development/PHP
 BuildRequires:	icu-devel >= 3.4
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	intl
 This is a dynamic shared object (DSO) for PHP that will add
@@ -691,7 +662,6 @@ Internationalization extension implements ICU library functionality in PHP.
 Summary:	JavaScript Object Notation
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	json
 Support for JSON (JavaScript Object Notation) serialization.
@@ -702,7 +672,6 @@ Group:		Development/PHP
 BuildRequires:	libldap-devel
 BuildRequires:	libsasl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	ldap
 This is a dynamic shared object (DSO) for PHP that will add LDAP support.
@@ -723,7 +692,6 @@ Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
 BuildRequires:	mbfl-devel
 BuildRequires:	onig-devel
-Epoch:		0
 
 %description	mbstring
 This is a dynamic shared object (DSO) for PHP that will add multibyte string
@@ -741,7 +709,6 @@ Group:		Development/PHP
 BuildRequires:	libmcrypt-devel
 BuildRequires:	libtool-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	mcrypt
 This is a dynamic shared object (DSO) for PHP that will add mcrypt support.
@@ -757,7 +724,6 @@ Group:		Development/PHP
 Requires:       freetds >= 0.63
 BuildRequires:  freetds-devel >= 0.63
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	mssql
 This is a dynamic shared object (DSO) for PHP that will add MS SQL databases
@@ -768,7 +734,6 @@ Summary:	MySQL database module for PHP
 Group:		Development/PHP
 BuildRequires:	mysql-devel >= 4.0.10
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	mysql
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -784,7 +749,6 @@ Summary:	MySQL database module for PHP
 Group:		Development/PHP
 BuildRequires:	mysql-devel >= 4.1.7
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	mysqli
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -801,7 +765,6 @@ Summary:	ODBC extension module for PHP
 Group:		Development/PHP
 BuildRequires:	unixODBC-devel >= 2.2.1
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	odbc
 This is a dynamic shared object (DSO) for PHP that will add ODBC support.
@@ -816,7 +779,6 @@ ODBC functions.
 Summary:	Process Control extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pcntl
 This is a dynamic shared object (DSO) for PHP that will add process spawning
@@ -833,7 +795,6 @@ environment.
 Summary:	PHP Data Objects Interface
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo
 PDO provides a uniform data access interface, sporting advanced features such
@@ -850,7 +811,6 @@ Requires:       freetds >= 0.63
 BuildRequires:  freetds-devel >= 0.63
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo_dblib
 PDO_DBLIB is a driver that implements the PHP Data Objects (PDO) interface to
@@ -862,7 +822,6 @@ Summary:	MySQL Interface driver for PDO
 Group:		Development/PHP
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo_mysql
 PDO_MYSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -878,7 +837,6 @@ Group:		Development/PHP
 BuildRequires:	unixODBC-devel
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo_odbc
 PDO_ODBC is a driver that implements the PHP Data Objects (PDO) interface to
@@ -902,7 +860,6 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo_pgsql
 PDO_PGSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -915,7 +872,6 @@ BuildRequires:	sqlite3-devel
 BuildRequires:	lemon
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pdo_sqlite
 PDO_SQLITE is a driver that implements the PHP Data Objects (PDO) interface to
@@ -932,7 +888,6 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 BuildRequires:	openssl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pgsql
 This is a dynamic shared object (DSO) for PHP that will add PostgreSQL database
@@ -949,7 +904,6 @@ an open source descendant of this original Berkeley code.
 Summary:	POSIX extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	posix
 This is a dynamic shared object (DSO) for PHP that will add POSIX functions
@@ -967,7 +921,6 @@ Summary:	Pspell extension module for PHP
 Group:		Development/PHP
 BuildRequires:	aspell-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	pspell
 This is a dynamic shared object (DSO) for PHP that will add pspell support to
@@ -983,7 +936,6 @@ BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	gpm-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	readline
 This PHP module adds support for readline functions (only for cli and cgi
@@ -1002,7 +954,6 @@ Group:		Development/PHP
 BuildRequires:	recode-devel
 BuildRequires:	gettext-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	recode
 This is a dynamic shared object (DSO) for PHP that will add recode support
@@ -1021,7 +972,6 @@ Group:		Development/PHP
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	session
 This is a dynamic shared object (DSO) for PHP that will add session support.
@@ -1038,7 +988,6 @@ in the URL.
 Summary:	Shared Memory Operations extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	shmop
 This is a dynamic shared object (DSO) for PHP that will add Shared Memory
@@ -1056,7 +1005,6 @@ BuildRequires:	net-snmp-mibs
 BuildRequires:	openssl-devel
 BuildRequires:	elfutils-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	snmp
 This is a dynamic shared object (DSO) for PHP that will add SNMP support using
@@ -1069,7 +1017,6 @@ Summary:	Soap extension module for PHP
 Group:		Development/PHP
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	soap
 This is a dynamic shared object (DSO) for PHP that will add soap support.
@@ -1081,7 +1028,6 @@ subsets of SOAP 1.1, SOAP 1.2 and WSDL 1.1 specifications.
 Summary:	Sockets extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	sockets
 This is a dynamic shared object (DSO) for PHP that will add sockets support.
@@ -1098,7 +1044,6 @@ Obsoletes:	php-sqlite
 Provides:	php-sqlite = %{epoch}:%{version}
 BuildRequires:	sqlite3-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	sqlite3
 This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
@@ -1116,7 +1061,6 @@ Group:		Development/PHP
 Obsoletes:	php-sybase
 Provides:	php-sybase = %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	sybase_ct
 This is a dynamic shared object (DSO) for PHP that will add Sybase support to
@@ -1126,7 +1070,6 @@ PHP.
 Summary:	SysV msg extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	sysvmsg
 This is a dynamic shared object (DSO) for PHP that will add SysV message queues
@@ -1136,7 +1079,6 @@ support.
 Summary:	SysV sem extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	sysvsem
 This is a dynamic shared object (DSO) for PHP that will add SysV semaphores
@@ -1146,7 +1088,6 @@ support.
 Summary:	SysV shm extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		3
 
 %description	sysvshm
 This is a dynamic shared object (DSO) for PHP that will add SysV Shared Memory
@@ -1157,7 +1098,6 @@ Summary:	Tidy HTML Repairing and Parsing for PHP
 Group:		Development/PHP
 BuildRequires:	tidy-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	tidy
 Tidy is a binding for the Tidy HTML clean and repair utility which allows you
@@ -1168,7 +1108,6 @@ the document tree using the Zend Engine 2 OO semantics.
 Summary:	Tokenizer extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	tokenizer
 This is a dynamic shared object (DSO) for PHP that will add Tokenizer support.
@@ -1183,7 +1122,6 @@ Summary:	XML extension module for PHP
 Group:		Development/PHP
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	xml
 This is a dynamic shared object (DSO) for PHP that will add XML support. This
@@ -1196,7 +1134,6 @@ Group:		Development/PHP
 Requires:	php-dom
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	xmlreader
 XMLReader represents a reader that provides non-cached, forward-only access to
@@ -1208,7 +1145,6 @@ Group:		Development/PHP
 BuildRequires:	expat-devel
 BuildRequires:	xmlrpc-epi-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	xmlrpc
 This is a dynamic shared object (DSO) for PHP that will add XMLRPC support.
@@ -1223,7 +1159,6 @@ Summary:	Provides fast, non-cached, forward-only means to write XML data
 Group:		Development/PHP
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	xmlwriter
 This extension wraps the libxml xmlWriter API. Represents a writer that
@@ -1236,7 +1171,6 @@ Group:		Development/PHP
 BuildRequires:	libxslt-devel
 BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	xsl
 This is a dynamic shared object (DSO) for PHP that will add xsl support.
@@ -1250,7 +1184,6 @@ Group:		Development/PHP
 Requires:	php-xml
 BuildRequires:  libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Epoch:		0
 
 %description	wddx
 This is a dynamic shared object (DSO) that adds wddx support to PHP. 
@@ -1260,8 +1193,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %package	zip
 Summary:	A zip management extension for PHP
 Group:		Development/PHP
-#BuildRequires:	libzip-devel >= 0.9
-Epoch:		1
 
 %description	zip
 This is a dynamic shared object (DSO) for PHP that will add zip support to
@@ -1282,6 +1213,7 @@ create and read zip files using the libzip library.
 #
 %patch13 -p1 -b .apache2-filters.droplet
 %patch15 -p0 -b .no_libedit.droplet
+%patch16 -p0 -b .xmlrpc_epi_header
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
 #####################################################################
@@ -1442,25 +1374,20 @@ for i in cgi cli fcgi apxs; do
     --with-libdir=%{_lib} \
     --with-config-file-path=%{_sysconfdir} \
     --with-config-file-scan-dir=%{_sysconfdir}/php.d \
-    --disable-debug --enable-pic \
+    --disable-debug  \
     --enable-inline-optimization \
     --with-exec-dir=%{_bindir} \
-    --with-regex=php \
-    --with-pcre=%{_prefix} --with-pcre-regex=%{_prefix} \
+    --with-regex=system \
+    --with-pcre-regex=%{_prefix} \
     --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
     --with-png-dir=%{_prefix} \
-    --with-regex=php \
-    --disable-mysqlnd-threading \
+	--with-pdo-odbc=unixODBC \
+	--disable-mysqlnd-threading \
     --enable-magic-quotes \
     --enable-safe-mode \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
     --with-openssl=shared,%{_prefix} \
     --enable-libxml=%{_prefix} --with-libxml-dir=%{_prefix} \
-    --enable-spl=%{_prefix} \
-    --enable-track-vars \
-    --enable-trans-sid \
-    --enable-memory-limit \
-    --with-versioning \
     --enable-mod_charset \
     --without-pear \
     --enable-bcmath=shared \
@@ -1468,7 +1395,7 @@ for i in cgi cli fcgi apxs; do
     --enable-calendar=shared \
     --enable-ctype=shared \
     --with-curl=shared,%{_prefix} --without-curlwrappers \
-    --enable-dba=shared --with-gdbm --with-db4 --with-cdb --with-flatfile --with-inifile \
+    --enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
     --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --with-enchant=shared,%{_prefix} \
     --enable-exif=shared \
@@ -1514,11 +1441,10 @@ for i in cgi cli fcgi apxs; do
     --enable-tokenizer=shared,%{_prefix} \
     --enable-xml=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-xmlreader=shared,%{_prefix} \
-    --with-xmlrpc=shared,%{_prefix} --with-expat-dir=%{_prefix} \
+    --with-xmlrpc=shared,%{_prefix} \
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared --with-libxml-dir=%{_prefix} \
-    --enable-reflection=shared \
     --enable-zip=shared
 
 cp -f Makefile Makefile.$i
@@ -1532,10 +1458,10 @@ perl -pi -e "s|-prefer-non-pic -static||g" Makefile.$i
 done
 
 # remove all confusion...
-perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/libphp5_common%{major}-%{version}/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
+perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/libphp5_common%{php5_common_major}-%{version}/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
 cp config.nice configure_command; chmod 644 configure_command
 
-make
+%make
 
 # make php-fcgi
 cp -af php_config.h.fcgi main/php_config.h
@@ -2529,15 +2455,18 @@ fi
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
-%files -n %{libname}
-%defattr(-,root,root)
+%files doc
+%defattr(-,root,root,-)
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
 %doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
 %doc README.PHP4-TO-PHP5-THIN-CHANGES
 %doc README.EXTENSIONS README.EXT_SKEL README.input_filter
 %doc README.PARAMETER_PARSING_API README.STREAMS
-%attr(0755,root,root) %{_libdir}/libphp5_common.so.*
+
+%files -n %{libname}
+%defattr(-,root,root,-)
+%{_libdir}/libphp5_common.so.%{php5_common_major}*
 
 %files cli
 %defattr(-,root,root)
