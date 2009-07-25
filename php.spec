@@ -338,11 +338,23 @@ Group:		Development/C
 Requires(post): %{libname} >= %{epoch}:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires: glibc-devel
-Requires: zlib1-devel
-Requires: libxml2-devel >= 2.6
-Requires: libxslt-devel >= 1.1.0
-Requires: pcre-devel >= 6.6
+Requires:	apache-base >= 2.2.8
+Requires:	autoconf2.5
+Requires:	automake1.7
+Requires:	bison
+Requires:	byacc
+Requires:	chrpath
+Requires:	dos2unix
+Requires:	flex
+Requires:	libtool
+Requires:	libxml2-devel >= 2.6
+Requires:	libxslt-devel >= 1.1.0
+Requires:	openssl >= 0.9.7
+Requires:	openssl-devel >= 0.9.7
+Requires:	pam-devel
+Requires:	pcre-devel >= 6.6
+Requires:	re2c >= 0.9.11
+Requires:	tcl
 
 %description	devel
 The php-devel package lets you compile dynamic extensions to PHP5. Included
