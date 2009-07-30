@@ -9,7 +9,7 @@
 
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 3
+Release:	%mkrel 4
 Epoch:      3
 Group:		Development/PHP
 License:	PHP License
@@ -89,6 +89,9 @@ BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
+# stupid postgresql...
+%define postgresql_version %(pg_config | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null)
+
 %description
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
 integration for several commercial and non-commercial database management
@@ -114,7 +117,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.23
+#Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -133,7 +136,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.23
+#Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -152,7 +155,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.23
+#Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -188,7 +191,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.23
+#Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -207,7 +210,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.23
+#Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -226,7 +229,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.23
+#Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -262,7 +265,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.23
+#Requires(post):	php-suhosin >= 0.9.23
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -281,7 +284,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.23
+#Requires(preun): php-suhosin >= 0.9.23
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -300,7 +303,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.23
+#Requires:	php-suhosin >= 0.9.23
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -338,7 +341,6 @@ Group:		Development/C
 Requires(post): %{libname} >= %{epoch}:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	apache-base >= 2.2.8
 Requires:	autoconf2.5
 Requires:	automake1.7
 Requires:	bison
@@ -872,6 +874,7 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pdo_pgsql
 PDO_PGSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -900,6 +903,7 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 BuildRequires:	openssl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pgsql
 This is a dynamic shared object (DSO) for PHP that will add PostgreSQL database
