@@ -9,7 +9,7 @@
 
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 4
+Release:	%mkrel 5
 Epoch:      3
 Group:		Development/PHP
 License:	PHP License
@@ -88,6 +88,11 @@ BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+# stupid postgresql... stupid build system...
+# this is needed due to the postgresql packaging and due to bugs like this:
+# https://qa.mandriva.com/show_bug.cgi?id=52527
+%define postgresql_version %(pg_config &>/dev/null && pg_config 2>/dev/null | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null || echo 0)
 
 %description
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -870,6 +875,7 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pdo_pgsql
 PDO_PGSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -897,6 +903,7 @@ Summary:	PostgreSQL database module for PHP
 Group:		Development/PHP
 BuildRequires:	postgresql-devel
 Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pgsql
 This is a dynamic shared object (DSO) for PHP that will add PostgreSQL database
