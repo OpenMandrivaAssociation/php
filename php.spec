@@ -87,11 +87,7 @@ BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
-BuildRequires:  postgresql-libs-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
-# stupid postgresql...
-%define postgresql_version %(pg_config | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null)
 
 %description
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -556,7 +552,6 @@ of filters and mechanisms that users can use to safely access their input data.
 %package	ftp
 Summary:	FTP extension module for PHP
 Group:		Development/PHP
-BuildRequires:	openssl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	ftp
@@ -875,7 +870,6 @@ Group:		Development/PHP
 BuildRequires:	postgresql-devel
 Requires:	php-pdo >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pdo_pgsql
 PDO_PGSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -902,9 +896,7 @@ support for prepared statements with bound parameters and improved concurrency.
 Summary:	PostgreSQL database module for PHP
 Group:		Development/PHP
 BuildRequires:	postgresql-devel
-BuildRequires:	openssl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pgsql
 This is a dynamic shared object (DSO) for PHP that will add PostgreSQL database
@@ -1019,7 +1011,6 @@ Group:		Development/PHP
 Requires:	net-snmp-mibs
 BuildRequires:	net-snmp-devel
 BuildRequires:	net-snmp-mibs
-BuildRequires:	openssl-devel
 BuildRequires:	elfutils-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
