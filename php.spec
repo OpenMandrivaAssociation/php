@@ -87,6 +87,7 @@ BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
+BuildRequires:  postgresql-libs-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 # stupid postgresql...
