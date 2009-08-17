@@ -9,7 +9,7 @@
 
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 5
+Release:	%mkrel 6
 Epoch:      3
 Group:		Development/PHP
 License:	PHP License
