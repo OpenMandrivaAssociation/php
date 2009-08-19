@@ -9,7 +9,7 @@
 
 Name:		php
 Version:	5.3.0
-Release:	%mkrel 6
+Release:	%mkrel 7
 Epoch:      3
 Group:		Development/PHP
 License:	PHP License
@@ -119,7 +119,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-#Requires(post):	php-suhosin >= 0.9.23
+Requires(post):	php-suhosin >= 0.9.29
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -138,7 +138,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-#Requires(preun): php-suhosin >= 0.9.23
+Requires(preun): php-suhosin >= 0.9.29
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -157,7 +157,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-#Requires:	php-suhosin >= 0.9.23
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -193,7 +193,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-#Requires(post):	php-suhosin >= 0.9.23
+Requires(post):	php-suhosin >= 0.9.29
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -212,7 +212,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-#Requires(preun): php-suhosin >= 0.9.23
+Requires(preun): php-suhosin >= 0.9.29
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -231,7 +231,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-#Requires:	php-suhosin >= 0.9.23
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -267,7 +267,7 @@ Requires(post): php-tokenizer >= %{version}
 Requires(post):	php-hash >= %{version}
 Requires(post):	php-xmlreader >= %{version}
 Requires(post):	php-xmlwriter >= %{version}
-#Requires(post):	php-suhosin >= 0.9.23
+Requires(post):	php-suhosin >= 0.9.29
 Requires(post):	php-filter >= 0.11.0
 Requires(post):	php-json >= 0:%{version}
 Requires(preun): %{libname} >= %{epoch}:%{version}
@@ -286,7 +286,7 @@ Requires(preun): php-tokenizer >= %{version}
 Requires(preun): php-hash >= %{version}
 Requires(preun): php-xmlreader >= %{version}
 Requires(preun): php-xmlwriter >= %{version}
-#Requires(preun): php-suhosin >= 0.9.23
+Requires(preun): php-suhosin >= 0.9.29
 Requires(preun): php-filter >= 0.11.0
 Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
@@ -305,7 +305,7 @@ Requires:	php-tokenizer >= %{version}
 Requires:	php-hash >= %{version}
 Requires:	php-xmlreader >= %{version}
 Requires:	php-xmlwriter >= %{version}
-#Requires:	php-suhosin >= 0.9.23
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-filter >= 0.11.0
 Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
