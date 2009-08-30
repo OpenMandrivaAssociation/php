@@ -103,66 +103,27 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 %package	cli
 Summary:	PHP5 CLI interface
 Group:		Development/Other
-Requires(post): %{libname} >= %{epoch}:%{version}
-Requires(post): php-ini >= %{version}
-Requires(post): php-ftp >= %{epoch}:%{version}
-Requires(post): php-pcre >= %{epoch}:%{version}
-Requires(post): php-gettext >= %{epoch}:%{version}
-Requires(post): php-posix >= %{epoch}:%{version}
-Requires(post): php-ctype >= %{epoch}:%{version}
-Requires(post): php-session >= %{epoch}:%{version}
-Requires(post): php-sysvsem >= %{epoch}:%{version}
-Requires(post): php-sysvshm >= %{epoch}:%{version}
-Requires(post): php-openssl >= %{epoch}:%{version}
-Requires(post): php-zlib >= %{epoch}:%{version}
-Requires(post): php-tokenizer >= %{version}
-Requires(post):	php-hash >= %{version}
-Requires(post):	php-xmlreader >= %{version}
-Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.29
-Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 0:%{version}
-Requires(preun): %{libname} >= %{epoch}:%{version}
-Requires(preun): php-ini >= %{version}
-Requires(preun): php-ftp >= %{epoch}:%{version}
-Requires(preun): php-pcre >= %{epoch}:%{version}
-Requires(preun): php-gettext >= %{epoch}:%{version}
-Requires(preun): php-posix >= %{epoch}:%{version}
-Requires(preun): php-ctype >= %{epoch}:%{version}
-Requires(preun): php-session >= %{epoch}:%{version}
-Requires(preun): php-sysvsem >= %{epoch}:%{version}
-Requires(preun): php-sysvshm >= %{epoch}:%{version}
-Requires(preun): php-openssl >= %{epoch}:%{version}
-Requires(preun): php-zlib >= %{epoch}:%{version}
-Requires(preun): php-tokenizer >= %{version}
-Requires(preun): php-hash >= %{version}
-Requires(preun): php-xmlreader >= %{version}
-Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.29
-Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ini >= %{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-ctype >= %{epoch}:%{version}
+Requires:	php-filter >= %{epoch}:%{version}
+Requires:	php-ftp >= %{epoch}:%{version}
+Requires:	php-gettext >= %{epoch}:%{version}
+Requires:	php-hash >= %{epoch}:%{version}
+Requires:	php-ini >= %{version}
+Requires:	php-json >= %{epoch}:%{version}
+Requires:	php-openssl >= %{epoch}:%{version}
+Requires:	php-pcre >= %{epoch}:%{version}
+Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-tokenizer >= %{version}
-Requires:	php-hash >= %{version}
-Requires:	php-xmlreader >= %{version}
-Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.29
-Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
-Provides:	php php3 php4
-Obsoletes:	php php3 php4
+Requires:	php-tokenizer >= %{epoch}:%{version}
+Requires:	php-xmlreader >= %{epoch}:%{version}
+Requires:	php-xmlwriter >= %{epoch}:%{version}
+Requires:	php-zlib >= %{epoch}:%{version}
+Provides:	php = %{epoch}:%{version}
 
 %description	cli
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -177,66 +138,27 @@ install the apache-mod_php package.
 %package	cgi
 Summary:	PHP5 CGI interface
 Group:		Development/Other
-Requires(post): %{libname} >= %{epoch}:%{version}
-Requires(post): php-ini >= %{version}
-Requires(post): php-ftp >= %{epoch}:%{version}
-Requires(post): php-pcre >= %{epoch}:%{version}
-Requires(post): php-gettext >= %{epoch}:%{version}
-Requires(post): php-posix >= %{epoch}:%{version}
-Requires(post): php-ctype >= %{epoch}:%{version}
-Requires(post): php-session >= %{epoch}:%{version}
-Requires(post): php-sysvsem >= %{epoch}:%{version}
-Requires(post): php-sysvshm >= %{epoch}:%{version}
-Requires(post): php-openssl >= %{epoch}:%{version}
-Requires(post): php-zlib >= %{epoch}:%{version}
-Requires(post): php-tokenizer >= %{version}
-Requires(post):	php-hash >= %{version}
-Requires(post):	php-xmlreader >= %{version}
-Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.29
-Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 0:%{version}
-Requires(preun): %{libname} >= %{epoch}:%{version}
-Requires(preun): php-ini >= %{version}
-Requires(preun): php-ftp >= %{epoch}:%{version}
-Requires(preun): php-pcre >= %{epoch}:%{version}
-Requires(preun): php-gettext >= %{epoch}:%{version}
-Requires(preun): php-posix >= %{epoch}:%{version}
-Requires(preun): php-ctype >= %{epoch}:%{version}
-Requires(preun): php-session >= %{epoch}:%{version}
-Requires(preun): php-sysvsem >= %{epoch}:%{version}
-Requires(preun): php-sysvshm >= %{epoch}:%{version}
-Requires(preun): php-openssl >= %{epoch}:%{version}
-Requires(preun): php-zlib >= %{epoch}:%{version}
-Requires(preun): php-tokenizer >= %{version}
-Requires(preun): php-hash >= %{version}
-Requires(preun): php-xmlreader >= %{version}
-Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.29
-Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ini >= %{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-ctype >= %{epoch}:%{version}
+Requires:	php-filter >= %{epoch}:%{version}
+Requires:	php-ftp >= %{epoch}:%{version}
+Requires:	php-gettext >= %{epoch}:%{version}
+Requires:	php-hash >= %{epoch}:%{version}
+Requires:	php-ini >= %{version}
+Requires:	php-json >= %{epoch}:%{version}
+Requires:	php-openssl >= %{epoch}:%{version}
+Requires:	php-pcre >= %{epoch}:%{version}
+Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-tokenizer >= %{version}
-Requires:	php-hash >= %{version}
-Requires:	php-xmlreader >= %{version}
-Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.29
-Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
-Provides:	php php3 php4
-Obsoletes:	php php3 php4
+Requires:	php-tokenizer >= %{epoch}:%{version}
+Requires:	php-xmlreader >= %{epoch}:%{version}
+Requires:	php-xmlwriter >= %{epoch}:%{version}
+Requires:	php-zlib >= %{epoch}:%{version}
+Provides:	php = %{epoch}:%{version}
 
 %description	cgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -251,66 +173,27 @@ apache-mod_php package.
 %package	fcgi
 Summary:	PHP5 CGI interface with FastCGI support
 Group:		Development/Other
-Requires(post): %{libname} >= %{epoch}:%{version}
-Requires(post): php-ini >= %{version}
-Requires(post): php-ftp >= %{epoch}:%{version}
-Requires(post): php-pcre >= %{epoch}:%{version}
-Requires(post): php-gettext >= %{epoch}:%{version}
-Requires(post): php-posix >= %{epoch}:%{version}
-Requires(post): php-ctype >= %{epoch}:%{version}
-Requires(post): php-session >= %{epoch}:%{version}
-Requires(post): php-sysvsem >= %{epoch}:%{version}
-Requires(post): php-sysvshm >= %{epoch}:%{version}
-Requires(post): php-openssl >= %{epoch}:%{version}
-Requires(post): php-zlib >= %{epoch}:%{version}
-Requires(post): php-tokenizer >= %{version}
-Requires(post):	php-hash >= %{version}
-Requires(post):	php-xmlreader >= %{version}
-Requires(post):	php-xmlwriter >= %{version}
-Requires(post):	php-suhosin >= 0.9.29
-Requires(post):	php-filter >= 0.11.0
-Requires(post):	php-json >= 0:%{version}
-Requires(preun): %{libname} >= %{epoch}:%{version}
-Requires(preun): php-ini >= %{version}
-Requires(preun): php-ftp >= %{epoch}:%{version}
-Requires(preun): php-pcre >= %{epoch}:%{version}
-Requires(preun): php-gettext >= %{epoch}:%{version}
-Requires(preun): php-posix >= %{epoch}:%{version}
-Requires(preun): php-ctype >= %{epoch}:%{version}
-Requires(preun): php-session >= %{epoch}:%{version}
-Requires(preun): php-sysvsem >= %{epoch}:%{version}
-Requires(preun): php-sysvshm >= %{epoch}:%{version}
-Requires(preun): php-openssl >= %{epoch}:%{version}
-Requires(preun): php-zlib >= %{epoch}:%{version}
-Requires(preun): php-tokenizer >= %{version}
-Requires(preun): php-hash >= %{version}
-Requires(preun): php-xmlreader >= %{version}
-Requires(preun): php-xmlwriter >= %{version}
-Requires(preun): php-suhosin >= 0.9.29
-Requires(preun): php-filter >= 0.11.0
-Requires(preun): php-json >= 0:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ini >= %{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-ctype >= %{epoch}:%{version}
+Requires:	php-filter >= %{epoch}:%{version}
+Requires:	php-ftp >= %{epoch}:%{version}
+Requires:	php-gettext >= %{epoch}:%{version}
+Requires:	php-hash >= %{epoch}:%{version}
+Requires:	php-ini >= %{version}
+Requires:	php-json >= %{epoch}:%{version}
+Requires:	php-openssl >= %{epoch}:%{version}
+Requires:	php-pcre >= %{epoch}:%{version}
+Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-suhosin >= 0.9.29
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-tokenizer >= %{version}
-Requires:	php-hash >= %{version}
-Requires:	php-xmlreader >= %{version}
-Requires:	php-xmlwriter >= %{version}
-Requires:	php-suhosin >= 0.9.29
-Requires:	php-filter >= 0.11.0
-Requires:	php-json >= 0:%{version}
 Requires:	php-timezonedb >= 3:2009.10
-Provides:	php php3 php4
-Obsoletes:	php php3 php4
+Requires:	php-tokenizer >= %{epoch}:%{version}
+Requires:	php-xmlreader >= %{epoch}:%{version}
+Requires:	php-xmlwriter >= %{epoch}:%{version}
+Requires:	php-zlib >= %{epoch}:%{version}
+Provides:	php = %{epoch}:%{version}
 
 %description	fcgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -325,12 +208,8 @@ also need to install the apache-mod_php package.
 %package -n	%{libname}
 Summary:	Shared library for PHP5
 Group:		Development/Other
-Provides:	libphp_common php-common
-Obsoletes:	libphp_common php-common
-Obsoletes:	php-pcre
 Provides:	php-pcre = %{epoch}:%{version}
-Obsoletes:	php-simplexml
-Provides:	php-simplexml = 0:%{version}
+Provides:	php-simplexml = %{epoch}:%{version}
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
@@ -340,8 +219,6 @@ webserver with php support (ie: apache-mod_php).
 %package	devel
 Summary:	Development package for PHP5
 Group:		Development/C
-Requires(post): %{libname} >= %{epoch}:%{version}
-Requires(preun): %{libname} >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	autoconf2.5
 Requires:	automake1.7
@@ -519,7 +396,7 @@ spell libraries:
 Summary:	EXIF extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-mbstring >= 0:%{version}
+Requires:	php-mbstring >= %{epoch}:%{version}
 
 %description	exif
 This is a dynamic shared object (DSO) for PHP that will add EXIF tags support
@@ -824,7 +701,7 @@ Summary:	Sybase Interface driver for PDO
 Group:		Development/PHP
 Requires:       freetds >= 0.63
 BuildRequires:  freetds-devel >= 0.63
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	pdo_dblib
@@ -835,7 +712,7 @@ FreeTDS libary.
 %package	pdo_mysql
 Summary:	MySQL Interface driver for PDO
 Group:		Development/PHP
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	pdo_mysql
@@ -850,7 +727,7 @@ libraries, PDO will emulate them for you.
 Summary:	ODBC v3 Interface driver for PDO
 Group:		Development/PHP
 BuildRequires:	unixODBC-devel
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	pdo_odbc
@@ -873,7 +750,7 @@ different "flavours" of database drivers:
 Summary:	PostgreSQL interface driver for PDO
 Group:		Development/PHP
 BuildRequires:	postgresql-devel
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	postgresql-libs >= %{postgresql_version}
 
@@ -886,7 +763,7 @@ Summary:	SQLite v3 Interface driver for PDO
 Group:		Development/PHP
 BuildRequires:	sqlite3-devel
 BuildRequires:	lemon
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	pdo_sqlite
@@ -1054,7 +931,7 @@ possibility to act as a socket server as well as a client.
 %package	sqlite3
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
-Requires:	php-pdo >= 0:%{version}
+Requires:	php-pdo >= %{epoch}:%{version}
 Obsoletes:	php-sqlite
 Provides:	php-sqlite = %{epoch}:%{version}
 BuildRequires:	sqlite3-devel
