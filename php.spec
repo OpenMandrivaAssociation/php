@@ -7,14 +7,13 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
+Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.0
 Release:	%mkrel 7
-Epoch:      3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Summary:	The PHP5 scripting language
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
@@ -31,7 +30,7 @@ Patch10:	php-phpbuilddir.diff
 Patch13:	php5-apache2-filters.diff
 # remove libedit once and for all
 Patch15:	php-no_libedit.diff
-Patch16:    php-xmlrpc_epi.patch 
+Patch16:	php-xmlrpc_epi.patch 
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
 #####################################################################
@@ -87,6 +86,7 @@ BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.9.11
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
+Epoch: 3
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 # stupid postgresql... stupid build system...
