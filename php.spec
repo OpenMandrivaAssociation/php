@@ -70,8 +70,7 @@ Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 BuildRequires:	apache-devel >= 2.2.8
-BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
+BuildRequires:	autoconf2.1
 BuildRequires:	bison
 BuildRequires:	byacc
 BuildRequires:	flex
@@ -1218,19 +1217,8 @@ EOF
 
 chmod 755 php-devel/buildext
 
-# this _has_ to be executed!
-#export WANT_AUTOCONF_2_5=1
-
-%if %{mdkversion} >= 200910
-# aclocal workaround - to be improved
-cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >>aclocal.m4
-
-# Force use of system libtool:
-cat `aclocal-1.7 --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
-%endif
-
-rm -f configure; libtoolize --copy --force; aclocal-1.7; autoconf --force; autoheader
-#./buildconf --force
+export PHP_AUTOCONF=autoconf-2.13
+./buildconf --force
 
 # Do this patch with a perl hack...
 perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
