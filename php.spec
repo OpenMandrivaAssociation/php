@@ -9,18 +9,18 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.0
-Release:	%mkrel 8
+Version:	5.3.1
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+#Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://downloads.php.net/johannes/php-5.3.1RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
-Patch3:		php-64bit.diff
 Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
@@ -1091,12 +1091,11 @@ create and read zip files using the libzip library.
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
-%patch3 -p1 -b .64bit.droplet
 %patch6 -p0 -b .libtool.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch8 -p1 -b .phpize.droplet
@@ -1145,7 +1144,6 @@ create and read zip files using the libzip library.
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
