@@ -7,10 +7,12 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
+%define suhosin_version 0.9.8
+
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 0.0.RC1.2
+Release:	%mkrel 0.0.RC1.3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -70,6 +72,9 @@ Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 Patch229:	php-5.3.x-CVE-2009-3291.diff
+# http://www.suhosin.org/
+Source300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -99,6 +104,11 @@ PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
 integration for several commercial and non-commercial database management
 systems, so writing a database-enabled script with PHP5 is fairly simple. The
 most common use of PHP5 coding is probably as a replacement for CGI scripts.
+
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %package	cli
 Summary:	PHP5 CLI interface
@@ -135,6 +145,11 @@ This package contains a command-line (CLI) version of php. You must also
 install libphp5_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+
 %package	cgi
 Summary:	PHP5 CGI interface
 Group:		Development/Other
@@ -169,6 +184,11 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 This package contains a standalone (CGI) version of php. You must also install
 libphp5_common. If you need apache module support, you also need to install the
 apache-mod_php package.
+
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %package	fcgi
 Summary:	PHP5 CGI interface with FastCGI support
@@ -205,6 +225,11 @@ This package contains a standalone (CGI) version of php with FastCGI support.
 You must also install libphp5_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+
 %package -n	%{libname}
 Summary:	Shared library for PHP5
 Group:		Development/Other
@@ -215,6 +240,11 @@ Provides:	php-simplexml = %{epoch}:%{version}
 This package provides the common files to run with different implementations of
 PHP5. You need this package if you install the php standalone package or a
 webserver with php support (ie: apache-mod_php).
+
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %package	devel
 Summary:	Development package for PHP5
@@ -1098,7 +1128,6 @@ create and read zip files using the libzip library.
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
 %patch6 -p0 -b .libtool.droplet
-%patch7 -p1 -b .no_egg.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
 #
@@ -1111,7 +1140,6 @@ create and read zip files using the libzip library.
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
 %patch22 -p0 -b .filter-shared.droplet
-%patch23 -p1 -b .mdv_logo.droplet
 %patch25 -p0 -b .dba-link.droplet
 %patch26 -p0 -b .bdb4.7_fix.droplet
 %patch27 -p0 -b .zlib-for-getimagesize.droplet
@@ -1146,6 +1174,10 @@ create and read zip files using the libzip library.
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 %patch229 -p0 -b .CVE-2009-3291.droplet
+
+%patch300 -p1 -b .suhosin.droplet
+%patch7 -p1 -b .no_egg.droplet
+%patch23 -p1 -b .mdv_logo.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
