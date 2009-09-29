@@ -1249,6 +1249,7 @@ EOF
 
 chmod 755 php-devel/buildext
 
+rm -f configure
 export PHP_AUTOCONF=autoconf-2.13
 ./buildconf --force
 
