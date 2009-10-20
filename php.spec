@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 0.0.RC1.4
+Release:	%mkrel 0.0.RC1.5
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -72,6 +72,10 @@ Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 Patch229:	php-5.3.x-CVE-2009-3291.diff
+Patch230:	php-5.3.x-open_basedir_bypass_fix.diff
+Patch231:	php-5.3.x-safe_mode_bypass_fix.diff
+Patch232:	php-5.3.x-CVE-2009-3546.diff
+Patch233:	php-5.3.x-bug49224.diff
 # http://www.suhosin.org/
 Source300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz
@@ -1174,6 +1178,10 @@ create and read zip files using the libzip library.
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 %patch229 -p0 -b .CVE-2009-3291.droplet
+%patch230 -p0 -b .open_basedir_bypass_fix.droplet
+%patch231 -p0 -b .safe_mode_bypass_fix.droplet
+%patch232 -p0 -b .CVE-2009-3546.droplet
+%patch233 -p0 -b .bug49224.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
