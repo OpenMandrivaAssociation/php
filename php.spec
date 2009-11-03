@@ -134,6 +134,7 @@ Requires:	php-tokenizer >= %{epoch}:%{version}
 Requires:	php-xmlreader >= %{epoch}:%{version}
 Requires:	php-xmlwriter >= %{epoch}:%{version}
 Requires:	php-zlib >= %{epoch}:%{version}
+Requires:	php-xml >= %{epoch}:%{version}
 Provides:	php = %{epoch}:%{version}
 
 %description	cli
@@ -174,6 +175,7 @@ Requires:	php-tokenizer >= %{epoch}:%{version}
 Requires:	php-xmlreader >= %{epoch}:%{version}
 Requires:	php-xmlwriter >= %{epoch}:%{version}
 Requires:	php-zlib >= %{epoch}:%{version}
+Requires:	php-xml >= %{epoch}:%{version}
 Provides:	php = %{epoch}:%{version}
 
 %description	cgi
@@ -214,6 +216,7 @@ Requires:	php-tokenizer >= %{epoch}:%{version}
 Requires:	php-xmlreader >= %{epoch}:%{version}
 Requires:	php-xmlwriter >= %{epoch}:%{version}
 Requires:	php-zlib >= %{epoch}:%{version}
+Requires:	php-xml >= %{epoch}:%{version}
 Provides:	php = %{epoch}:%{version}
 
 %description	fcgi
