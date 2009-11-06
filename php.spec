@@ -12,12 +12,12 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 0.0.RC2.1
+Release:	%mkrel 0.0.RC3.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
 #Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
-Source0:	http://downloads.php.net/johannes/php-5.3.1RC2.tar.gz
+Source0:	http://downloads.php.net/johannes/php-5.3.1RC3.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -1126,7 +1126,7 @@ create and read zip files using the libzip library.
 
 %prep
 
-%setup -q -n php-%{version}RC2
+%setup -q -n php-%{version}RC3
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
