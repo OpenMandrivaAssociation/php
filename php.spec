@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 0.0.RC3.1
+Release:	%mkrel 0.0.RC3.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -177,49 +177,12 @@ Requires:	php-xmlwriter >= %{epoch}:%{version}
 Requires:	php-zlib >= %{epoch}:%{version}
 Requires:	php-xml >= %{epoch}:%{version}
 Provides:	php = %{epoch}:%{version}
+Provides:	php-fcgi = %{epoch}:%{version}-%{release}
+Obsoletes:	php-fcgi
+# because of a added compat softlink
+Conflicts:	php-fcgi < %{epoch}:%{version}-%{release}
 
 %description	cgi
-PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
-integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP5 is fairly simple. The
-most common use of PHP5 coding is probably as a replacement for CGI scripts.
-
-This package contains a standalone (CGI) version of php. You must also install
-libphp5_common. If you need apache module support, you also need to install the
-apache-mod_php package.
-
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
-
-%package	fcgi
-Summary:	PHP5 CGI interface with FastCGI support
-Group:		Development/Other
-Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ctype >= %{epoch}:%{version}
-Requires:	php-filter >= %{epoch}:%{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-hash >= %{epoch}:%{version}
-Requires:	php-ini >= %{version}
-Requires:	php-json >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
-Requires:	php-session >= %{epoch}:%{version}
-Requires:	php-suhosin >= 0.9.29
-Requires:	php-sysvsem >= %{epoch}:%{version}
-Requires:	php-sysvshm >= %{epoch}:%{version}
-Requires:	php-timezonedb >= 3:2009.10
-Requires:	php-tokenizer >= %{epoch}:%{version}
-Requires:	php-xmlreader >= %{epoch}:%{version}
-Requires:	php-xmlwriter >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-xml >= %{epoch}:%{version}
-Provides:	php = %{epoch}:%{version}
-
-%description	fcgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
 integration for several commercial and non-commercial database management
 systems, so writing a database-enabled script with PHP5 is fairly simple. The
@@ -1268,9 +1231,8 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # never use "--disable-rpath", it does the opposite
 
 # Configure php5
-for i in cgi cli fcgi apxs; do
+for i in cgi cli apxs; do
 ./configure \
-    `[ $i = fcgi ] && echo --disable-cli` \
     `[ $i = cgi ] && echo --disable-cli` \
     `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
@@ -1380,19 +1342,9 @@ cp config.nice configure_command; chmod 644 configure_command
 
 %make
 
-# make php-fcgi
-cp -af php_config.h.fcgi main/php_config.h
-make -f Makefile.fcgi sapi/cgi/php-cgi
-cp -rp sapi/cgi sapi/fcgi
-perl -pi -e "s|sapi/cgi|sapi/fcgi|g" sapi/fcgi/php
-
-# cleanup
-rm -rf sapi/cgi/.libs; rm -f sapi/cgi/*.lo sapi/cgi/php-cgi
-
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
 make -f Makefile.cgi sapi/cgi/php-cgi
-
 cp -af php_config.h.apxs main/php_config.h
 
 %install
@@ -1414,8 +1366,10 @@ make -f Makefile.apxs install \
 	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/" \
 	INSTALL_CLI="\$(LIBTOOL) --silent --mode=install install sapi/cli/php %{buildroot}%{_bindir}/php"
 
-./libtool --silent --mode=install install sapi/fcgi/php-cgi %{buildroot}%{_bindir}/php-fcgi
 ./libtool --silent --mode=install install sapi/cgi/php-cgi %{buildroot}%{_bindir}/php-cgi
+
+# compat php-fcgi symink
+ln -s php-cgi %{buildroot}%{_bindir}/php-fcgi
 
 cp -dpR php-devel/* %{buildroot}%{_usrsrc}/php-devel/
 install -m0644 run-tests*.php %{buildroot}%{_usrsrc}/php-devel/
@@ -1502,10 +1456,7 @@ cp ext/zlib/CREDITS CREDITS.zlib
 
 # cgi docs
 cp sapi/cgi/CREDITS CREDITS.cgi
-
-# fcgi docs
 cp sapi/cgi/README.FastCGI README.fcgi
-cp sapi/cgi/CREDITS CREDITS.fcgi
 
 # cli docs
 cp sapi/cli/CREDITS CREDITS.cli
@@ -1634,6 +1585,18 @@ TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
 %postun -n %{libname} -p /sbin/ldconfig
 %endif
 
+%post cgi
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun cgi
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
 %post bcmath
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -1736,18 +1699,6 @@ if [ -f /var/lock/subsys/httpd ]; then
 fi
 
 %postun exif
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post fcgi
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun fcgi
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2393,12 +2344,8 @@ fi
 
 %files cgi
 %defattr(-,root,root)
-%doc CREDITS.cgi
+%doc CREDITS.cgi README.fcgi
 %attr(0755,root,root) %{_bindir}/php-cgi
-
-%files fcgi
-%defattr(-,root,root)
-%doc CREDITS.fcgi README.fcgi
 %attr(0755,root,root) %{_bindir}/php-fcgi
 
 %files devel
