@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -72,9 +72,8 @@ Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 Patch233:	php-5.3.x-bug49224.diff
 # http://www.suhosin.org/
-Source300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-5.3.1RC1-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.1RC2-%{suhosin_version}.diff
+Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1141,7 +1140,7 @@ create and read zip files using the libzip library.
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 %patch233 -p0 -b .bug49224.droplet
 
-%patch301 -p1 -b .suhosin.droplet
+%patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
