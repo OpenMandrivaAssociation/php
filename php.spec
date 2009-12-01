@@ -1335,7 +1335,7 @@ perl -pi -e "s|-prefer-non-pic -static||g" Makefile.$i
 done
 
 # remove all confusion...
-perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/libphp5_common%{php5_common_major}-%{version}/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
+perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/php-doc/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
 cp config.nice configure_command; chmod 644 configure_command
 
 %make
