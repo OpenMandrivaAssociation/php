@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -20,6 +20,9 @@ Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
+Source4:	php-fpm.init
+Source5:	php-fpm.sysconf
+Source6:	php-fpm.logrorate
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch6:		php-libtool.diff
@@ -61,6 +64,9 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
+Patch116:	php-5.3.x-fpm-0.6.5.diff
+Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
+Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
@@ -1085,6 +1091,51 @@ Group:		Development/PHP
 This is a dynamic shared object (DSO) for PHP that will add zip support to
 create and read zip files using the libzip library.
 
+%package	fpm
+Summary:	PHP5 FastCGI Process Manager
+Group:		Development/Other
+Requires(post): rpm-helper
+Requires(preun): rpm-helper
+Requires(pre): rpm-helper
+Requires(postun): rpm-helper
+BuildRequires:	libevent-devel >= 1.4.11
+Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-ctype >= %{epoch}:%{version}
+Requires:	php-filter >= %{epoch}:%{version}
+Requires:	php-ftp >= %{epoch}:%{version}
+Requires:	php-gettext >= %{epoch}:%{version}
+Requires:	php-hash >= %{epoch}:%{version}
+Requires:	php-ini >= %{version}
+Requires:	php-json >= %{epoch}:%{version}
+Requires:	php-openssl >= %{epoch}:%{version}
+Requires:	php-pcre >= %{epoch}:%{version}
+Requires:	php-posix >= %{epoch}:%{version}
+Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-suhosin >= 0.9.29
+Requires:	php-sysvsem >= %{epoch}:%{version}
+Requires:	php-sysvshm >= %{epoch}:%{version}
+Requires:	php-timezonedb >= 3:2009.10
+Requires:	php-tokenizer >= %{epoch}:%{version}
+Requires:	php-xmlreader >= %{epoch}:%{version}
+Requires:	php-xmlwriter >= %{epoch}:%{version}
+Requires:	php-zlib >= %{epoch}:%{version}
+Requires:	php-xml >= %{epoch}:%{version}
+Provides:	php = %{epoch}:%{version}
+
+%description	fpm
+PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
+integration for several commercial and non-commercial database management
+systems, so writing a database-enabled script with PHP5 is fairly simple. The
+most common use of PHP5 coding is probably as a replacement for CGI scripts.
+
+This package contains the FastCGI Process Manager. You must also install
+libphp5_common.
+
+This version of php has the suhosin patch %{suhosin_version} applied. Please
+report bugs here: http://qa.mandriva.com/ so that the official maintainer of
+this Mandriva package can help you. More information regarding the
+suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+
 %prep
 
 %setup -q -n php-%{version}
@@ -1129,6 +1180,11 @@ create and read zip files using the libzip library.
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
 
+# fpm stuff
+%patch116 -p1
+%patch117 -p1
+%patch118 -p0
+
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
@@ -1147,6 +1203,9 @@ create and read zip files using the libzip library.
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
+cp %{SOURCE4} php-fpm.init
+cp %{SOURCE5} php-fpm.sysconf
+cp %{SOURCE6} php-fpm.logrorate
 
 # lib64 hack
 perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
@@ -1214,8 +1273,8 @@ EOF
 
 chmod 755 php-devel/buildext
 
-rm -f configure
 export PHP_AUTOCONF=autoconf-2.13
+rm -f configure
 ./buildconf --force
 
 # Do this patch with a perl hack...
@@ -1229,11 +1288,12 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # never use "--disable-rpath", it does the opposite
 
 # Configure php5
-for i in cgi cli apxs; do
+for i in fpm cgi cli apxs; do
 ./configure \
+    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-libevent-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
     `[ $i = cgi ] && echo --disable-cli` \
-    `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
+    `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
     --build=%{_build} \
     --prefix=%{_prefix} \
     --exec-prefix=%{_prefix} \
@@ -1258,8 +1318,8 @@ for i in cgi cli apxs; do
     --with-pcre-regex=%{_prefix} \
     --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
     --with-png-dir=%{_prefix} \
-	--with-pdo-odbc=unixODBC \
-	--disable-mysqlnd-threading \
+    --with-pdo-odbc=unixODBC \
+    --disable-mysqlnd-threading \
     --enable-magic-quotes \
     --enable-safe-mode \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
@@ -1345,6 +1405,11 @@ cp -af php_config.h.cgi main/php_config.h
 make -f Makefile.cgi sapi/cgi/php-cgi
 cp -af php_config.h.apxs main/php_config.h
 
+# make php-fpm
+cp -af php_config.h.fpm main/php_config.h
+make -f Makefile.fpm sapi/fpm/php-fpm
+cp -af php_config.h.apxs main/php_config.h
+
 %install
 rm -rf %{buildroot}
 
@@ -1376,6 +1441,22 @@ install -m0644 main/internal_functions.c %{buildroot}%{_usrsrc}/php-devel/
 install -m0644 sapi/cli/php.1 %{buildroot}%{_mandir}/man1/
 install -m0644 scripts/man1/phpize.1 %{buildroot}%{_mandir}/man1/
 install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
+
+# fpm
+install -d %{buildroot}%{_initrddir}
+install -d %{buildroot}%{_sysconfdir}/logrotate.d
+install -d %{buildroot}%{_sysconfdir}/sysconfig
+install -d %{buildroot}%{_sbindir}
+install -d %{buildroot}/var/lib/php-fpm
+install -d %{buildroot}/var/log/php-fpm
+install -d %{buildroot}/var/run/php-fpm
+
+./libtool --silent --mode=install install sapi/fpm/php-fpm %{buildroot}%{_sbindir}/php-fpm
+install -m0644 sapi/fpm/php-fpm.1 %{buildroot}%{_mandir}/man1/
+install -m0644 sapi/fpm/php-fpm.conf %{buildroot}%{_sysconfdir}/
+install -m0755 php-fpm.init %{buildroot}%{_initrddir}/php-fpm
+install -m0644 php-fpm.sysconf %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
+install -m0644 php-fpm.logrorate %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
 
 ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
 
@@ -2318,6 +2399,18 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%pre fpm
+%_pre_useradd apache /var/www /bin/sh
+
+%post fpm
+%_post_service php-fpm
+
+%preun fpm
+%_preun_service php-fpm
+
+%postun fpm
+%_postun_userdel apache
+
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
@@ -2664,3 +2757,16 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/83_zip.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zip.so
+
+%files fpm
+%defattr(-,root,root)
+%doc sapi/fpm/CREDITS sapi/fpm/LICENSE
+%attr(0755,root,root) %{_initrddir}/php-fpm
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
+%attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
+%attr(0755,root,root) %{_sbindir}/php-fpm
+%attr(0644,root,root) %{_mandir}/man1/php-fpm.1*
+%attr(0711,apache,apache) %dir /var/lib/php-fpm
+%attr(0711,apache,apache) %dir /var/log/php-fpm
+%attr(0711,apache,apache) %dir /var/run/php-fpm
