@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -23,6 +23,7 @@ Source3:	php.crond
 Source4:	php-fpm.init
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrorate
+Source7:	fpm.tar.gz
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch6:		php-libtool.diff
@@ -64,7 +65,6 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
-Patch116:	php-5.3.x-fpm-0.6.5.diff
 Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
 Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
 # Fix bugs
@@ -1138,7 +1138,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version} -a7
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1181,7 +1181,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch115 -p0 -b .dlopen.droplet
 
 # fpm stuff
-%patch116 -p1
 %patch117 -p1
 %patch118 -p0
 
