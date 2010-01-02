@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.1
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -67,6 +67,7 @@ Patch114:	php-no_pam_in_c-client.diff
 Patch115:	php-dlopen.diff
 Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
 Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
+Patch119:	php-5.3.1-bdb4.8_fix.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
@@ -1183,6 +1184,8 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 # fpm stuff
 %patch117 -p1
 %patch118 -p0
+
+%patch119 -p0
 
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
