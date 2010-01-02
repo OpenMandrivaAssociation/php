@@ -11,12 +11,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.1
-Release:	%mkrel 6
+Version:	5.3.2
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -77,10 +77,12 @@ Patch225:	php-extraimapcheck.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch233:	php-5.3.x-bug49224.diff
 # http://www.suhosin.org/
-Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Source300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz.sig
+Patch300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz
+Patch301:	suhosin-patch-5.3.2RC1-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1139,7 +1141,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version} -a7
+%setup -q -n php-%{version}RC1 -a7
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1196,9 +1198,8 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch233 -p0 -b .bug49224.droplet
 
-%patch300 -p1 -b .suhosin.droplet
+%patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
