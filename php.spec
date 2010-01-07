@@ -30,6 +30,7 @@ Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch10:	php-phpbuilddir.diff
+Patch11:	php-5.3.2-libjpegv7.patch
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -1149,6 +1150,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
+%patch11 -p0 -b .jpegv7
 #
 %patch13 -p1 -b .apache2-filters.droplet
 %patch15 -p0 -b .no_libedit.droplet
