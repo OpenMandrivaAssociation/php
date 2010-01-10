@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.2
-Release:	%mkrel 0.0.RC1.1
+Release:	%mkrel 0.0.RC1.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -30,7 +30,7 @@ Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch10:	php-phpbuilddir.diff
-Patch11:	php-5.3.2-libjpegv7.patch
+Patch11:	php-5.3.2-libjpegv7-8.patch
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -1150,7 +1150,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
-%patch11 -p0 -b .jpegv7
+%patch11 -p0 -b .jpegv7-8
 #
 %patch13 -p1 -b .apache2-filters.droplet
 %patch15 -p0 -b .no_libedit.droplet
