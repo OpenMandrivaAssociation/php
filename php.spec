@@ -12,11 +12,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.2
-Release:	%mkrel 0.0.RC1.5
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -84,7 +84,7 @@ Patch229:	php-5.3.2-gmp-5.0.0.patch
 #Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Source300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz.sig
 Patch300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.2RC1-%{suhosin_version}.diff
+Patch301:	suhosin-patch-5.3.2RC2-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1143,7 +1143,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}RC1 -a7
+%setup -q -n php-%{version}RC2 -a7
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
