@@ -12,11 +12,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.2
-Release:	%mkrel 0.0.RC2.2
+Release:	%mkrel 0.0.RC3.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC3.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -78,7 +78,6 @@ Patch225:	php-extraimapcheck.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch229:	php-5.3.2-gmp-5.0.0.patch
 # http://www.suhosin.org/
 #Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1143,7 +1142,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}RC2 -a7
+%setup -q -n php-%{version}RC3 -a7
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1201,7 +1200,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch229 -p0 -b .gmp_5.0.0
 
 %patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
