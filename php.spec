@@ -7,12 +7,12 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
-%define suhosin_version 0.9.8
+%define suhosin_version 0.9.9.1
 
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.2
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -79,11 +79,8 @@ Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 # http://www.suhosin.org/
-#Source300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-#Patch300:	suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Source300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz.sig
-Patch300:	suhosin-patch-5.3.1-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.2RC2-%{suhosin_version}.diff
+Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1201,7 +1198,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 
-%patch301 -p1 -b .suhosin.droplet
+%patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
