@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.2
-Release:	%mkrel 9
+Release:	%mkrel 10
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -1450,10 +1450,13 @@ install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_sysconfdir}/sysconfig
+install -d %{buildroot}%{_sysconfdir}/php-fpm.d
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}/var/lib/php-fpm
 install -d %{buildroot}/var/log/php-fpm
 install -d %{buildroot}/var/run/php-fpm
+# a small bug here...
+echo "; place your config here" > %{buildroot}%{_sysconfdir}/php-fpm.d/default.conf
 
 ./libtool --silent --mode=install install sapi/fpm/php-fpm %{buildroot}%{_sbindir}/php-fpm
 install -m0644 sapi/fpm/php-fpm.1 %{buildroot}%{_mandir}/man1/
@@ -2769,6 +2772,8 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
 %attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
+%attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
 %attr(0755,root,root) %{_sbindir}/php-fpm
 %attr(0644,root,root) %{_mandir}/man1/php-fpm.1*
 %attr(0711,apache,apache) %dir /var/lib/php-fpm
