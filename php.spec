@@ -11,26 +11,24 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.2
-Release:	%mkrel 11
+Version:	5.3.3
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
 Source4:	php-fpm.init
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrorate
-Source7:	fpm.tar.gz
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
 Patch10:	php-phpbuilddir.diff
-Patch11:	php-5.3.2-libjpegv7-8.patch
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
 Patch13:	php5-apache2-filters.diff
@@ -45,7 +43,6 @@ Patch20:	php-mail.diff
 Patch22:	php-filter-shared.diff
 Patch23:	php-mdv_logo.diff
 Patch25:	php-dba-link.patch
-Patch26:	php-5.2.8-bdb4.7_fix.diff
 Patch27:	php-zlib-for-getimagesize.patch
 Patch28:	php-zlib.patch
 # stolen from debian
@@ -68,7 +65,6 @@ Patch114:	php-no_pam_in_c-client.diff
 Patch115:	php-dlopen.diff
 Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
 Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
-Patch119:	php-5.3.1-bdb4.8_fix.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
@@ -78,10 +74,10 @@ Patch225:	php-extraimapcheck.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch229:	php-5.3.x-CVE-2010-0397.diff
 # http://www.suhosin.org/
-Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+#Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Patch300:	suhosin-patch-5.3.3-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -585,8 +581,8 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	mbfl-devel
-BuildRequires:	onig-devel
+BuildRequires:	mbfl-devel >= 1.1.0
+BuildRequires:	onig-devel >= 5.9.2
 
 %description	mbstring
 This is a dynamic shared object (DSO) for PHP that will add multibyte string
@@ -1140,7 +1136,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version} -a7
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1148,7 +1144,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
-%patch11 -p0 -b .jpegv7-8
 #
 %patch13 -p1 -b .apache2-filters.droplet
 %patch15 -p0 -b .no_libedit.droplet
@@ -1160,7 +1155,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch20 -p0 -b .mail.droplet
 %patch22 -p0 -b .filter-shared.droplet
 %patch25 -p0 -b .dba-link.droplet
-%patch26 -p0 -b .bdb4.7_fix.droplet
 %patch27 -p0 -b .zlib-for-getimagesize.droplet
 %patch28 -p1 -b .zlib.droplet
 
@@ -1187,8 +1181,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch117 -p1
 %patch118 -p0
 
-%patch119 -p0
-
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
@@ -1198,7 +1190,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch229 -p0 -b .CVE-2010-0397.droplet
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
