@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.3
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -791,6 +791,30 @@ commercial databases. It provides SQL92/SQL99 language support, transactions,
 referential integrity, stored procedures and type extensibility. PostgreSQL is
 an open source descendant of this original Berkeley code.
 
+%package	phar
+Summary:	Allows running of complete applications out of .phar files
+Group:		Development/PHP
+Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-bz2
+Requires:	php-hash
+
+%description	phar
+This is the extension version of PEAR's PHP_Archive package. Support for
+zlib, bz2 and crc32 is achieved without any dependency other than the external
+zlib or bz2 extension.
+
+.phar files can be read using the phar stream, or with the Phar class. If the
+SPL extension is available, a Phar object can be used as an array to iterate
+over a phar's contents or to read files directly from the phar.
+
+Phar archives can be created using the streams API or with the Phar class, if
+the phar.readonly ini variable is set to false.
+
+Full support for MD5 and SHA1 signatures is possible. Signatures can be
+required if the ini variable phar.require_hash is set to true. When PECL
+extension hash is avaiable then SHA-256 and SHA-512 signatures are supported as
+well.
+
 %package	posix
 Summary:	POSIX extension module for PHP
 Group:		Development/PHP
@@ -1351,7 +1375,7 @@ for i in fpm cgi cli apxs; do
     --enable-pcntl=shared \
     --enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
     --with-pgsql=shared,%{_prefix} \
-    --disable-phar \
+    --enable-phar=shared \
     --enable-posix=shared \
     --with-pspell=shared,%{_prefix} \
     --with-readline=shared,%{_prefix} \
@@ -1518,6 +1542,7 @@ echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
 echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
 echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
 echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
+echo "extension = phar.so"		> %{buildroot}%{_sysconfdir}/php.d/84_phar.ini
 
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
@@ -1538,6 +1563,12 @@ cp sapi/cgi/README.FastCGI README.fcgi
 cp sapi/cli/CREDITS CREDITS.cli
 cp sapi/cli/README README.cli
 cp sapi/cli/TODO TODO.cli
+
+# phar fixes
+if [ -L %{buildroot}%{_bindir}/phar ]; then
+    rm -f %{buildroot}%{_bindir}/phar
+    mv %{buildroot}%{_bindir}/phar.phar %{buildroot}%{_bindir}/phar
+fi
 
 # house cleaning
 rm -f %{buildroot}%{_bindir}/pear
@@ -2105,6 +2136,18 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%post phar
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun phar
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
 %post posix
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -2636,6 +2679,12 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/42_pgsql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pgsql.so
+
+%files phar
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/84_phar.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/phar.so
+%attr(0755,root,root) %{_bindir}/phar
 
 %files posix
 %defattr(-,root,root)
