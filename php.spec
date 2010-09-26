@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.3
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -645,10 +645,17 @@ This is a dynamic shared object (DSO) for PHP that will add MySQL database
 support.
 
 The mysqli extension allows you to access the functionality provided by MySQL
-4.1 and above. More information about the MySQL Database server can be found at
+4.1 and above. It is an improved version of the older PHP MySQL driver,
+offering various benefits. The developers of the PHP programming language
+recommend using MySQLi when dealing with MySQL server versions 4.1.3 and newer
+(takes advantage of new functionality)
+
+More information about the MySQL Database server can be found at
 http://www.mysql.com/
 
 Documentation for MySQL can be found at http://dev.mysql.com/doc/.
+
+Documentation for MySQLi can be found at http://www.php.net/manual/en/mysqli.overview.php.
 
 %package	odbc
 Summary:	ODBC extension module for PHP
