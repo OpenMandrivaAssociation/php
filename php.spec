@@ -92,8 +92,8 @@ BuildRequires:	libxslt-devel >= 1.1.0
 BuildRequires:	openssl >= 0.9.7
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
-BuildRequires:	pcre-devel >= 6.6 
-BuildRequires:	re2c >= 0.9.11
+BuildRequires:	pcre-devel >= 6.6
+BuildRequires:	re2c >= 0.13.4
 BuildRequires:	multiarch-utils >= 1.0.3
 BuildRequires:  unixODBC-devel
 Epoch: 3
