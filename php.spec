@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.3
-Release:	%mkrel 8
+Release:	%mkrel 9
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -78,6 +78,8 @@ Patch229:	php-5.3.3-CVE-2010-3436.diff
 Patch230:	php-5.3.3-CVE-2010-3709.diff
 Patch231:	php-5.3.3-CVE-2010-3710.diff
 Patch232:	php-5.3.3-CVE-2010-3870.diff
+# (cg) From http://bugs.php.net/bug.php?id=50027
+Patch233:	php-gc-fix-r303016.patch
 # http://www.suhosin.org/
 Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1229,6 +1231,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch230 -p0 -b .CVE-2010-3709.droplet
 %patch231 -p0 -b .CVE-2010-3710.droplet
 %patch232 -p1 -b .CVE-2010-3870.droplet
+%patch233 -p4 -b .bug50027
 
 %patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
