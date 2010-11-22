@@ -11,12 +11,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.3
-Release:	%mkrel 9
+Version:	5.3.4
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -49,9 +49,10 @@ Patch28:	php-zlib.patch
 Patch30:	php-session.save_path.diff
 Patch32:	php-exif_nesting_level.diff
 # for kolab2
-Patch50:	php-imap-annotation.diff
-Patch51:	php-imap-status-current.diff
-Patch52:	php-imap-myrights.diff
+# P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
+Patch50:	php-imap-annotation+status-current.diff
+# P51 was taken from http://kolab.org/cgi-bin/viewcvs-kolab.cgi/server/php/patches/php-5.3.2/
+Patch51:	php-imap-myrights.diff
 #####################################################################
 # Stolen from fedora
 Patch101:	php-cxx.diff
@@ -70,19 +71,13 @@ Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
 Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
-Patch225:	php-extraimapcheck.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch229:	php-5.3.3-CVE-2010-3436.diff
-Patch230:	php-5.3.3-CVE-2010-3709.diff
-Patch231:	php-5.3.3-CVE-2010-3710.diff
-Patch232:	php-5.3.3-CVE-2010-3870.diff
-# (cg) From http://bugs.php.net/bug.php?id=50027
-Patch233:	php-gc-fix-r303016.patch
 # http://www.suhosin.org/
-Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+#Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+#Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
+Patch301:	suhosin-patch-5.3.4RC1-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1172,7 +1167,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1199,9 +1194,8 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch32 -p0 -b .exif_nesting_level.droplet
 
 # for kolab2
-#%patch50 -p1 -b .imap-annotation.droplet <- needs porting
-#%patch51 -p1 -b .imap-status-current.droplet <- needs porting
-#%patch52 -p1 -b .imap-myrights.droplet <- needs porting
+%patch50 -p1 -b .imap-annotation.droplet
+%patch51 -p1 -b .imap-myrights.droplet
 
 #####################################################################
 # Stolen from fedora
@@ -1222,18 +1216,11 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch121 -p0 -b .bug43221.droplet
 %patch123 -p0 -b .bug43589.droplet
 %patch224 -p0 -b .CVE-2005-3388.droplet
-#%patch225 -p0 -b .open_basedir_and_safe_mode_checks.droplet <- does not apply anymore
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 
-%patch229 -p0 -b .CVE-2010-3436.droplet
-%patch230 -p0 -b .CVE-2010-3709.droplet
-%patch231 -p0 -b .CVE-2010-3710.droplet
-%patch232 -p1 -b .CVE-2010-3870.droplet
-%patch233 -p4 -b .bug50027
-
-%patch300 -p1 -b .suhosin.droplet
+%patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
@@ -1485,6 +1472,7 @@ install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_sysconfdir}/sysconfig
 install -d %{buildroot}%{_sysconfdir}/php-fpm.d
 install -d %{buildroot}%{_sbindir}
+install -d %{buildroot}%{_mandir}/man8
 install -d %{buildroot}/var/lib/php-fpm
 install -d %{buildroot}/var/log/php-fpm
 install -d %{buildroot}/var/run/php-fpm
@@ -1492,7 +1480,7 @@ install -d %{buildroot}/var/run/php-fpm
 echo "; place your config here" > %{buildroot}%{_sysconfdir}/php-fpm.d/default.conf
 
 ./libtool --silent --mode=install install sapi/fpm/php-fpm %{buildroot}%{_sbindir}/php-fpm
-install -m0644 sapi/fpm/php-fpm.1 %{buildroot}%{_mandir}/man1/
+install -m0644 sapi/fpm/php-fpm.8 %{buildroot}%{_mandir}/man8/
 install -m0644 sapi/fpm/php-fpm.conf %{buildroot}%{_sysconfdir}/
 install -m0755 php-fpm.init %{buildroot}%{_initrddir}/php-fpm
 install -m0644 php-fpm.sysconf %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
@@ -2833,7 +2821,7 @@ fi
 %attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
 %attr(0755,root,root) %{_sbindir}/php-fpm
-%attr(0644,root,root) %{_mandir}/man1/php-fpm.1*
+%attr(0644,root,root) %{_mandir}/man8/php-fpm.8*
 %attr(0711,apache,apache) %dir /var/lib/php-fpm
 %attr(0711,apache,apache) %dir /var/log/php-fpm
 %attr(0711,apache,apache) %dir /var/run/php-fpm
