@@ -12,11 +12,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.4
-Release:	%mkrel 0.0.RC1.2
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -77,7 +77,7 @@ Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.4RC1-%{suhosin_version}.diff
+Patch301:	suhosin-patch-5.3.4RC2-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.1
 BuildRequires:	bison
@@ -1127,7 +1127,6 @@ Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
-BuildRequires:	libevent-devel >= 1.4.11
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	php-ctype >= %{epoch}:%{version}
 Requires:	php-filter >= %{epoch}:%{version}
@@ -1167,7 +1166,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}RC1
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1314,7 +1313,7 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # Configure php5
 for i in fpm cgi cli apxs; do
 ./configure \
-    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-libevent-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
+    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
     `[ $i = cgi ] && echo --disable-cli` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
     `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
