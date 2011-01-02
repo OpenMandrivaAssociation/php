@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.4
-Release:	%mkrel 4
+Release:	%mkrel 5
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -64,6 +64,7 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
+Patch116:	php-5.3.4-aconf26x.patch
 Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
 Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
 # Fix bugs
@@ -81,7 +82,7 @@ Patch230:	php-5.3.4-bug53541.diff
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Patch301:	suhosin-patch-5.3.4RC2-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.8
-BuildRequires:	autoconf2.1
+BuildRequires:	autoconf2.5
 BuildRequires:	bison
 BuildRequires:	byacc
 BuildRequires:	flex
@@ -222,7 +223,7 @@ Summary:	Development package for PHP5
 Group:		Development/C
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	autoconf2.5
-Requires:	automake1.7
+Requires:	automake
 Requires:	bison
 Requires:	byacc
 Requires:	chrpath
@@ -1227,6 +1228,8 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
+%patch116 -p1 -b .aconf26x
+
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
@@ -1300,7 +1303,7 @@ EOF
 
 chmod 755 php-devel/buildext
 
-export PHP_AUTOCONF=autoconf-2.13
+#export PHP_AUTOCONF=autoconf-2.13
 rm -f configure
 ./buildconf --force
 
