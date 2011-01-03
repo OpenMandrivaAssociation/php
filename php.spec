@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.4
-Release:	%mkrel 5
+Release:	%mkrel 6
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -78,9 +78,8 @@ Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 Patch229:	php-5.3.x-bug53517.diff
 Patch230:	php-5.3.4-bug53541.diff
 # http://www.suhosin.org/
-#Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-#Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.4RC2-%{suhosin_version}.diff
+Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
+Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	bison
@@ -1224,7 +1223,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch229 -p0 -b .bug53517.droplet
 %patch230 -p1 -b .bug53541.droplet
 
-%patch301 -p1 -b .suhosin.droplet
+%patch300 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
 %patch23 -p1 -b .mdv_logo.droplet
 
