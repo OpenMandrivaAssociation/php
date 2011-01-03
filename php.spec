@@ -96,7 +96,6 @@ BuildRequires:	pam-devel
 BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.13.4
 BuildRequires:	multiarch-utils >= 1.0.3
-BuildRequires:  unixODBC-devel
 Epoch: 3
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -458,7 +457,8 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libxpm-devel
 BuildRequires:	t1lib-devel
-BuildRequires:	X11-devel
+BuildRequires:	libx11-devel
+BuildRequires:	freetype2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	gd
