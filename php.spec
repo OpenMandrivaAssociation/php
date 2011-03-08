@@ -12,11 +12,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.6
-Release:	%mkrel 0.0.RC1.2
+Release:	%mkrel 0.0.RC2.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -1167,7 +1167,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}RC1
+%setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
