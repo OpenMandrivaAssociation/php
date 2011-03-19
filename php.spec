@@ -59,6 +59,7 @@ Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
+Patch111:	php-5.3.6-jpegversion.patch
 Patch112:	php-shutdown.diff
 Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
@@ -1202,6 +1203,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch101 -p0 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
 %patch105 -p0 -b .umask.droplet
+%patch111 -p0 -b .jpegversion
 %patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
@@ -1346,7 +1348,6 @@ for i in fpm cgi cli apxs; do
     --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
     --with-png-dir=%{_prefix} \
     --with-pdo-odbc=unixODBC \
-    --disable-mysqlnd-threading \
     --enable-magic-quotes \
     --enable-safe-mode \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
