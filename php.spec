@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.6
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -964,12 +964,27 @@ possibility to act as a socket server as well as a client.
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
 Requires:	php-pdo >= %{epoch}:%{version}
-Obsoletes:	php-sqlite
-Provides:	php-sqlite = %{epoch}:%{version}
 BuildRequires:	sqlite3-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	sqlite3
+This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
+C library that implements an embeddable SQL database engine. Programs that link
+with the SQLite library can have SQL database access without running a separate
+RDBMS process.
+
+SQLite is not a client library used to connect to a big database server. SQLite
+is the server. The SQLite library reads and writes directly to and from the
+database files on disk.
+
+%package	sqlite
+Summary:	SQLite v2 database bindings for PHP
+Group:		Development/PHP
+Requires:	php-pdo >= %{epoch}:%{version}
+BuildRequires:	sqlite-devel
+Requires:	%{libname} >= %{epoch}:%{version}
+
+%description	sqlite
 This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
 C library that implements an embeddable SQL database engine. Programs that link
 with the SQLite library can have SQL database access without running a separate
@@ -1396,7 +1411,7 @@ for i in fpm cgi cli apxs; do
     --with-snmp=shared,%{_prefix} --enable-ucd-snmp-hack \
     --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-sockets=shared,%{_prefix} \
-    --without-sqlite \
+    --with-sqlite=shared,%{_prefix} \
     --with-sqlite3=shared,%{_prefix} \
     --with-sybase-ct=shared,%{_prefix} \
     --enable-sysvmsg=shared,%{_prefix} \
@@ -1538,6 +1553,7 @@ echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
+echo "extension = sqlite.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite.ini
 echo "extension = sqlite3.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite3.ini
 echo "extension = sybase_ct.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase_ct.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
@@ -2270,6 +2286,18 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%post sqlite
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun sqlite
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
 %post sqlite3
 if [ -f /var/lock/subsys/httpd ]; then
     %{_initrddir}/httpd restart >/dev/null || :
@@ -2744,6 +2772,11 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
+
+%files sqlite
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
 
 %files sqlite3
 %defattr(-,root,root)
