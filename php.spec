@@ -94,7 +94,6 @@ BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	re2c >= 0.13.4
-BuildRequires:	multiarch-utils >= 1.0.3
 Epoch: 3
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -2528,8 +2527,8 @@ fi
 %attr(0755,root,root) %{_libdir}/libphp5_common.la
 %{_libdir}/php/build
 %{_usrsrc}/php-devel
-%multiarch %{multiarch_includedir}/php/main/build-defs.h
-%multiarch %{multiarch_includedir}/php/main/php_config.h
+%{multiarch_includedir}/php/main/build-defs.h
+%{multiarch_includedir}/php/main/php_config.h
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
