@@ -1674,6 +1674,7 @@ find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
 %{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
 
 %multiarch_includes %{buildroot}%{_includedir}/php/main/build-defs.h
+
 %multiarch_includes %{buildroot}%{_includedir}/php/main/php_config.h
 
 %if %{build_test}
