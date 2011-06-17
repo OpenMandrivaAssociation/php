@@ -11,12 +11,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.6
-Release:	%mkrel 4
+Version:	5.3.7
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -25,6 +25,7 @@ Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrorate
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
+Patch2:		php-5.3.7RC1-autoconf26_check_revert.diff
 Patch6:		php-libtool.diff
 Patch7:		php-no_egg.diff
 Patch8:		php-phpize.diff
@@ -79,7 +80,7 @@ Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.6RC1-0.9.10.diff
+Patch301:	suhosin-patch-5.3.7RC1-0.9.10.diff
 BuildRequires:	apache-devel >= 2.2.8
 BuildRequires:	autoconf2.5
 BuildRequires:	bison
@@ -1182,11 +1183,12 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
+%patch2 -p0 -b .autoconf26_check_revert.droplet
 %patch6 -p0 -b .libtool.droplet
 %patch8 -p1 -b .phpize.droplet
 %patch10 -p1 -b .phpbuilddir.droplet
@@ -1318,6 +1320,7 @@ chmod 755 php-devel/buildext
 
 #export PHP_AUTOCONF=autoconf-2.13
 rm -f configure
+rm -rf autom4te.cache
 ./buildconf --force
 
 # Do this patch with a perl hack...
