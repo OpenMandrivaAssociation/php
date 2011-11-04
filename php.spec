@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.8
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -38,6 +38,7 @@ Patch15:	php-no_libedit.diff
 Patch16:	php-xmlrpc_epi.patch 
 Patch17:	php-xmlrpc_no_rpath.diff
 Patch18:	php-really_external_sqlite2.diff
+Patch19:	php-5.3.8-bdb-5.2.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -77,6 +78,7 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
+Patch229:	php-5.3.8-CVE-2011-3379.diff
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
@@ -1198,6 +1200,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch16 -p0 -b .xmlrpc_epi_header
 %patch17 -p0 -b .xmlrpc_no_rpath.droplet
 %patch18 -p0 -b .really_external_sqlite2.droplet
+%patch19 -p0 -b .bdb-5.2.droplet
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
@@ -1237,6 +1240,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
+%patch229 -p0 -b .CVE-2011-3379.droplet
 
 %patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
