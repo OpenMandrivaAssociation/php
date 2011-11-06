@@ -11,12 +11,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.8
-Release:	%mkrel 2
+Version:	5.3.9
+Release:	%mkrel 0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -78,11 +78,10 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch229:	php-5.3.8-CVE-2011-3379.diff
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-%{version}-%{suhosin_version}.diff
+Patch301:	suhosin-patch-5.3.9RC1-%{suhosin_version}.diff
 BuildRequires:	apache-devel >= 2.2.0
 BuildRequires:	autoconf2.5
 BuildRequires:	bison
@@ -222,14 +221,12 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 Summary:	Development package for PHP5
 Group:		Development/C
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	autoconf2.5
-Requires:	automake
+Requires:	autoconf automake libtool
 Requires:	bison
 Requires:	byacc
 Requires:	chrpath
 Requires:	dos2unix
 Requires:	flex
-Requires:	libtool
 Requires:	libxml2-devel >= 2.6
 Requires:	libxslt-devel >= 1.1.0
 Requires:	openssl >= 0.9.7
@@ -585,7 +582,7 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	mbfl-devel >= 1.1.0
+BuildRequires:	mbfl-devel >= 1.1.0-6
 BuildRequires:	onig-devel >= 5.9.2
 
 %description	mbstring
@@ -661,6 +658,21 @@ http://www.mysql.com/
 Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 
 Documentation for MySQLi can be found at http://www.php.net/manual/en/mysqli.overview.php.
+
+%package	mysqlnd
+Summary:	MySQL native database module for PHP
+Group:		Development/PHP
+BuildRequires:	mysql-devel >= 4.1.7
+Requires:	%{libname} >= %{epoch}:%{version}
+
+%description	mysqlnd
+This is a dynamic shared object (DSO) for PHP that will add MySQL native
+database support.
+
+These functions allow you to access MySQL database servers. More information
+about MySQL can be found at http://www.mysql.com/.
+
+Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 
 %package	odbc
 Summary:	ODBC extension module for PHP
@@ -982,7 +994,6 @@ database files on disk.
 %package	sqlite
 Summary:	SQLite v2 database bindings for PHP
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
 BuildRequires:	sqlite-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
@@ -1185,7 +1196,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 %patch0 -p0 -b .init.droplet
@@ -1240,7 +1251,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch229 -p0 -b .CVE-2011-3379.droplet
 
 %patch301 -p1 -b .suhosin.droplet
 %patch7 -p1 -b .no_egg.droplet
@@ -1402,6 +1412,7 @@ for i in fpm cgi cli apxs; do
     --with-mssql=shared,%{_prefix} \
     --with-mysql=shared,%{_prefix} --with-mysql-sock=/var/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
+    --enable-mysqlnd=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
     --enable-pcntl=shared \
     --enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
@@ -1549,6 +1560,7 @@ echo "extension = pdo_mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/73_pdo_mysql
 echo "extension = pdo_odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/75_pdo_odbc.ini
 echo "extension = pdo_pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/76_pdo_pgsql.ini
 echo "extension = pdo_sqlite.so"	> %{buildroot}%{_sysconfdir}/php.d/77_pdo_sqlite.ini
+echo "extension = mysqlnd.so"		> %{buildroot}%{_sysconfdir}/php.d/78_mysqlnd.ini
 echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
 echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
 echo "extension = pspell.so"		> %{buildroot}%{_sysconfdir}/php.d/44_pspell.ini
@@ -1635,6 +1647,7 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mcrypt
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mssql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqlnd
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/odbc
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/openssl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcntl
@@ -1659,8 +1672,7 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite3
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase-ct
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase_ct zip
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase_ct
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
@@ -1672,6 +1684,7 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlreader
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlrpc
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
+rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
 
 # php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
@@ -1716,14 +1729,6 @@ for f in $disable_tests; do
 done
 
 TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
-%endif
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
 %endif
 
 %post cgi
@@ -2044,6 +2049,18 @@ if [ -f /var/lock/subsys/httpd ]; then
 fi
 
 %postun mysqli
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
+
+%post mysqlnd
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun mysqlnd
 if [ "$1" = "0" ]; then
     if [ -f /var/lock/subsys/httpd ]; then
         %{_initrddir}/httpd restart >/dev/null || :
@@ -2680,6 +2697,11 @@ fi
 %defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
+
+%files mysqlnd
+%defattr(-,root,root)
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_mysqlnd.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mysqlnd.so
 
 %files odbc
 %defattr(-,root,root)
