@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.9
-Release:	%mkrel 0.0.RC1.1
+Release:	%mkrel 0.0.RC1.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -994,6 +994,7 @@ database files on disk.
 %package	sqlite
 Summary:	SQLite v2 database bindings for PHP
 Group:		Development/PHP
+Requires:	php-pdo >= %{epoch}:%{version}
 BuildRequires:	sqlite-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
