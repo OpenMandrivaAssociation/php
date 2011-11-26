@@ -1314,6 +1314,10 @@ rm -rf ext/xmlrpc/libxmlrpc
 %build
 %serverbuild
 
+# it does not work with -fPIE and someone added that to the serverbuild macro...
+CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
+CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
+
 #export CFLAGS="`echo ${CFLAGS} | sed s/O2/O0/` -fPIC -L%{_libdir} -fno-strict-aliasing"
 export CFLAGS="${CFLAGS} -fPIC -L%{_libdir} -fno-strict-aliasing"
 export CXXFLAGS="${CFLAGS}"
