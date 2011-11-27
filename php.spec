@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.9
-Release:	%mkrel 0.0.RC2.1
+Release:	%mkrel 0.0.RC2.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -26,35 +26,40 @@ Source6:	php-fpm.logrorate
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch2:		php-5.3.7RC1-autoconf26_check_revert.diff
-Patch6:		php-libtool.diff
-Patch7:		php-no_egg.diff
-Patch8:		php-phpize.diff
-Patch10:	php-phpbuilddir.diff
+Patch3:		php-libtool.diff
+Patch4:		php-phpize.diff
+Patch5:		php-phpbuilddir.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
-Patch13:	php5-apache2-filters.diff
+Patch6:		php5-apache2-filters.diff
 # remove libedit once and for all
-Patch15:	php-no_libedit.diff
-Patch16:	php-xmlrpc_epi.patch 
-Patch17:	php-xmlrpc_no_rpath.diff
-Patch18:	php-really_external_sqlite2.diff
-Patch19:	php-5.3.8-bdb-5.2.diff
+Patch7:		php-no_libedit.diff
+Patch8:		php-xmlrpc_epi.patch
+Patch9:		php-xmlrpc_no_rpath.diff
+Patch10:	php-really_external_sqlite2.diff
+Patch11:	php-5.3.8-bdb-5.2.diff
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
-Patch22:	php-filter-shared.diff
-Patch23:	php-mdv_logo.diff
-Patch25:	php-dba-link.patch
-Patch27:	php-zlib-for-getimagesize.patch
-Patch28:	php-zlib.patch
-# stolen from debian
-Patch30:	php-session.save_path.diff
-Patch32:	php-exif_nesting_level.diff
+Patch21:	php-filter-shared.diff
+Patch22:	php-dba-link.patch
+Patch23:	php-zlib-for-getimagesize.patch
+Patch24:	php-zlib.patch
+Patch25:	php-5.3.9RC2-external_libzip.diff
+Patch26:	php-5.3.9RC2-mcrypt-libs.diff
 # for kolab2
 # P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
-Patch50:	php-imap-annotation+status-current.diff
+Patch27:	php-imap-annotation+status-current.diff
 # P51 was taken from http://kolab.org/cgi-bin/viewcvs-kolab.cgi/server/php/patches/php-5.3.2/
-Patch51:	php-imap-myrights.diff
+Patch28:	php-imap-myrights.diff
+Patch29:	php-5.3.x-fpm-0.6.5-shared.diff
+Patch30:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
+#####################################################################
+# stolen from debian
+Patch50:	php-session.save_path.diff
+Patch51:	php-exif_nesting_level.diff
+# https://bugs.php.net/bug.php?id=51247
+Patch52:	php-5.3.9RC2-fix_broken_sha-2_test.diff
 #####################################################################
 # Stolen from fedora
 Patch101:	php-cxx.diff
@@ -67,9 +72,6 @@ Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
 Patch115:	php-dlopen.diff
-Patch116:	php-5.3.4-aconf26x.patch
-Patch117:	php-5.3.x-fpm-0.6.5-shared.diff
-Patch118:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
 # Fix bugs
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
@@ -82,6 +84,9 @@ Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
 Patch301:	suhosin-patch-5.3.9RC2-%{suhosin_version}.diff
+Patch302:	php-no_egg.diff
+Patch303:	php-mdv_logo.diff
+Patch304:	php-5.3.4-aconf26x.patch
 BuildRequires:	apache-devel >= 2.2.0
 BuildRequires:	autoconf2.5
 BuildRequires:	bison
@@ -1146,6 +1151,7 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %package	zip
 Summary:	A zip management extension for PHP
 Group:		Development/PHP
+BuildRequires:  libzip-devel
 
 %description	zip
 This is a dynamic shared object (DSO) for PHP that will add zip support to
@@ -1200,34 +1206,41 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %setup -q -n php-%{version}RC2
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
+
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
 %patch2 -p0 -b .autoconf26_check_revert.droplet
-%patch6 -p0 -b .libtool.droplet
-%patch8 -p1 -b .phpize.droplet
-%patch10 -p1 -b .phpbuilddir.droplet
-#
-%patch13 -p1 -b .apache2-filters.droplet
-%patch15 -p0 -b .no_libedit.droplet
-%patch16 -p0 -b .xmlrpc_epi_header
-%patch17 -p0 -b .xmlrpc_no_rpath.droplet
-%patch18 -p0 -b .really_external_sqlite2.droplet
-%patch19 -p0 -b .bdb-5.2.droplet
+%patch3 -p0 -b .libtool.droplet
+%patch4 -p1 -b .phpize.droplet
+%patch5 -p1 -b .phpbuilddir.droplet
+%patch6 -p1 -b .apache2-filters.droplet
+%patch7 -p0 -b .no_libedit.droplet
+%patch8 -p0 -b .xmlrpc_epi_header
+%patch9 -p0 -b .xmlrpc_no_rpath.droplet
+%patch10 -p0 -b .really_external_sqlite2.droplet
+%patch11 -p0 -b .bdb-5.2.droplet
+
 #####################################################################
 # Stolen from PLD
 %patch20 -p0 -b .mail.droplet
-%patch22 -p0 -b .filter-shared.droplet
-%patch25 -p0 -b .dba-link.droplet
-%patch27 -p0 -b .zlib-for-getimagesize.droplet
-%patch28 -p1 -b .zlib.droplet
-
-# stolen from debian
-%patch30 -p0 -b .session.save_path.droplet
-%patch32 -p0 -b .exif_nesting_level.droplet
-
+%patch21 -p0 -b .filter-shared.droplet
+%patch22 -p0 -b .dba-link.droplet
+%patch23 -p0 -b .zlib-for-getimagesize.droplet
+%patch24 -p1 -b .zlib.droplet
+%patch25 -p0 -b .external_libzip.droplet
+%patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
-%patch50 -p1 -b .imap-annotation.droplet
-%patch51 -p1 -b .imap-myrights.droplet
+%patch27 -p1 -b .imap-annotation.droplet
+%patch28 -p1 -b .imap-myrights.droplet
+# fpm stuff
+%patch29 -p1
+%patch30 -p0
+
+#####################################################################
+# stolen from debian
+%patch50 -p0 -b .session.save_path.droplet
+%patch51 -p0 -b .exif_nesting_level.droplet
+%patch52 -p0 -b .fix_broken_sha-2_test.droplet
 
 #####################################################################
 # Stolen from fedora
@@ -1240,10 +1253,6 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
 
-# fpm stuff
-%patch117 -p1
-%patch118 -p0
-
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
@@ -1254,10 +1263,9 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 
 %patch301 -p1 -b .suhosin.droplet
-%patch7 -p1 -b .no_egg.droplet
-%patch23 -p1 -b .mdv_logo.droplet
-
-%patch116 -p1 -b .aconf26x
+%patch302 -p1 -b .no_egg.droplet
+%patch303 -p1 -b .mdv_logo.droplet
+%patch304 -p1 -b .aconf26x.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
@@ -1349,6 +1357,8 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
+SAFE_LDFLAGS=`echo %{ldflags}|sed -e 's|-Wl,--no-undefined||g'`
+export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
 
@@ -1447,7 +1457,7 @@ for i in fpm cgi cli apxs; do
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared --with-libxml-dir=%{_prefix} \
-    --enable-zip=shared
+    --enable-zip=shared --with-libzip=%{_prefix}
 
 cp -f Makefile Makefile.$i
 
