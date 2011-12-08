@@ -1632,7 +1632,7 @@ fi
 
 # house cleaning
 rm -f %{buildroot}%{_bindir}/pear
-rm -f %{buildroot}%{_libdir}/*.a
+rm -f %{buildroot}%{_libdir}/*.*a
 
 # don't pack useless stuff
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bcmath
