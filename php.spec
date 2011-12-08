@@ -2564,7 +2564,6 @@ fi
 %attr(0755,root,root) %{_bindir}/php-config
 %attr(0755,root,root) %{_bindir}/phpize
 %attr(0755,root,root) %{_libdir}/libphp5_common.so
-%attr(0755,root,root) %{_libdir}/libphp5_common.la
 %{_libdir}/php/build
 %{_usrsrc}/php-devel
 %{multiarch_includedir}/php/main/build-defs.h
