@@ -12,11 +12,11 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.9
-Release:	%mkrel 0.0.RC3.1
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC3.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -83,7 +83,7 @@ Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.9RC2-%{suhosin_version}.diff
+Patch301:	suhosin-patch-5.3.9-%{suhosin_version}.diff
 Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
 Patch304:	php-5.3.4-aconf26x.patch
@@ -587,7 +587,7 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	mbfl-devel >= 1.1.0-6
+BuildRequires:	mbfl-devel >= 1.1.0
 BuildRequires:	onig-devel >= 5.9.2
 
 %description	mbstring
@@ -1203,7 +1203,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}RC3
+%setup -q -n php-%{version}
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
