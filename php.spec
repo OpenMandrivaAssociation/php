@@ -12,7 +12,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.9
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -23,6 +23,8 @@ Source3:	php.crond
 Source4:	php-fpm.init
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrorate
+# S7 comes from ext/fileinfo/create_data_file.php but could be removed someday
+Source7:	create_data_file.php
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch2:		php-5.3.7RC1-autoconf26_check_revert.diff
@@ -88,11 +90,10 @@ Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
 Patch304:	php-5.3.4-aconf26x.patch
 BuildRequires:	apache-devel >= 2.2.0
-BuildRequires:	autoconf2.5
+BuildRequires:	autoconf automake libtool
 BuildRequires:	bison
 BuildRequires:	byacc
 BuildRequires:	flex
-BuildRequires:	libtool
 BuildRequires:	libtool-devel
 BuildRequires:	libxml2-devel >= 2.6
 BuildRequires:	libxslt-devel >= 1.1.0
@@ -415,8 +416,7 @@ images.
 Summary:	Fileinfo extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	file
-BuildRequires:  file-devel
+BuildRequires:	file file-devel
 
 %description	fileinfo
 This extension allows retrieval of information regarding vast majority of file.
@@ -1205,6 +1205,11 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %setup -q -n php-%{version}
 
+if ! [ -f %{_datadir}/misc/magic.mgc ]; then
+    echo "ERROR: the %{_datadir}/misc/magic.mgc file is needed"
+    exit 1
+fi
+
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
 %patch0 -p0 -b .init.droplet
@@ -1273,6 +1278,7 @@ cp %{SOURCE3} php.crond
 cp %{SOURCE4} php-fpm.init
 cp %{SOURCE5} php-fpm.sysconf
 cp %{SOURCE6} php-fpm.logrorate
+cp %{SOURCE7} create_data_file.php
 
 # lib64 hack
 perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
@@ -1474,6 +1480,13 @@ perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is
 cp config.nice configure_command; chmod 644 configure_command
 
 %make
+
+# keep in sync with latest system magic, the next best thing when system libmagic can't be used...
+sapi/cli/php create_data_file.php %{_datadir}/misc/magic.mgc > ext/fileinfo/data_file.c
+rm -rf ext/fileinfo/.libs ext/fileinfo/*.lo ext/fileinfo/*.la modules/fileinfo.so modules/fileinfo.la
+cp -p ext/fileinfo/data_file.c php-devel/extensions/fileinfo/data_file.c
+%make
+
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
