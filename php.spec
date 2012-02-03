@@ -1194,10 +1194,12 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %setup -q -n php-%{version}
 
+%if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
     echo "ERROR: the %{_datadir}/misc/magic.mgc file is needed"
     exit 1
 fi
+%endif
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
