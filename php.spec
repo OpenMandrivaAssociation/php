@@ -94,18 +94,62 @@ Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
 Patch304:	php-5.3.4-aconf26x.patch
 BuildRequires:	apache-devel >= 2.2.0
+BuildRequires:	aspell-devel
 BuildRequires:	autoconf automake libtool
 BuildRequires:	bison
 BuildRequires:	byacc
+BuildRequires:	bzip2-devel
+BuildRequires:	c-client-devel >= 2007
+BuildRequires:	curl-devel >= 7.9.8
+BuildRequires:	db-devel
+BuildRequires:	elfutils-devel
+BuildRequires:	enchant-devel
+BuildRequires:	expat-devel
+BuildRequires:	file
 BuildRequires:	flex
+BuildRequires:  freetds-devel >= 0.63
+BuildRequires:	freetype2-devel
+BuildRequires:	gdbm-devel
+BuildRequires:	gd-devel >= 2.0.33
+BuildRequires:	gettext-devel
+BuildRequires:	gmp-devel
+BuildRequires:	gpm-devel
+BuildRequires:	icu-devel >= 3.4
+BuildRequires:	lemon
+BuildRequires:	libjpeg-devel
+BuildRequires:	libldap-devel
+BuildRequires:	libmcrypt-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libsasl-devel
 BuildRequires:	libtool-devel
+BuildRequires:	libx11-devel
 BuildRequires:	libxml2-devel >= 2.6
+BuildRequires:	libxpm-devel
 BuildRequires:	libxslt-devel >= 1.1.0
-BuildRequires:	openssl >= 0.9.7
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:  libzip-devel
+BuildRequires:	mbfl-devel >= 1.1.0
+BuildRequires:	mysql-devel >= 4.1.7
+BuildRequires:	ncurses-devel
+BuildRequires:	net-snmp-devel
+BuildRequires:	net-snmp-mibs
+BuildRequires:	onig-devel >= 5.9.2
+BuildRequires:	openssl
+BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
 BuildRequires:	pcre-devel >= 6.6
+BuildRequires:	postgresql-devel
 BuildRequires:	re2c >= 0.13.4
+BuildRequires:	readline-devel
+BuildRequires:	recode-devel
+BuildRequires:	sqlite3-devel
+BuildRequires:	sqlite-devel
+BuildRequires:	t1lib-devel
+BuildRequires:	tidy-devel
+BuildRequires:	unixODBC-devel >= 2.2.1
+BuildRequires:	xmlrpc-epi-devel
+%if %{build_libmagic}
+BuildRequires:	file-devel
+%endif
 Epoch: 3
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -293,7 +337,6 @@ supports numbers of any size and precision, represented as strings.
 Summary:	Bzip2 extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	bzip2-devel
 
 %description	bz2
 This is a dynamic shared object (DSO) for PHP that will add bzip2 compression
@@ -336,7 +379,6 @@ setlocale()).
 %package	curl
 Summary:	Curl extension module for PHP
 Group:		Development/PHP
-BuildRequires:	curl-devel >= 7.9.8
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	curl
@@ -353,8 +395,6 @@ user+password authentication.
 %package	dba
 Summary:	DBA extension module for PHP
 Group:		Development/PHP
-BuildRequires:	gdbm-devel
-BuildRequires:	db-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	dba
@@ -371,7 +411,6 @@ IBM's DB2 software, which is supported through the ODBC functions.)
 %package	dom
 Summary:	Dom extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	dom
@@ -387,7 +426,6 @@ The extension allows you to operate on an XML document with the DOM API.
 Summary:	Libenchant binder, support near all spelling tools
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	enchant-devel
 
 %description	enchant
 Enchant is a binder for libenchant. Libenchant provides a common API for many
@@ -420,10 +458,6 @@ images.
 Summary:	Fileinfo extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	file
-%if %{build_libmagic}
-BuildRequires:	file-devel
-%endif
 
 %description	fileinfo
 This extension allows retrieval of information regarding vast majority of file.
@@ -435,7 +469,6 @@ file and for text files proper language encoding.
 %package	filter
 Summary:	Extension for safely dealing with input parameters
 Group:		Development/PHP
-BuildRequires:	pcre-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	filter
@@ -461,14 +494,6 @@ intuitive interface.
 %package	gd
 Summary:	GD extension module for PHP
 Group:		Development/PHP
-BuildRequires:	freetype2-devel
-BuildRequires:	gd-devel >= 2.0.33
-BuildRequires:	libjpeg-devel
-BuildRequires:	libpng-devel
-BuildRequires:	libxpm-devel
-BuildRequires:	t1lib-devel
-BuildRequires:	libx11-devel
-BuildRequires:	freetype2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	gd
@@ -488,7 +513,6 @@ TIFF and JPEG2000 images.
 %package	gettext
 Summary:	Gettext extension module for PHP
 Group:		Development/PHP
-BuildRequires:	gettext-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	gettext
@@ -502,7 +526,6 @@ view the docs at http://www.gnu.org/software/gettext/manual/gettext.html.
 %package	gmp
 Summary:	Gmp extension module for PHP
 Group:		Development/PHP
-BuildRequires:	gmp-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	gmp
@@ -540,7 +563,6 @@ It will most likely end up with more consistent results.
 %package	imap
 Summary:	IMAP extension module for PHP
 Group:		Development/PHP
-BuildRequires:	c-client-devel >= 2007
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	imap
@@ -553,7 +575,6 @@ methods.
 %package	intl
 Summary:	Internationalization extension module for PHP
 Group:		Development/PHP
-BuildRequires:	icu-devel >= 3.4
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	intl
@@ -573,8 +594,6 @@ Support for JSON (JavaScript Object Notation) serialization.
 %package	ldap
 Summary:	LDAP extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libldap-devel
-BuildRequires:	libsasl-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	ldap
@@ -594,8 +613,6 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	mbfl-devel >= 1.1.0
-BuildRequires:	onig-devel >= 5.9.2
 
 %description	mbstring
 This is a dynamic shared object (DSO) for PHP that will add multibyte string
@@ -610,8 +627,6 @@ encodings for convenience.
 %package	mcrypt
 Summary:	Mcrypt extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libmcrypt-devel
-BuildRequires:	libtool-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	mcrypt
@@ -626,7 +641,6 @@ Additionally, it supports RC6 and IDEA which are considered "non-free".
 Summary:	MS SQL extension module for PHP
 Group:		Development/PHP
 Requires:       freetds >= 0.63
-BuildRequires:  freetds-devel >= 0.63
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	mssql
@@ -636,7 +650,6 @@ support using the FreeTDS library.
 %package	mysql
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-BuildRequires:	mysql-devel >= 4.0.10
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	mysql
@@ -651,7 +664,6 @@ Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 %package	mysqli
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-BuildRequires:	mysql-devel >= 4.1.7
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	mysqli
@@ -674,7 +686,6 @@ Documentation for MySQLi can be found at http://www.php.net/manual/en/mysqli.ove
 %package	mysqlnd
 Summary:	MySQL native database module for PHP
 Group:		Development/PHP
-BuildRequires:	mysql-devel >= 4.1.7
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	mysqlnd
@@ -689,7 +700,6 @@ Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 %package	odbc
 Summary:	ODBC extension module for PHP
 Group:		Development/PHP
-BuildRequires:	unixODBC-devel >= 2.2.1
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	odbc
@@ -734,7 +744,6 @@ Read the documentation at http://www.php.net/pdo for more information.
 Summary:	Sybase Interface driver for PDO
 Group:		Development/PHP
 Requires:       freetds >= 0.63
-BuildRequires:  freetds-devel >= 0.63
 Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
@@ -760,7 +769,6 @@ libraries, PDO will emulate them for you.
 %package	pdo_odbc
 Summary:	ODBC v3 Interface driver for PDO
 Group:		Development/PHP
-BuildRequires:	unixODBC-devel
 Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
@@ -783,7 +791,6 @@ different "flavours" of database drivers:
 %package	pdo_pgsql
 Summary:	PostgreSQL interface driver for PDO
 Group:		Development/PHP
-BuildRequires:	postgresql-devel
 Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	postgresql-libs >= %{postgresql_version}
@@ -795,8 +802,6 @@ enable access from PHP to PostgreSQL databases.
 %package	pdo_sqlite
 Summary:	SQLite v3 Interface driver for PDO
 Group:		Development/PHP
-BuildRequires:	sqlite3-devel
-BuildRequires:	lemon
 Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
 
@@ -812,7 +817,6 @@ support for prepared statements with bound parameters and improved concurrency.
 %package	pgsql
 Summary:	PostgreSQL database module for PHP
 Group:		Development/PHP
-BuildRequires:	postgresql-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 Requires:	postgresql-libs >= %{postgresql_version}
 
@@ -870,7 +874,6 @@ module tries to remedy this by providing easy access to these functions.
 %package	pspell
 Summary:	Pspell extension module for PHP
 Group:		Development/PHP
-BuildRequires:	aspell-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	pspell
@@ -883,9 +886,6 @@ suggestions.
 %package	readline
 Summary:	Readline extension module for PHP
 Group:		Development/PHP
-BuildRequires:	ncurses-devel
-BuildRequires:	readline-devel
-BuildRequires:	gpm-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	readline
@@ -902,8 +902,6 @@ writing scripts used from a command line.
 %package	recode
 Summary:	Recode extension module for PHP
 Group:		Development/PHP
-BuildRequires:	recode-devel
-BuildRequires:	gettext-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	recode
@@ -951,9 +949,6 @@ and delete Unix shared memory segments.
 Summary:	NET-SNMP extension module for PHP
 Group:		Development/PHP
 Requires:	net-snmp-mibs
-BuildRequires:	net-snmp-devel
-BuildRequires:	net-snmp-mibs
-BuildRequires:	elfutils-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	snmp
@@ -965,7 +960,6 @@ In order to use the SNMP functions you need to install the NET-SNMP package.
 %package	soap
 Summary:	Soap extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	soap
@@ -990,7 +984,6 @@ possibility to act as a socket server as well as a client.
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
 Requires:	php-pdo >= %{epoch}:%{version}
-BuildRequires:	sqlite3-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	sqlite3
@@ -1007,7 +1000,6 @@ database files on disk.
 Summary:	SQLite v2 database bindings for PHP
 Group:		Development/PHP
 Requires:	php-pdo >= %{epoch}:%{version}
-BuildRequires:	sqlite-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	sqlite
@@ -1061,7 +1053,6 @@ support.
 %package	tidy
 Summary:	Tidy HTML Repairing and Parsing for PHP
 Group:		Development/PHP
-BuildRequires:	tidy-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	tidy
@@ -1085,7 +1076,6 @@ specification at the lexical level.
 %package	xml
 Summary:	XML extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	xml
@@ -1097,7 +1087,6 @@ XML events.
 Summary:	Xmlreader extension module for PHP
 Group:		Development/PHP
 Requires:	php-dom
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	xmlreader
@@ -1107,8 +1096,6 @@ XML data. It is based upon the xmlTextReader api from libxml
 %package	xmlrpc
 Summary:	Xmlrpc extension module for PHP
 Group:		Development/PHP
-BuildRequires:	expat-devel
-BuildRequires:	xmlrpc-epi-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	xmlrpc
@@ -1122,7 +1109,6 @@ http://xmlrpc-epi.sourceforge.net/.
 %package	xmlwriter
 Summary:	Provides fast, non-cached, forward-only means to write XML data
 Group:		Development/PHP
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	xmlwriter
@@ -1133,8 +1119,6 @@ containing XML data.
 %package	xsl
 Summary:	Xsl extension module for PHP
 Group:		Development/PHP
-BuildRequires:	libxslt-devel
-BuildRequires:	libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	xsl
@@ -1147,7 +1131,6 @@ using the libxslt library
 Summary:	WDDX serialization functions
 Group:		Development/PHP
 Requires:	php-xml
-BuildRequires:  libxml2-devel
 Requires:	%{libname} >= %{epoch}:%{version}
 
 %description	wddx
@@ -1158,7 +1141,6 @@ These functions are intended for work with WDDX (http://www.openwddx.org/)
 %package	zip
 Summary:	A zip management extension for PHP
 Group:		Development/PHP
-BuildRequires:  libzip-devel
 
 %description	zip
 This is a dynamic shared object (DSO) for PHP that will add zip support to
