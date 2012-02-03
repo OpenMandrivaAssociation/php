@@ -1502,8 +1502,6 @@ install -d %{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_sysconfdir}/cron.d
 install -d %{buildroot}/var/lib/php
 
-#perl -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" .libs/*.la*
-
 make -f Makefile.apxs install \
 	INSTALL_ROOT=%{buildroot} \
 	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/" \
@@ -1709,9 +1707,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
 
 # php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
 find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
-
-# fix one strange weirdo
-%{__perl} -pi -e "s|^libdir=.*|libdir='%{_libdir}'|g" %{buildroot}%{_libdir}/*.la
 
 %multiarch_includes %{buildroot}%{_includedir}/php/main/build-defs.h
 
