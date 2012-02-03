@@ -2,6 +2,10 @@
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
 
+%define build_libmagic 0
+%{?_with_libmagic: %{expand: %%global build_libmagic 1}}
+%{?_without_libmagic: %{expand: %%global build_libmagic 0}}
+
 %define _requires_exceptions BEGIN\\|mkinstalldirs\\|pear(\\|/usr/bin/tclsh
 
 %define php5_common_major 5
@@ -416,7 +420,10 @@ images.
 Summary:	Fileinfo extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
-BuildRequires:	file file-devel
+BuildRequires:	file
+%if %{build_libmagic}
+BuildRequires:	file-devel
+%endif
 
 %description	fileinfo
 This extension allows retrieval of information regarding vast majority of file.
@@ -1481,12 +1488,13 @@ cp config.nice configure_command; chmod 644 configure_command
 
 %make
 
+%if %{build_libmagic}
 # keep in sync with latest system magic, the next best thing when system libmagic can't be used...
 sapi/cli/php create_data_file.php %{_datadir}/misc/magic.mgc > ext/fileinfo/data_file.c
 rm -rf ext/fileinfo/.libs ext/fileinfo/*.lo ext/fileinfo/*.la modules/fileinfo.so modules/fileinfo.la
 cp -p ext/fileinfo/data_file.c php-devel/extensions/fileinfo/data_file.c
 %make
-
+%endif
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
