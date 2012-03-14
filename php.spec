@@ -16,7 +16,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.10
-Release:	%mkrel 2
+Release:	3
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -152,7 +152,6 @@ BuildRequires:	xmlrpc-epi-devel
 BuildRequires:	file-devel
 %endif
 Epoch: 3
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 # stupid postgresql... stupid build system...
 # this is needed due to the postgresql packaging and due to bugs like this:
@@ -1497,7 +1496,6 @@ make -f Makefile.fpm sapi/fpm/php-fpm
 cp -af php_config.h.apxs main/php_config.h
 
 %install
-rm -rf %{buildroot}
 
 install -d %{buildroot}%{_libdir}
 install -d %{buildroot}%{_bindir}
@@ -2315,11 +2313,7 @@ if [ $1 -ge 1 ]; then
 fi
 %_postun_userdel apache
 
-%clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
-
 %files doc
-%defattr(-,root,root,-)
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
 %doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
@@ -2328,23 +2322,19 @@ fi
 %doc README.PARAMETER_PARSING_API README.STREAMS
 
 %files -n %{libname}
-%defattr(-,root,root,-)
 %{_libdir}/libphp5_common.so.%{php5_common_major}*
 
 %files cli
-%defattr(-,root,root)
 %doc CREDITS.cli README.cli TODO.cli
 %attr(0755,root,root) %{_bindir}/php
 %attr(0644,root,root) %{_mandir}/man1/php.1*
 
 %files cgi
-%defattr(-,root,root)
 %doc CREDITS.cgi README.fcgi
 %attr(0755,root,root) %{_bindir}/php-cgi
 %attr(0755,root,root) %{_bindir}/php-fcgi
 
 %files devel
-%defattr(-,root,root)
 %doc SELF-CONTAINED-EXTENSIONS CODING_STANDARDS README.* TODO EXTENSIONS
 %doc Zend/ZEND_* README.TESTING*
 %attr(0755,root,root) %{_bindir}/php-config
@@ -2359,223 +2349,179 @@ fi
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
 
 %files openssl
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_openssl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/openssl.so
 
 %files zlib
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_zlib.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zlib.so
 
 %files bcmath
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/66_bcmath.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/bcmath.so
 
 %files bz2
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/10_bz2.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/bz2.so
 
 %files calendar
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/11_calendar.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/calendar.so
 
 %files ctype
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/12_ctype.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ctype.so
 
 %files curl
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/13_curl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/curl.so
 
 %files dba
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/14_dba.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dba.so
 
 %files dom
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/18_dom.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/dom.so
 
 %files enchant
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/38_enchant.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/enchant.so
 
 %files exif
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/19_exif.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/exif.so
 
 %files fileinfo
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/32_fileinfo.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/fileinfo.so
 
 %files filter
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/81_filter.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/filter.so
 
 %files ftp
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/22_ftp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ftp.so
 
 %files gd
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/23_gd.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gd.so
 
 %files gettext
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/24_gettext.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gettext.so
 
 %files gmp
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/25_gmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gmp.so
 
 %files hash
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/54_hash.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/hash.so
 
 %files iconv
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/26_iconv.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/iconv.so
 
 %files imap
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_imap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/imap.so
 
 %files intl
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_intl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/intl.so
 
 %files json
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/82_json.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/json.so
 
 %files ldap
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/28_ldap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ldap.so
 
 %files mbstring
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/29_mbstring.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mbstring.so
 
 %files mcrypt
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/30_mcrypt.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
 
 %files mssql
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/35_mssql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mssql.so
 
 %files mysql
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/36_mysql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysql.so
 
 %files mysqli
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
 
 %files mysqlnd
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_mysqlnd.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqlnd.so
 
 %files odbc
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/39_odbc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/odbc.so
 
 %files pcntl
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/40_pcntl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pcntl.so
 
 %files pdo
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/70_pdo.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo.so
 
 %files pdo_dblib
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/71_pdo_dblib.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_dblib.so
 
 %files pdo_mysql
-%defattr(-,root,root)
 %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/73_pdo_mysql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_mysql.so
 
 %files pdo_odbc
-%defattr(-,root,root)
 %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/php.d/75_pdo_odbc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_odbc.so
 
 %files pdo_pgsql
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/76_pdo_pgsql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_pgsql.so
 
 %files pdo_sqlite
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/77_pdo_sqlite.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pdo_sqlite.so
 
 %files pgsql
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/42_pgsql.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pgsql.so
 
 %files phar
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/84_phar.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/phar.so
 %attr(0755,root,root) %{_bindir}/phar
 
 %files posix
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/43_posix.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/posix.so
 
 %files pspell
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/44_pspell.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/pspell.so
 
 %files readline
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/45_readline.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/readline.so
 
 %files recode
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_recode.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/recode.so
 
 %files session
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/47_session.ini
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
 %attr(0755,root,root) %{_libdir}/php/extensions/session.so
@@ -2583,102 +2529,82 @@ fi
 %attr(01733,apache,apache) %dir /var/lib/php
 
 %files shmop
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/48_shmop.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/shmop.so
 
 %files snmp
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/50_snmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/snmp.so
 
 %files soap
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/51_soap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/soap.so
 
 %files sockets
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
 
 %files sqlite
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
 
 %files sqlite3
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite3.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sqlite3.so
 
 %files sybase_ct
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_sybase_ct.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sybase_ct.so
 
 %files sysvmsg
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/56_sysvmsg.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvmsg.so
 
 %files sysvsem
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/57_sysvsem.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvsem.so
 
 %files sysvshm
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/58_sysvshm.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sysvshm.so
 
 %files tidy
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/59_tidy.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/tidy.so
 
 %files tokenizer
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/60_tokenizer.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/tokenizer.so
 
 %files xml
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/62_xml.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xml.so
 
 %files xmlreader
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xmlreader.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlreader.so
 
 %files xmlrpc
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/62_xmlrpc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlrpc.so
 
 %files xmlwriter
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/64_xmlwriter.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlwriter.so
 
 %files xsl
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xsl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xsl.so
 
 %files wddx
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_wddx.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/wddx.so
 
 %files zip
-%defattr(-,root,root)
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/83_zip.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zip.so
 
 %files fpm
-%defattr(-,root,root)
 %doc sapi/fpm/CREDITS sapi/fpm/LICENSE
 /lib/systemd/system/php-fpm.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
