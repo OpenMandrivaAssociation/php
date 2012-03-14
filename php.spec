@@ -24,9 +24,9 @@ Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
-Source4:	php-fpm.init
+Source4:	php-fpm.service
 Source5:	php-fpm.sysconf
-Source6:	php-fpm.logrorate
+Source6:	php-fpm.logrotate
 # S7 comes from ext/fileinfo/create_data_file.php but could be removed someday
 Source7:	create_data_file.php
 Patch0:		php-init.diff
@@ -261,6 +261,10 @@ Summary:	Shared library for PHP5
 Group:		Development/Other
 Provides:	php-pcre = %{epoch}:%{version}
 Provides:	php-simplexml = %{epoch}:%{version}
+Requires: systemd-units
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
@@ -1268,9 +1272,9 @@ fi
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
-cp %{SOURCE4} php-fpm.init
+cp %{SOURCE4} php-fpm.service
 cp %{SOURCE5} php-fpm.sysconf
-cp %{SOURCE6} php-fpm.logrorate
+cp %{SOURCE6} php-fpm.logrotate
 cp %{SOURCE7} create_data_file.php
 
 # lib64 hack
@@ -1523,7 +1527,7 @@ install -m0644 scripts/man1/phpize.1 %{buildroot}%{_mandir}/man1/
 install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
 
 # fpm
-install -d %{buildroot}%{_initrddir}
+install -d %{buildroot}/lib/systemd/system
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_sysconfdir}/sysconfig
 install -d %{buildroot}%{_sysconfdir}/php-fpm.d
@@ -1538,9 +1542,9 @@ echo "; place your config here" > %{buildroot}%{_sysconfdir}/php-fpm.d/default.c
 ./libtool --silent --mode=install install sapi/fpm/php-fpm %{buildroot}%{_sbindir}/php-fpm
 install -m0644 sapi/fpm/php-fpm.8 %{buildroot}%{_mandir}/man8/
 install -m0644 sapi/fpm/php-fpm.conf %{buildroot}%{_sysconfdir}/
-install -m0755 php-fpm.init %{buildroot}%{_initrddir}/php-fpm
+install -m0644 php-fpm.service %{buildroot}/lib/systemd/system/
 install -m0644 php-fpm.sysconf %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
-install -m0644 php-fpm.logrorate %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
+install -m0644 php-fpm.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
 
 ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
 
@@ -1748,787 +1752,567 @@ done
 TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
 %endif
 
-%post cgi
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun cgi
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
 %post bcmath
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun bcmath
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post bz2
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun bz2
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post calendar
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun calendar
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post cgi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun cgi
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post cli
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun cli
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ctype
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun ctype
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post curl
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun curl
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post dba
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun dba
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post devel
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun devel
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post doc
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun doc
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post dom
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun dom
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post enchant
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun enchant
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post exif
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun exif
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post fileinfo
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun fileinfo
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post filter
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun filter
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ftp
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun ftp
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gd
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun gd
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gettext
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun gettext
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gmp
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun gmp
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post hash
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun hash
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post iconv
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun iconv
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post intl
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun intl
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post imap
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun imap
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post intl
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun intl
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post json
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun json
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ldap
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun ldap
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mbstring
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mbstring
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mcrypt
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mcrypt
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mssql
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mssql
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mysql
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mysql
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mysqli
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mysqli
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mysqlnd
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mysqlnd
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post odbc
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun odbc
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post openssl
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun openssl
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pcntl
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pcntl
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_dblib
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo_dblib
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_mysql
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo_mysql
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_odbc
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo_odbc
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_pgsql
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo_pgsql
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_sqlite
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pdo_sqlite
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pgsql
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pgsql
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post phar
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun phar
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post posix
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun posix
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pspell
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun pspell
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post readline
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun readline
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post recode
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun recode
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %pre session
 %_pre_useradd apache /var/www /bin/sh
 
 %post session
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun session
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post shmop
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun shmop
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post snmp
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun snmp
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post soap
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun soap
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sockets
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sockets
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sqlite
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sqlite
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sqlite3
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sqlite3
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sybase_ct
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sybase_ct
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvmsg
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sysvmsg
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvsem
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sysvsem
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvshm
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun sysvshm
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post tidy
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun tidy
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post tokenizer
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun tokenizer
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post wddx
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun wddx
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xml
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun xml
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xmlreader
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun xmlreader
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xmlrpc
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun xmlrpc
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xmlwriter
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun xmlwriter
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xsl
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun xsl
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
-%post zlib
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun zlib
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post zip
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun zip
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-        %{_initrddir}/httpd restart >/dev/null || :
-    fi
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post zlib
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun zlib
+if [ "$1" = "0" ]; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post fpm
+if [ $1 = 1 ]; then
+    # Initial installation
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %pre fpm
 %_pre_useradd apache /var/www /bin/sh
 
-%post fpm
-%_post_service php-fpm
-
 %preun fpm
-%_preun_service php-fpm
+if [ $1 = 0 ]; then
+    # Package removal, not upgrade
+    /bin/systemctl --no-reload disable php-fpm.service >/dev/null 2>&1 || :
+    /bin/systemctl stop php-fpm.service >/dev/null 2>&1 || :
+fi
 
 %postun fpm
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ]; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
+fi
 %_postun_userdel apache
 
 %clean
@@ -2896,7 +2680,7 @@ fi
 %files fpm
 %defattr(-,root,root)
 %doc sapi/fpm/CREDITS sapi/fpm/LICENSE
-%attr(0755,root,root) %{_initrddir}/php-fpm
+/lib/systemd/system/php-fpm.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
 %attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
