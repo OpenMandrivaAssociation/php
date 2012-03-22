@@ -16,7 +16,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.10
-Release:	3
+Release:	4
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -51,7 +51,7 @@ Patch21:	php-filter-shared.diff
 Patch22:	php-dba-link.patch
 Patch23:	php-zlib-for-getimagesize.patch
 Patch24:	php-zlib.patch
-Patch25:	php-5.3.9RC2-external_libzip.diff
+Patch25:	php-5.3.10-external_libzip.diff
 Patch26:	php-5.3.9RC2-mcrypt-libs.diff
 # for kolab2
 # P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
@@ -1227,7 +1227,7 @@ fi
 %patch22 -p0 -b .dba-link.droplet
 %patch23 -p0 -b .zlib-for-getimagesize.droplet
 %patch24 -p1 -b .zlib.droplet
-%patch25 -p0 -b .external_libzip.droplet
+%patch25 -p1 -b .external_libzip.droplet
 %patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
 %patch27 -p1 -b .imap-annotation.droplet
