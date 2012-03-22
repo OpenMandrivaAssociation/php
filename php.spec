@@ -127,7 +127,7 @@ BuildRequires:	libx11-devel
 BuildRequires:	libxml2-devel >= 2.6
 BuildRequires:	libxpm-devel
 BuildRequires:	libxslt-devel >= 1.1.0
-BuildRequires:  libzip-devel
+BuildRequires:  libzip-devel >= 0.10.1
 BuildRequires:	mbfl-devel >= 1.1.0
 BuildRequires:	mysql-devel >= 4.1.7
 BuildRequires:	ncurses-devel
