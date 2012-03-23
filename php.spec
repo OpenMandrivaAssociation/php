@@ -1,3 +1,6 @@
+%define _build_pkgcheck_set %{nil}
+%define _build_pkgcheck_srpm %{nil}
+
 %define build_test 1
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
