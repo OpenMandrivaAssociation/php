@@ -1373,7 +1373,7 @@ for i in fpm cgi cli apxs; do
     `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
     `[ $i = cgi ] && echo --disable-cli` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
-    `[ $i = apxs ] && echo --with-apxs2=%{_sbindir}/apxs` \
+    `[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
     --build=%{_build} \
     --prefix=%{_prefix} \
     --exec-prefix=%{_prefix} \
