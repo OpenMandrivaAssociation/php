@@ -18,12 +18,12 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.10
-Release:	4
+Version:	5.3.11
+Release:	0.0.RC1.1
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}RC1.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -89,12 +89,11 @@ Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch229:	php-5.3.x-bug60986.diff
 Patch230:	php-5.3.10-add-missing-function-argument.patch
 # http://www.suhosin.org/
 #Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
 #Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.9-%{suhosin_version}.diff
+Patch301:	suhosin-patch-5.3.11RC1-%{suhosin_version}.diff
 Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
 Patch304:	php-5.3.4-aconf26x.patch
@@ -1200,7 +1199,7 @@ suhosin patch %{suhosin_version} here: http://www.suhosin.org/
 
 %prep
 
-%setup -q -n php-%{version}
+%setup -q -n php-%{version}RC1
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
@@ -1265,7 +1264,6 @@ fi
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch229 -p0 -b .bug60986.droplet
 %patch230 -p1 -b .func_arg~
 
 %patch301 -p1 -b .suhosin.droplet
