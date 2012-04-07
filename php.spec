@@ -19,7 +19,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.3.11
-Release:	0.0.RC1.1
+Release:	0.0.RC1.2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -118,7 +118,7 @@ BuildRequires:	gd-devel >= 2.0.33
 BuildRequires:	gettext-devel
 BuildRequires:	gmp-devel
 BuildRequires:	gpm-devel
-BuildRequires:	icu-devel >= 3.4
+BuildRequires:	icu-devel >= 49.0
 BuildRequires:	lemon
 BuildRequires:	libjpeg-devel
 BuildRequires:	libldap-devel
