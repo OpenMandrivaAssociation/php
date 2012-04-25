@@ -14,16 +14,21 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
-%define suhosin_version 0.9.10
+%define beta RC2
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.3.11
-Release:	0.0.RC2.1
+Version:	5.4.1
+%if "%beta" != ""
+Release:	0.%beta.1
+Source0:	http://downloads.php.net/stas/php-%{version}%beta.tar.gz
+%else
+Release:	1
+Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
+%endif
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
 Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
@@ -34,7 +39,6 @@ Source6:	php-fpm.logrotate
 Source7:	create_data_file.php
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
-Patch2:		php-5.3.7RC1-autoconf26_check_revert.diff
 Patch3:		php-libtool.diff
 Patch4:		php-phpize.diff
 Patch5:		php-phpbuilddir.diff
@@ -45,7 +49,6 @@ Patch6:		php5-apache2-filters.diff
 Patch7:		php-no_libedit.diff
 Patch8:		php-xmlrpc_epi.patch
 Patch9:		php-xmlrpc_no_rpath.diff
-Patch10:	php-really_external_sqlite2.diff
 Patch11:	php-5.3.8-bdb-5.2.diff
 #####################################################################
 # Stolen from PLD
@@ -53,7 +56,6 @@ Patch20:	php-mail.diff
 Patch21:	php-filter-shared.diff
 Patch22:	php-dba-link.patch
 Patch23:	php-zlib-for-getimagesize.patch
-Patch24:	php-zlib.patch
 Patch25:	php-5.3.10-external_libzip.diff
 Patch26:	php-5.3.9RC2-mcrypt-libs.diff
 # for kolab2
@@ -76,7 +78,6 @@ Patch102:	php-install.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
 Patch111:	php-5.3.6-jpegversion.patch
-Patch112:	php-shutdown.diff
 Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
@@ -85,18 +86,11 @@ Patch115:	php-dlopen.diff
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
-Patch224:	php-5.1.0RC6-CVE-2005-3388.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch230:	php-5.3.10-add-missing-function-argument.patch
-# http://www.suhosin.org/
-#Source300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz.sig
-#Patch300:	http://download.suhosin.org/suhosin-patch-%{version}-%{suhosin_version}.patch.gz
-Patch301:	suhosin-patch-5.3.11RC1-%{suhosin_version}.diff
 Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
-Patch304:	php-5.3.4-aconf26x.patch
 BuildRequires:	apache-devel >= 2.2.0
 BuildRequires:	aspell-devel
 BuildRequires:	autoconf automake libtool
@@ -146,7 +140,6 @@ BuildRequires:	re2c >= 0.13.4
 BuildRequires:	readline-devel
 BuildRequires:	recode-devel
 BuildRequires:	sqlite3-devel
-BuildRequires:	sqlite-devel
 BuildRequires:	t1lib-devel
 BuildRequires:	tidy-devel
 BuildRequires:	unixODBC-devel >= 2.2.1
@@ -167,10 +160,8 @@ integration for several commercial and non-commercial database management
 systems, so writing a database-enabled script with PHP5 is fairly simple. The
 most common use of PHP5 coding is probably as a replacement for CGI scripts.
 
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
+of this Mandriva package can help you.
 
 %package	cli
 Summary:	PHP5 CLI interface
@@ -187,7 +178,7 @@ Requires:	php-openssl >= %{epoch}:%{version}
 Requires:	php-pcre >= %{epoch}:%{version}
 Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
-Requires:	php-suhosin >= 0.9.29
+Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -208,10 +199,8 @@ This package contains a command-line (CLI) version of php. You must also
 install libphp5_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
+of this Mandriva package can help you.
 
 %package	cgi
 Summary:	PHP5 CGI interface
@@ -228,7 +217,7 @@ Requires:	php-openssl >= %{epoch}:%{version}
 Requires:	php-pcre >= %{epoch}:%{version}
 Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
-Requires:	php-suhosin >= 0.9.29
+Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -253,10 +242,8 @@ This package contains a standalone (CGI) version of php with FastCGI support.
 You must also install libphp5_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
+of this Mandriva package can help you.
 
 %package -n	%{libname}
 Summary:	Shared library for PHP5
@@ -273,10 +260,8 @@ This package provides the common files to run with different implementations of
 PHP5. You need this package if you install the php standalone package or a
 webserver with php support (ie: apache-mod_php).
 
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
+of this Mandriva package can help you.
 
 %package	devel
 Summary:	Development package for PHP5
@@ -992,24 +977,9 @@ Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
 Requires:	php-pdo >= %{epoch}:%{version}
 Requires:	%{libname} >= %{epoch}:%{version}
+Obsoletes:	%name-sqlite
 
 %description	sqlite3
-This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
-C library that implements an embeddable SQL database engine. Programs that link
-with the SQLite library can have SQL database access without running a separate
-RDBMS process.
-
-SQLite is not a client library used to connect to a big database server. SQLite
-is the server. The SQLite library reads and writes directly to and from the
-database files on disk.
-
-%package	sqlite
-Summary:	SQLite v2 database bindings for PHP
-Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
-
-%description	sqlite
 This is an extension for the SQLite Embeddable SQL Database Engine. SQLite is a
 C library that implements an embeddable SQL database engine. Programs that link
 with the SQLite library can have SQL database access without running a separate
@@ -1172,7 +1142,7 @@ Requires:	php-openssl >= %{epoch}:%{version}
 Requires:	php-pcre >= %{epoch}:%{version}
 Requires:	php-posix >= %{epoch}:%{version}
 Requires:	php-session >= %{epoch}:%{version}
-Requires:	php-suhosin >= 0.9.29
+Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{epoch}:%{version}
 Requires:	php-sysvshm >= %{epoch}:%{version}
 Requires:	php-timezonedb >= 3:2009.10
@@ -1192,10 +1162,8 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 This package contains the FastCGI Process Manager. You must also install
 libphp5_common.
 
-This version of php has the suhosin patch %{suhosin_version} applied. Please
-report bugs here: http://qa.mandriva.com/ so that the official maintainer of
-this Mandriva package can help you. More information regarding the
-suhosin patch %{suhosin_version} here: http://www.suhosin.org/
+Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
+of this Mandriva package can help you.
 
 %prep
 
@@ -1212,46 +1180,42 @@ fi
 
 %patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
-%patch2 -p0 -b .autoconf26_check_revert.droplet
 %patch3 -p0 -b .libtool.droplet
 %patch4 -p1 -b .phpize.droplet
 %patch5 -p1 -b .phpbuilddir.droplet
 %patch6 -p1 -b .apache2-filters.droplet
-%patch7 -p0 -b .no_libedit.droplet
+%patch7 -p1 -b .no_libedit.droplet
 %patch8 -p0 -b .xmlrpc_epi_header
 %patch9 -p0 -b .xmlrpc_no_rpath.droplet
-%patch10 -p0 -b .really_external_sqlite2.droplet
 %patch11 -p0 -b .bdb-5.2.droplet
 
 #####################################################################
 # Stolen from PLD
-%patch20 -p0 -b .mail.droplet
+%patch20 -p1 -b .mail.droplet
 %patch21 -p0 -b .filter-shared.droplet
 %patch22 -p0 -b .dba-link.droplet
 %patch23 -p0 -b .zlib-for-getimagesize.droplet
-%patch24 -p1 -b .zlib.droplet
 %patch25 -p1 -b .external_libzip.droplet
 %patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
 %patch27 -p1 -b .imap-annotation.droplet
 %patch28 -p1 -b .imap-myrights.droplet
 # fpm stuff
-%patch29 -p1
-%patch30 -p0
+%patch29 -p1 -b .shared-fpm~
+%patch30 -p1 -b .fpmmdv~
 
 #####################################################################
 # stolen from debian
-%patch50 -p0 -b .session.save_path.droplet
+%patch50 -p1 -b .session.save_path.droplet
 %patch51 -p0 -b .exif_nesting_level.droplet
 %patch52 -p0 -b .fix_broken_sha-2_test.droplet
 
 #####################################################################
 # Stolen from fedora
-%patch101 -p0 -b .cxx.droplet
+%patch101 -p1 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
-%patch105 -p0 -b .umask.droplet
+%patch105 -p1 -b .umask.droplet
 %patch111 -p0 -b .jpegversion
-%patch112 -p1 -b .shutdown.droplet
 %patch113 -p0 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
@@ -1260,16 +1224,12 @@ fi
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
 %patch123 -p0 -b .bug43589.droplet
-%patch224 -p0 -b .CVE-2005-3388.droplet
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-%patch230 -p1 -b .func_arg~
 
-%patch301 -p1 -b .suhosin.droplet
 %patch302 -p1 -b .no_egg.droplet
 %patch303 -p1 -b .mdv_logo.droplet
-%patch304 -p1 -b .aconf26x.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
@@ -1368,6 +1328,7 @@ export LDFLAGS="$SAFE_LDFLAGS"
 # never use "--disable-rpath", it does the opposite
 
 # Configure php5
+# FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
 for i in fpm cgi cli apxs; do
 ./configure \
     `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
@@ -1420,7 +1381,7 @@ for i in fpm cgi cli apxs; do
     --enable-intl=shared --with-icu-dir=%{_prefix} \
     --enable-json=shared \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
-    --with-gd=shared,%{_prefix} --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
+    --with-gd=shared --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
     --with-gettext=shared,%{_prefix} \
     --with-gmp=shared,%{_prefix} \
     --enable-hash=shared,%{_prefix} \
@@ -1596,7 +1557,6 @@ echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
-echo "extension = sqlite.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite.ini
 echo "extension = sqlite3.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite3.ini
 echo "extension = sybase_ct.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase_ct.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
@@ -2164,14 +2124,6 @@ if [ "$1" = "0" ]; then
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%post sqlite
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sqlite
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
 %post sqlite3
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -2338,7 +2290,7 @@ fi
 %attr(0755,root,root) %{_bindir}/php-fcgi
 
 %files devel
-%doc SELF-CONTAINED-EXTENSIONS CODING_STANDARDS README.* TODO EXTENSIONS
+%doc SELF-CONTAINED-EXTENSIONS CODING_STANDARDS README.* EXTENSIONS
 %doc Zend/ZEND_* README.TESTING*
 %attr(0755,root,root) %{_bindir}/php-config
 %attr(0755,root,root) %{_bindir}/phpize
@@ -2546,10 +2498,6 @@ fi
 %files sockets
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
-
-%files sqlite
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/sqlite.so
 
 %files sqlite3
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite3.ini
