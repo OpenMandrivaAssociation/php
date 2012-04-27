@@ -14,18 +14,11 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
-%define beta RC2
-
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.4.1
-%if "%beta" != ""
-Release:	0.%beta.1
-Source0:	http://downloads.php.net/stas/php-%{version}%beta.tar.gz
-%else
 Release:	1
-Source0:	http://se.php.net/distributions/php-%{version}RC2.tar.gz
-%endif
+Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
@@ -125,7 +118,7 @@ BuildRequires:	libxml2-devel >= 2.6
 BuildRequires:	libxpm-devel
 BuildRequires:	libxslt-devel >= 1.1.0
 BuildRequires:  libzip-devel >= 0.10.1
-BuildRequires:	mbfl-devel >= 1.1.0
+BuildRequires:	mbfl-devel >= 1.2.0
 BuildRequires:	mysql-devel >= 4.1.7
 BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
@@ -1167,7 +1160,7 @@ of this Mandriva package can help you.
 
 %prep
 
-%setup -q -n php-%{version}RC2
+%setup -q -n php-%{version}
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
@@ -1201,8 +1194,8 @@ fi
 %patch27 -p1 -b .imap-annotation.droplet
 %patch28 -p1 -b .imap-myrights.droplet
 # fpm stuff
-%patch29 -p1 -b .shared-fpm~
-%patch30 -p1 -b .fpmmdv~
+%patch29 -p1 -b .shared-fpm.droplet
+%patch30 -p1 -b .fpmmdv.droplet
 
 #####################################################################
 # stolen from debian
