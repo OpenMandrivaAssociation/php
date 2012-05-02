@@ -1465,9 +1465,11 @@ install -d %{buildroot}/var/lib/php
 
 make -f Makefile.apxs install \
 	INSTALL_ROOT=%{buildroot} \
-	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/" \
-	INSTALL_CLI="\$(LIBTOOL) --silent --mode=install install sapi/cli/php %{buildroot}%{_bindir}/php"
+	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/"
 
+# borked autopoo
+rm -f %{buildroot}%{_bindir}/php %{buildroot}%{_bindir}/php-cgi
+./libtool --silent --mode=install install sapi/cli/php %{buildroot}%{_bindir}/php
 ./libtool --silent --mode=install install sapi/cgi/php-cgi %{buildroot}%{_bindir}/php-cgi
 
 # compat php-fcgi symink
