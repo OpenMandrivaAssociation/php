@@ -1,0 +1,21 @@
+--- php-5.4.1RC2/sapi/fpm/config.m4.shared-fpm~	2012-04-12 07:07:50.000000000 +0200
++++ php-5.4.1RC2/sapi/fpm/config.m4	2012-04-17 21:06:35.559207792 +0200
+@@ -636,7 +636,7 @@ if test "$PHP_FPM" != "no"; then
+         BUILD_FPM="\$(CC) \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(NATIVE_RPATHS) \$(PHP_GLOBAL_OBJS:.lo=.o) \$(PHP_BINARY_OBJS:.lo=.o) \$(PHP_FPM_OBJS:.lo=.o) \$(PHP_FRAMEWORKS) \$(EXTRA_LIBS) \$(FPM_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
+       ;;
+       *)
+-        BUILD_FPM="\$(LIBTOOL) --mode=link \$(CC) -export-dynamic \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(PHP_RPATHS) \$(PHP_GLOBAL_OBJS) \$(PHP_BINARY_OBJS) \$(PHP_FPM_OBJS) \$(EXTRA_LIBS) \$(FPM_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
++        BUILD_FPM="\$(LIBTOOL) --mode=link \$(CC) -export-dynamic \$(CFLAGS_CLEAN) \$(EXTRA_CFLAGS) \$(EXTRA_LDFLAGS_PROGRAM) \$(LDFLAGS) \$(PHP_RPATHS) libphp\$(PHP_MAJOR_VERSION)_common.la \$(PHP_BINARY_OBJS) \$(PHP_FPM_OBJS) \$(EXTRA_LIBS) \$(FPM_EXTRA_LIBS) \$(ZEND_EXTRA_LIBS) -o \$(SAPI_FPM_PATH)"
+       ;;
+   esac
+ 
+--- php-5.4.1RC2/sapi/fpm/Makefile.frag.shared-fpm~	2012-04-12 07:07:50.000000000 +0200
++++ php-5.4.1RC2/sapi/fpm/Makefile.frag	2012-04-17 21:06:52.002208105 +0200
+@@ -1,6 +1,6 @@
+ fpm: $(SAPI_FPM_PATH)
+ 
+-$(SAPI_FPM_PATH): $(PHP_GLOBAL_OBJS) $(PHP_BINARY_OBJS) $(PHP_FPM_OBJS)
++$(SAPI_FPM_PATH): $(PHP_GLOBAL_OBJS) libphp$(PHP_MAJOR_VERSION)_common.la $(PHP_FPM_OBJS)
+ 	$(BUILD_FPM)
+ 
+ install-fpm: $(SAPI_FPM_PATH)

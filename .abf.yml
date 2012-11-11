@@ -1,0 +1,9 @@
+sources:
+  "create_data_file.php:"	9f44d96b8e6890dc20c510c7849391ec3844ff9a
+  "maxlifetime:"	2e26e90d5d0784e76eb1293d71b7fc322597c162
+  "php-5.4.7.tar.gz:"	4d104fc5bfcdd7cb34da3ae00beb7623a87f9fb5
+  "php.crond:"	099fe1ff4ab5cd65f65080922a7e231c37de1cea
+  "php-fpm.logrotate:"	adf4c741097590becfcce67cc2065575917cc2bf
+  "php-fpm.service:"	f9fcef2b52b0493109280a9384389a47ebc01992
+  "php-fpm.sysconf:"	fa0eb90c9dd7c4d39986e5ee19c69e328d963980
+  "php-test.ini:"	18421d4f1d28a5734986f2eba80551378ffcee1e
