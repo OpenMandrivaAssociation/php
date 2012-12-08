@@ -9,14 +9,12 @@
 %{?_with_libmagic: %{expand: %%global build_libmagic 1}}
 %{?_without_libmagic: %{expand: %%global build_libmagic 0}}
 
-%define _requires_exceptions BEGIN\\|mkinstalldirs\\|pear(\\|/usr/bin/tclsh
-
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.4.7
+Version:	5.4.9
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -84,61 +82,66 @@ Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 Patch302:	php-no_egg.diff
 Patch303:	php-mdv_logo.diff
-BuildRequires:	apache-devel >= 2.2.0
-BuildRequires:	aspell-devel
-BuildRequires:	autoconf automake libtool
+
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	byacc
-BuildRequires:	bzip2-devel
-BuildRequires:	c-client-devel >= 2007
-BuildRequires:	curl-devel >= 7.9.8
-BuildRequires:	db-devel
-BuildRequires:	elfutils-devel
-BuildRequires:	enchant-devel
-BuildRequires:	expat-devel
 BuildRequires:	file
 BuildRequires:	flex
-BuildRequires:  freetds-devel >= 0.63
-BuildRequires:	freetype2-devel
+BuildRequires:	lemon
+BuildRequires:	libtool
+BuildRequires:	openssl
+BuildRequires:	re2c >= 0.13.4
+
+BuildRequires:	pkgconfig(enchant)
+BuildRequires:	pkgconfig(expat)
+BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(libxslt)
+BuildRequires:	pkgconfig(libzip)
+BuildRequires:	pkgconfig(ncurses)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(sqlite3)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xpm)
+
+BuildRequires:	apache-devel >= 2.2.0
+BuildRequires:	aspell-devel
+BuildRequires:	bzip2-devel
+BuildRequires:	c-client-devel >= 2007
+BuildRequires:	db-devel
+BuildRequires:	elfutils-devel
+BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gdbm-devel
 BuildRequires:	gd-devel >= 2.0.33
 BuildRequires:	gettext-devel
 BuildRequires:	gmp-devel
 BuildRequires:	gpm-devel
 BuildRequires:	icu-devel >= 49.0
-BuildRequires:	lemon
-BuildRequires:	libjpeg-devel
+BuildRequires:	jpeg-devel
 BuildRequires:	libldap-devel
 BuildRequires:	libmcrypt-devel
-BuildRequires:	libpng-devel
 BuildRequires:	libsasl-devel
 BuildRequires:	libtool-devel
-BuildRequires:	libx11-devel
-BuildRequires:	libxml2-devel >= 2.6
-BuildRequires:	libxpm-devel
-BuildRequires:	libxslt-devel >= 1.1.0
-BuildRequires:  libzip-devel >= 0.10.1
 BuildRequires:	mbfl-devel >= 1.2.0
 BuildRequires:	mysql-devel >= 4.1.7
-BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	net-snmp-mibs
 BuildRequires:	onig-devel >= 5.9.2
-BuildRequires:	openssl
-BuildRequires:	openssl-devel
 BuildRequires:	pam-devel
-BuildRequires:	pcre-devel >= 6.6
 BuildRequires:	postgresql-devel
-BuildRequires:	re2c >= 0.13.4
 BuildRequires:	readline-devel
 BuildRequires:	recode-devel
-BuildRequires:	sqlite3-devel
 BuildRequires:	t1lib-devel
 BuildRequires:	tidy-devel
 BuildRequires:	unixODBC-devel >= 2.2.1
 BuildRequires:	xmlrpc-epi-devel
 %if %{build_libmagic}
-BuildRequires:	file-devel
+BuildRequires:	magic-devel
 %endif
 Epoch: 3
 
@@ -152,9 +155,6 @@ PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
 integration for several commercial and non-commercial database management
 systems, so writing a database-enabled script with PHP5 is fairly simple. The
 most common use of PHP5 coding is probably as a replacement for CGI scripts.
-
-Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
-of this Mandriva package can help you.
 
 %package	cli
 Summary:	PHP5 CLI interface
@@ -191,9 +191,6 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 This package contains a command-line (CLI) version of php. You must also
 install libphp5_common. If you need apache module support, you also need to
 install the apache-mod_php package.
-
-Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
-of this Mandriva package can help you.
 
 %package	cgi
 Summary:	PHP5 CGI interface
@@ -235,15 +232,12 @@ This package contains a standalone (CGI) version of php with FastCGI support.
 You must also install libphp5_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
-Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
-of this Mandriva package can help you.
-
 %package -n	%{libname}
 Summary:	Shared library for PHP5
 Group:		Development/Other
 Provides:	php-pcre = %{epoch}:%{version}
 Provides:	php-simplexml = %{epoch}:%{version}
-Requires: systemd-units
+Requires:	systemd-units
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -252,9 +246,6 @@ Requires(postun): systemd-units
 This package provides the common files to run with different implementations of
 PHP5. You need this package if you install the php standalone package or a
 webserver with php support (ie: apache-mod_php).
-
-Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
-of this Mandriva package can help you.
 
 %package	devel
 Summary:	Development package for PHP5
@@ -266,14 +257,15 @@ Requires:	byacc
 Requires:	chrpath
 Requires:	dos2unix
 Requires:	flex
-Requires:	libxml2-devel >= 2.6
-Requires:	libxslt-devel >= 1.1.0
-Requires:	openssl >= 0.9.7
-Requires:	openssl-devel >= 0.9.7
-Requires:	pam-devel
-Requires:	pcre-devel >= 6.6
+Requires:	openssl
 Requires:	re2c >= 0.9.11
 Requires:	tcl
+Requires:	pam-devel
+Requires:	pkgconfig(libpcre)
+Requires:	pkgconfig(libxml-2.0)
+Requires:	pkgconfig(libxslt)
+Requires:	pkgconfig(openssl)
+
 
 %description	devel
 The php-devel package lets you compile dynamic extensions to PHP5. Included
@@ -764,8 +756,7 @@ Call Level Interface (DB2 CLI) library. PDO_ODBC currently supports three
 different "flavours" of database drivers:
  
  o ibm-db2  - Supports access to IBM DB2 Universal Database, Cloudscape, and
-              Apache Derby servers through the free DB2 client. ibm-db2 is not
-	      supported in Mandriva.
+              Apache Derby servers through the free DB2 client.
 
  o unixODBC - Supports access to database servers through the unixODBC driver
               manager and the database's own ODBC drivers.
@@ -1154,9 +1145,6 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 
 This package contains the FastCGI Process Manager. You must also install
 libphp5_common.
-
-Please report bugs here: http://qa.mandriva.com/ so that the official maintainer
-of this Mandriva package can help you.
 
 %prep
 
@@ -2563,3 +2551,5 @@ fi
 %attr(0711,apache,apache) %dir /var/lib/php-fpm
 %attr(0711,apache,apache) %dir /var/log/php-fpm
 %attr(0711,apache,apache) %dir /var/run/php-fpm
+
+

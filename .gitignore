@@ -1,8 +1,0 @@
-create_data_file.php
-maxlifetime
-php-5.4.7.tar.gz
-php.crond
-php-fpm.logrotate
-php-fpm.service
-php-fpm.sysconf
-php-test.ini
