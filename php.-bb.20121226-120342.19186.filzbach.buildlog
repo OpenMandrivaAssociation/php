@@ -1,0 +1,29 @@
+warning: R systemd-units overlaps R systemd-units, removing R systemd-units and merging flags
+warning: R systemd-units overlaps R systemd-units, removing R systemd-units and merging flags
+warning: R rpm-helper overlaps R rpm-helper, removing R rpm-helper and merging flags
+warning: R rpm-helper overlaps R rpm-helper, removing R rpm-helper and merging flags
+warning: R rpm-helper overlaps R rpm-helper, removing R rpm-helper and merging flags
+warning: R rpm-helper overlaps R rpm-helper, removing R rpm-helper and merging flags
+Fetching(Source0): http://se.php.net/distributions/php-5.4.10.tar.gz
+error: Failed build dependencies:
+	lemon is needed by php-5.4.10-1.src
+	re2c >= 0.13.4 is needed by php-5.4.10-1.src
+	pkgconfig(expat) is needed by php-5.4.10-1.src
+	pkgconfig(libcurl) is needed by php-5.4.10-1.src
+	pkgconfig(libzip) is needed by php-5.4.10-1.src
+	apache-devel >= 2.2.0 is needed by php-5.4.10-1.src
+	aspell-devel is needed by php-5.4.10-1.src
+	c-client-devel >= 2007 is needed by php-5.4.10-1.src
+	freetds-devel >= 0.63 is needed by php-5.4.10-1.src
+	gd-devel >= 2.0.33 is needed by php-5.4.10-1.src
+	gpm-devel is needed by php-5.4.10-1.src
+	libmcrypt-devel is needed by php-5.4.10-1.src
+	mbfl-devel >= 1.2.0 is needed by php-5.4.10-1.src
+	onig-devel >= 5.9.2 is needed by php-5.4.10-1.src
+	postgresql-devel is needed by php-5.4.10-1.src
+	readline-devel is needed by php-5.4.10-1.src
+	recode-devel is needed by php-5.4.10-1.src
+	t1lib-devel is needed by php-5.4.10-1.src
+	tidy-devel is needed by php-5.4.10-1.src
+	unixODBC-devel >= 2.2.1 is needed by php-5.4.10-1.src
+	xmlrpc-epi-devel is needed by php-5.4.10-1.src
