@@ -14,7 +14,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.4.10
+Version:	5.4.11
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP

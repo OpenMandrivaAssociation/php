@@ -1,4 +1,5 @@
 removed_sources:
+  php-5.4.10.tar.gz: 6be6a1c16ca3f6bec93d19ce5d6b94c5cf89373b
   php-5.4.9.tar.gz: 08749151bc6875f372738bee6884782f654d2311
 sources:
-  php-5.4.10.tar.gz: 6be6a1c16ca3f6bec93d19ce5d6b94c5cf89373b
+  php-5.4.11.tar.gz: 11e6c114c08e6c0b768df6332aa80ef49748ace1
