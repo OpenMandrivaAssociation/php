@@ -123,7 +123,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	gpm-devel
 BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
-BuildRequires:	libldap-devel
+BuildRequires:	openldap-devel
 BuildRequires:	libmcrypt-devel
 BuildRequires:	libsasl-devel
 BuildRequires:	libtool-devel
