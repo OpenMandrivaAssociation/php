@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   php-5.4.11.tar.gz: 11e6c114c08e6c0b768df6332aa80ef49748ace1
+sources:
+  php-5.4.16.tar.gz: e7a9e798821fa186ae297392353be8f1d3de6edd

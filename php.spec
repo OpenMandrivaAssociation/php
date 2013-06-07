@@ -14,7 +14,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.4.11
+Version:	5.4.16
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -125,7 +125,7 @@ BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
 BuildRequires:	openldap-devel
 BuildRequires:	libmcrypt-devel
-BuildRequires:	libsasl-devel
+BuildRequires:	sasl-devel
 BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
 BuildRequires:	mysql-devel >= 4.1.7

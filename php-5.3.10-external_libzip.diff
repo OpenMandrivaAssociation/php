@@ -1,25 +1,5 @@
-diff -Naurp php-5.4.5/aclocal.m4 php-5.4.5.oden/aclocal.m4
-diff -Naurp php-5.4.5/aclocal.m4.libtool.droplet php-5.4.5.oden/aclocal.m4.libtool.droplet
-diff -Naurp php-5.4.5/build/build2.mk php-5.4.5.oden/build/build2.mk
-diff -Naurp php-5.4.5/build/build2.mk.phpize.droplet php-5.4.5.oden/build/build2.mk.phpize.droplet
-diff -Naurp php-5.4.5/ext/dba/config.m4 php-5.4.5.oden/ext/dba/config.m4
-diff -Naurp php-5.4.5/ext/dba/config.m4.bdb-5.2.droplet php-5.4.5.oden/ext/dba/config.m4.bdb-5.2.droplet
-diff -Naurp php-5.4.5/ext/dba/config.m4.dba-link.droplet php-5.4.5.oden/ext/dba/config.m4.dba-link.droplet
-diff -Naurp php-5.4.5/ext/filter/config.m4 php-5.4.5.oden/ext/filter/config.m4
-diff -Naurp php-5.4.5/ext/filter/config.m4.filter-shared.droplet php-5.4.5.oden/ext/filter/config.m4.filter-shared.droplet
-diff -Naurp php-5.4.5/ext/readline/config.m4 php-5.4.5.oden/ext/readline/config.m4
-diff -Naurp php-5.4.5/ext/readline/config.m4.no_libedit.droplet php-5.4.5.oden/ext/readline/config.m4.no_libedit.droplet
-diff -Naurp php-5.4.5/ext/standard/image.c php-5.4.5.oden/ext/standard/image.c
-diff -Naurp php-5.4.5/ext/standard/image.c.zlib-for-getimagesize.droplet php-5.4.5.oden/ext/standard/image.c.zlib-for-getimagesize.droplet
-diff -Naurp php-5.4.5/ext/standard/mail.c php-5.4.5.oden/ext/standard/mail.c
-diff -Naurp php-5.4.5/ext/standard/mail.c.mail.droplet php-5.4.5.oden/ext/standard/mail.c.mail.droplet
-diff -Naurp php-5.4.5/ext/xmlrpc/config.m4 php-5.4.5.oden/ext/xmlrpc/config.m4
-diff -Naurp php-5.4.5/ext/xmlrpc/config.m4.xmlrpc_no_rpath.droplet php-5.4.5.oden/ext/xmlrpc/config.m4.xmlrpc_no_rpath.droplet
-diff -Naurp php-5.4.5/ext/xmlrpc/xmlrpc-epi-php.c php-5.4.5.oden/ext/xmlrpc/xmlrpc-epi-php.c
-diff -Naurp php-5.4.5/ext/xmlrpc/xmlrpc-epi-php.c.xmlrpc_epi_header php-5.4.5.oden/ext/xmlrpc/xmlrpc-epi-php.c.xmlrpc_epi_header
-diff -Naurp php-5.4.5/ext/zip/config.m4 php-5.4.5.oden/ext/zip/config.m4
---- php-5.4.5/ext/zip/config.m4	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/config.m4	2012-07-23 14:54:49.000000000 +0200
+--- php-5.4.16/ext/zip/config.m4.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/config.m4	2013-06-07 17:36:42.350736948 +0200
 @@ -13,95 +13,136 @@ fi
  PHP_ARG_WITH(pcre-dir, pcre install prefix,
  [  --with-pcre-dir           ZIP: pcre install prefix], no, no)
@@ -229,12 +209,11 @@ diff -Naurp php-5.4.5/ext/zip/config.m4 php-5.4.5.oden/ext/zip/config.m4
  
    dnl so we always include the known-good working hack.
    PHP_ADD_MAKEFILE_FRAGMENT
-diff -Naurp php-5.4.5/ext/zip/php_zip.c php-5.4.5.oden/ext/zip/php_zip.c
---- php-5.4.5/ext/zip/php_zip.c	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/php_zip.c	2012-07-23 14:52:56.000000000 +0200
-@@ -29,8 +29,232 @@
- #include "ext/standard/php_string.h"
+--- php-5.4.16/ext/zip/php_zip.c.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/php_zip.c	2013-06-07 17:39:25.992253775 +0200
+@@ -30,8 +30,230 @@
  #include "ext/pcre/php_pcre.h"
+ #include "ext/standard/php_filestat.h"
  #include "php_zip.h"
 +#if defined(HAVE_LIBZIP)
 +#include <zip.h>
@@ -456,8 +435,6 @@ diff -Naurp php-5.4.5/ext/zip/php_zip.c php-5.4.5.oden/ext/zip/php_zip.c
 +    free(za);
 +    return;
 +} 
-+
-+
 +#else
  #include "lib/zip.h"
  #include "lib/zipint.h"
@@ -465,7 +442,7 @@ diff -Naurp php-5.4.5/ext/zip/php_zip.c php-5.4.5.oden/ext/zip/php_zip.c
  
  /* zip_open is a macro for renaming libzip zipopen, so we need to use PHP_NAMED_FUNCTION */
  static PHP_NAMED_FUNCTION(zif_zip_open);
-@@ -1624,6 +1848,10 @@ static ZIPARCHIVE_METHOD(addEmptyDir)
+@@ -1631,6 +1853,10 @@ static ZIPARCHIVE_METHOD(addEmptyDir)
  	}
  
  	idx = zip_stat(intern, s, 0, &sb);
@@ -476,7 +453,7 @@ diff -Naurp php-5.4.5/ext/zip/php_zip.c php-5.4.5.oden/ext/zip/php_zip.c
  	if (idx >= 0) {
  		RETVAL_FALSE;
  	} else {
-@@ -1846,6 +2074,10 @@ static ZIPARCHIVE_METHOD(addFromString)
+@@ -1853,6 +2079,10 @@ static ZIPARCHIVE_METHOD(addFromString)
  	}
  
  	cur_idx = zip_name_locate(intern, (const char *)name, 0);
@@ -487,9 +464,8 @@ diff -Naurp php-5.4.5/ext/zip/php_zip.c php-5.4.5.oden/ext/zip/php_zip.c
  	/* TODO: fix  _zip_replace */
  	if (cur_idx >= 0) {
  		if (zip_delete(intern, cur_idx) == -1) {
-diff -Naurp php-5.4.5/ext/zip/php_zip.h php-5.4.5.oden/ext/zip/php_zip.h
---- php-5.4.5/ext/zip/php_zip.h	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/php_zip.h	2012-07-23 14:52:56.000000000 +0200
+--- php-5.4.16/ext/zip/php_zip.h.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/php_zip.h	2013-06-07 17:36:42.350736948 +0200
 @@ -28,7 +28,11 @@ extern zend_module_entry zip_module_entr
  #include "TSRM.h"
  #endif
@@ -502,9 +478,8 @@ diff -Naurp php-5.4.5/ext/zip/php_zip.h php-5.4.5.oden/ext/zip/php_zip.h
  
  #define PHP_ZIP_VERSION_STRING "1.11.0"
  
-diff -Naurp php-5.4.5/ext/zip/tests/bug38943.phpt php-5.4.5.oden/ext/zip/tests/bug38943.phpt
---- php-5.4.5/ext/zip/tests/bug38943.phpt	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/tests/bug38943.phpt	2012-07-23 14:52:56.000000000 +0200
+--- php-5.4.16/ext/zip/tests/bug38943.phpt.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/tests/bug38943.phpt	2013-06-07 17:36:42.350736948 +0200
 @@ -27,7 +27,7 @@ array(1) {
    [0]=>
    int(1)
@@ -514,9 +489,8 @@ diff -Naurp php-5.4.5/ext/zip/tests/bug38943.phpt php-5.4.5.oden/ext/zip/tests/b
    ["test":"myZip":private]=>
    int(0)
    ["testp"]=>
-diff -Naurp php-5.4.5/ext/zip/tests/pecl12414.phpt php-5.4.5.oden/ext/zip/tests/pecl12414.phpt
---- php-5.4.5/ext/zip/tests/pecl12414.phpt	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/tests/pecl12414.phpt	2012-07-23 14:52:56.000000000 +0200
+--- php-5.4.16/ext/zip/tests/pecl12414.phpt.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/tests/pecl12414.phpt	2013-06-07 17:36:42.350736948 +0200
 @@ -5,6 +5,8 @@ Bug #12414 ( extracting files from damag
  /*$ */
  if(!extension_loaded('zip')) die('skip');
@@ -526,9 +500,8 @@ diff -Naurp php-5.4.5/ext/zip/tests/pecl12414.phpt php-5.4.5.oden/ext/zip/tests/
  --FILE--
  <?php
  $filename = 'MYLOGOV2.GFX';
-diff -Naurp php-5.4.5/ext/zip/zip_stream.c php-5.4.5.oden/ext/zip/zip_stream.c
---- php-5.4.5/ext/zip/zip_stream.c	2012-07-18 08:19:16.000000000 +0200
-+++ php-5.4.5.oden/ext/zip/zip_stream.c	2012-07-23 14:52:56.000000000 +0200
+--- php-5.4.16/ext/zip/zip_stream.c.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
++++ php-5.4.16/ext/zip/zip_stream.c	2013-06-07 17:36:42.350736948 +0200
 @@ -6,7 +6,11 @@
  #if HAVE_ZIP
  #ifdef ZEND_ENGINE_2
@@ -541,22 +514,3 @@ diff -Naurp php-5.4.5/ext/zip/zip_stream.c php-5.4.5.oden/ext/zip/zip_stream.c
  
  #include "php_streams.h"
  #include "ext/standard/file.h"
-diff -Naurp php-5.4.5/Makefile.global php-5.4.5.oden/Makefile.global
-diff -Naurp php-5.4.5/Makefile.global.shared.droplet php-5.4.5.oden/Makefile.global.shared.droplet
-diff -Naurp php-5.4.5/sapi/apache2handler/php_functions.c php-5.4.5.oden/sapi/apache2handler/php_functions.c
-diff -Naurp php-5.4.5/sapi/apache2handler/php_functions.c.apache2-filters.droplet php-5.4.5.oden/sapi/apache2handler/php_functions.c.apache2-filters.droplet
-diff -Naurp php-5.4.5/sapi/cgi/config9.m4 php-5.4.5.oden/sapi/cgi/config9.m4
-diff -Naurp php-5.4.5/sapi/cgi/config9.m4.shared.droplet php-5.4.5.oden/sapi/cgi/config9.m4.shared.droplet
-diff -Naurp php-5.4.5/sapi/cgi/Makefile.frag php-5.4.5.oden/sapi/cgi/Makefile.frag
-diff -Naurp php-5.4.5/sapi/cgi/Makefile.frag.shared.droplet php-5.4.5.oden/sapi/cgi/Makefile.frag.shared.droplet
-diff -Naurp php-5.4.5/sapi/cli/config.m4 php-5.4.5.oden/sapi/cli/config.m4
-diff -Naurp php-5.4.5/sapi/cli/config.m4.shared.droplet php-5.4.5.oden/sapi/cli/config.m4.shared.droplet
-diff -Naurp php-5.4.5/sapi/cli/Makefile.frag php-5.4.5.oden/sapi/cli/Makefile.frag
-diff -Naurp php-5.4.5/sapi/cli/Makefile.frag.shared.droplet php-5.4.5.oden/sapi/cli/Makefile.frag.shared.droplet
-diff -Naurp php-5.4.5/scripts/Makefile.frag php-5.4.5.oden/scripts/Makefile.frag
-diff -Naurp php-5.4.5/scripts/Makefile.frag.phpbuilddir.droplet php-5.4.5.oden/scripts/Makefile.frag.phpbuilddir.droplet
-diff -Naurp php-5.4.5/scripts/phpize.in php-5.4.5.oden/scripts/phpize.in
-diff -Naurp php-5.4.5/scripts/phpize.in.phpbuilddir.droplet php-5.4.5.oden/scripts/phpize.in.phpbuilddir.droplet
-diff -Naurp php-5.4.5/scripts/phpize.in.phpize.droplet php-5.4.5.oden/scripts/phpize.in.phpize.droplet
-diff -Naurp php-5.4.5/Zend/zend.h php-5.4.5.oden/Zend/zend.h
-diff -Naurp php-5.4.5/Zend/zend.h.init.droplet php-5.4.5.oden/Zend/zend.h.init.droplet
