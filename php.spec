@@ -12,10 +12,12 @@
 %define php5_common_major 5
 %define libname %mklibname php5_common %{php5_common_major}
 
+%define __noautoreq '.*/bin/awk|.*/bin/gawk'
+
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.4.16
-Release:	1
+Release:	2
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
 License:	PHP License
