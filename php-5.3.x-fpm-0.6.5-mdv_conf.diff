@@ -1,15 +1,14 @@
---- php-5.4.1RC2/sapi/fpm/php-fpm.conf.in.fpmmdv~	2012-04-12 07:07:50.000000000 +0200
-+++ php-5.4.1RC2/sapi/fpm/php-fpm.conf.in	2012-04-17 21:07:58.906209646 +0200
-@@ -12,7 +12,7 @@
- ; Relative path can also be used. They will be prefixed by:
- ;  - the global prefix if it's been set (-p arguement)
+--- php-5.4.19/sapi/fpm/php-fpm.conf.in.fpmmdv.droplet	2013-08-20 06:42:41.000000000 +0200
++++ php-5.4.19/sapi/fpm/php-fpm.conf.in	2013-08-25 22:31:54.661647890 +0200
+@@ -13,6 +13,7 @@
+ ;  - the global prefix if it's been set (-p argument)
  ;  - @prefix@ otherwise
--;include=etc/fpm.d/*.conf
+ ;include=etc/fpm.d/*.conf
 +include=/etc/php-fpm.d/*.conf
  
  ;;;;;;;;;;;;;;;;;;
  ; Global Options ;
-@@ -22,14 +22,14 @@
+@@ -22,14 +23,14 @@
  ; Pid file
  ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
  ; Default Value: none
@@ -26,7 +25,7 @@
  
  ; syslog_facility is used to specify what type of program is logging the
  ; message. This lets syslogd specify that messages from different facilities
-@@ -140,7 +140,8 @@ group = @php_fpm_group@
+@@ -156,7 +157,8 @@ group = @php_fpm_group@
  ;                            specific port;
  ;   '/path/to/unix/socket' - to listen on a unix socket.
  ; Note: This value is mandatory.
@@ -36,7 +35,7 @@
  
  ; Set listen(2) backlog.
  ; Default Value: 128 (-1 on FreeBSD and OpenBSD)
-@@ -198,22 +199,22 @@ pm = dynamic
+@@ -222,22 +224,22 @@ pm = dynamic
  ; forget to tweak pm.* to fit your needs.
  ; Note: Used when pm is set to 'static', 'dynamic' or 'ondemand'
  ; Note: This value is mandatory.
@@ -63,7 +62,7 @@
  
  ; The number of seconds after which an idle process will be killed.
  ; Note: Used only when pm is set to 'ondemand'
-@@ -224,7 +225,7 @@ pm.max_spare_servers = 3
+@@ -248,7 +250,7 @@ pm.max_spare_servers = 3
  ; This can be useful to work around memory leaks in 3rd party libraries. For
  ; endless request processing specify '0'. Equivalent to PHP_FCGI_MAX_REQUESTS.
  ; Default Value: 0
@@ -72,7 +71,7 @@
  
  ; The URI to view the FPM status page. If this value is not set, no URI will be
  ; recognized as a status page. It shows the following informations:
-@@ -405,6 +406,7 @@ pm.max_spare_servers = 3
+@@ -429,6 +431,7 @@ pm.max_spare_servers = 3
  ; Default Value: not set
  ; Note: slowlog is mandatory if request_slowlog_timeout is set
  ;slowlog = log/$pool.log.slow
@@ -80,7 +79,7 @@
   
  ; The timeout for serving a single request after which a PHP backtrace will be
  ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
-@@ -467,6 +469,7 @@ pm.max_spare_servers = 3
+@@ -491,6 +494,7 @@ pm.max_spare_servers = 3
  ;env[TMP] = /tmp
  ;env[TMPDIR] = /tmp
  ;env[TEMP] = /tmp

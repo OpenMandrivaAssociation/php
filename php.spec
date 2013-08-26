@@ -16,8 +16,8 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.4.16
-Release:	2
+Version:	5.4.19
+Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
 License:	PHP License
@@ -2273,6 +2273,7 @@ fi
 %doc CREDITS.cgi README.fcgi
 %attr(0755,root,root) %{_bindir}/php-cgi
 %attr(0755,root,root) %{_bindir}/php-fcgi
+%{_mandir}/man1/php-cgi.1*
 
 %files devel
 %doc SELF-CONTAINED-EXTENSIONS CODING_STANDARDS README.* EXTENSIONS
@@ -2444,6 +2445,8 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/84_phar.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/phar.so
 %attr(0755,root,root) %{_bindir}/phar
+%{_mandir}/man1/phar.1*
+%{_mandir}/man1/phar.phar.1*
 
 %files posix
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/43_posix.ini
