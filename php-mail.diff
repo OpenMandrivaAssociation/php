@@ -1,15 +1,15 @@
---- php-5.4.1RC2/ext/standard/mail.c.mail.droplet	2012-04-12 07:07:50.000000000 +0200
-+++ php-5.4.1RC2/ext/standard/mail.c	2012-04-17 21:01:06.221200289 +0200
-@@ -21,6 +21,8 @@
- #include <stdlib.h>
+--- php-5.5.4/ext/standard/mail.c.mail.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/standard/mail.c	2013-10-01 21:48:15.453263517 +0200
+@@ -22,6 +22,8 @@
  #include <ctype.h>
  #include <stdio.h>
-+#include <syslog.h>
+ #include <time.h>
 +#include <string.h>
++#include <syslog.h>
  #include "php.h"
  #include "ext/standard/info.h"
  #include "ext/standard/php_string.h"
-@@ -44,6 +46,9 @@
+@@ -47,6 +49,9 @@
  #include "php_string.h"
  #include "exec.h"
  
@@ -19,7 +19,7 @@
  #ifdef PHP_WIN32
  #include "win32/sendmail.h"
  #endif
-@@ -121,6 +126,18 @@ PHP_FUNCTION(mail)
+@@ -124,6 +129,18 @@ PHP_FUNCTION(mail)
  		MAIL_ASCIIZ_CHECK(extra_cmd, extra_cmd_len);
  	}
  
@@ -38,7 +38,7 @@
  	if (to_len > 0) {
  		to_r = estrndup(to, to_len);
  		for (; to_len; to_len--) {
-@@ -307,8 +324,42 @@ PHPAPI int php_mail(char *to, char *subj
+@@ -352,8 +369,42 @@ PHPAPI int php_mail(char *to, char *subj
  			MAIL_RET(0);
  		}
  #endif

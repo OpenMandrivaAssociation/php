@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.4.19
+Version:	5.5.4
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -62,15 +62,12 @@ Patch30:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
 # stolen from debian
 Patch50:	php-session.save_path.diff
 Patch51:	php-exif_nesting_level.diff
-# https://bugs.php.net/bug.php?id=51247
-Patch52:	php-5.3.9RC2-fix_broken_sha-2_test.diff
 #####################################################################
 # Stolen from fedora
 Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
-Patch111:	php-5.3.6-jpegversion.patch
 Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
 # Functional changes
@@ -82,8 +79,6 @@ Patch123:	php-bug43589.diff
 Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-Patch302:	php-no_egg.diff
-Patch303:	php-mdv_logo.diff
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -690,6 +685,14 @@ implement their own API. Instead of maintaining multiple database drivers that
 were all nearly identical, these drivers have been unified into a single set of
 ODBC functions.
 
+%package	opcache
+Summary:	Opcode cache for PHP
+Group:		Development/PHP
+Requires:	%{libname} >= %{epoch}:%{version}
+
+%description	opcache
+Opcode cache for PHP
+
 %package	pcntl
 Summary:	Process Control extension module for PHP
 Group:		Development/PHP
@@ -1191,15 +1194,13 @@ fi
 # stolen from debian
 %patch50 -p1 -b .session.save_path.droplet
 %patch51 -p0 -b .exif_nesting_level.droplet
-%patch52 -p0 -b .fix_broken_sha-2_test.droplet
 
 #####################################################################
 # Stolen from fedora
 %patch101 -p1 -b .cxx.droplet
 %patch102 -p0 -b .install.droplet
 %patch105 -p1 -b .umask.droplet
-%patch111 -p0 -b .jpegversion
-%patch113 -p0 -b .libc-client-php.droplet
+%patch113 -p1 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
 %patch115 -p0 -b .dlopen.droplet
 
@@ -1210,9 +1211,6 @@ fi
 %patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
-
-%patch302 -p1 -b .no_egg.droplet
-%patch303 -p1 -b .mdv_logo.droplet
 
 cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
@@ -1558,6 +1556,15 @@ echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
 echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
 echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
 echo "extension = phar.so"		> %{buildroot}%{_sysconfdir}/php.d/84_phar.ini
+cat >%{buildroot}%{_sysconfdir}/php.d/85_opcache.ini <<"EOF"
+zend_extension = %{_libdir}/php/extensions/opcache.so
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+EOF
 
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
@@ -2408,6 +2415,10 @@ fi
 %files odbc
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/39_odbc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/odbc.so
+
+%files opcache
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/85_opcache.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/opcache.so
 
 %files pcntl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/40_pcntl.ini

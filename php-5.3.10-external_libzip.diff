@@ -1,12 +1,12 @@
---- php-5.4.16/ext/zip/config.m4.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/config.m4	2013-06-07 17:36:42.350736948 +0200
-@@ -13,95 +13,136 @@ fi
+--- php-5.5.4/ext/zip/config.m4.external_libzip.droplet	2013-10-01 21:48:33.091262779 +0200
++++ php-5.5.4/ext/zip/config.m4	2013-10-01 22:17:41.068189674 +0200
+@@ -13,65 +13,103 @@ fi
  PHP_ARG_WITH(pcre-dir, pcre install prefix,
- [  --with-pcre-dir           ZIP: pcre install prefix], no, no)
+ [  --with-pcre-dir         ZIP: pcre install prefix], no, no)
  
 -if test "$PHP_ZIP" != "no"; then
 +PHP_ARG_WITH(libzip, libzip,
-+[ --with-libzip[=DIR]        ZIP: use libzip], no, no)
++[  --with-libzip[=DIR]     ZIP: use libzip], no, no)
  
 -  if test "$PHP_ZLIB_DIR" != "no" && test "$PHP_ZLIB_DIR" != "yes"; then
 -    if test -f "$PHP_ZLIB_DIR/include/zlib/zlib.h"; then
@@ -22,36 +22,35 @@
 +      LIBZIP_DIR=$PHP_LIBZIP
      else
 -      AC_MSG_ERROR([Can not find zlib headers under "$PHP_ZLIB_DIR"])
-+      AC_MSG_CHECKING(for libzip in default path)
++      AC_MSG_CHECKING([for libzip in default path])
 +      for i in /usr/local /usr; do
 +        if test -r $i/include/zip.h; then
 +          LIBZIP_DIR=$i
-+          AC_MSG_RESULT(found in $i)
++          AC_MSG_RESULT([found in $i])
 +          break
 +        fi
 +      done
-+    fi
+     fi
 +
 +    if test -z "$LIBZIP_DIR"; then
-+      AC_MSG_RESULT(not found)
-+      AC_MSG_ERROR(Please reinstall the libzip distribution)
-     fi
++      AC_MSG_RESULT([not found])
++      AC_MSG_ERROR([Please reinstall the libzip distribution])
++    fi
 +
 +    dnl Could not think of a simple way to check libzip for overwrite support
 +    PHP_CHECK_LIBRARY(zip, zip_open,
 +    [
 +      PHP_ADD_INCLUDE($LIBZIP_DIR/include)
 +      PHP_ADD_LIBRARY_WITH_PATH(zip, $LIBZIP_DIR/$PHP_LIBDIR, ZIP_SHARED_LIBADD)
-+      AC_DEFINE(HAVE_LIBZIP,1,[ ])
++      AC_DEFINE([HAVE_LIBZIP], 1, [Define if you have libzip])
 +    ], [
-+      AC_MSG_ERROR(could not find usable libzip)
++      AC_MSG_ERROR([could not find usable libzip])
 +    ], [
 +      -L$LIBZIP_DIR/$PHP_LIBDIR
 +    ])
-+
-+    AC_DEFINE(HAVE_ZIP,1,[ ]) 
++    AC_DEFINE([HAVE_ZIP], 1, [])
 +    PHP_NEW_EXTENSION(zip, php_zip.c zip_stream.c, $ext_shared)
-+    PHP_SUBST(ZIP_SHARED_LIBADD)
++    PHP_SUBST(ZIP_SHARED_LIBRARY)
    else
 -    for i in /usr/local /usr; do
 -      if test -f "$i/include/zlib/zlib.h"; then
@@ -60,8 +59,7 @@
 -      elif test -f "$i/include/zlib.h"; then
 -        PHP_ZLIB_DIR="$i"
 -        PHP_ZLIB_INCDIR="$i/include"
-+
-+  dnl bundled libzip, depends on zlib
++    dnl bundled libzip, depends on zlib
 +    if test "$PHP_ZLIB_DIR" != "no" && test "$PHP_ZLIB_DIR" != "yes"; then
 +      if test -f "$PHP_ZLIB_DIR/include/zlib/zlib.h"; then
 +        PHP_ZLIB_DIR="$PHP_ZLIB_DIR"
@@ -144,63 +142,18 @@
 +    CPPFLAGS=$old_CPPFLAGS
  
 -  PHP_ZIP_SOURCES="$PHP_ZIP_SOURCES lib/zip_add.c lib/zip_error.c lib/zip_fclose.c \
--                         lib/zip_fread.c lib/zip_open.c lib/zip_source_filep.c  \
--                         lib/zip_strerror.c lib/zip_close.c lib/zip_error_get.c \
--                         lib/zip_file_error_get.c lib/zip_free.c lib/zip_rename.c \
--                         lib/zip_source_free.c lib/zip_unchange_all.c lib/zip_delete.c \
--                         lib/zip_error_get_sys_type.c lib/zip_file_get_offset.c \
--                         lib/zip_get_name.c lib/zip_replace.c lib/zip_source_function.c \
--                         lib/zip_unchange.c lib/zip_dirent.c lib/zip_error_strerror.c \
--                         lib/zip_filerange_crc.c lib/zip_file_strerror.c lib/zip_get_num_files.c \
--                         lib/zip_get_archive_flag.c lib/zip_set_archive_flag.c \
--                         lib/zip_set_name.c lib/zip_source_zip.c lib/zip_unchange_data.c \
--                         lib/zip_entry_free.c lib/zip_error_to_str.c lib/zip_fopen.c \
--                         lib/zip_name_locate.c lib/zip_source_buffer.c lib/zip_stat.c \
--                         lib/zip_entry_new.c lib/zip_err_str.c lib/zip_fopen_index.c \
--                         lib/zip_get_archive_comment.c lib/zip_get_file_comment.c \
--                         lib/zip_new.c lib/zip_source_file.c lib/zip_stat_index.c \
--                         lib/zip_set_archive_comment.c lib/zip_set_file_comment.c \
--                         lib/zip_unchange_archive.c lib/zip_memdup.c lib/zip_stat_init.c lib/zip_add_dir.c \
--                         lib/zip_error_clear.c lib/zip_file_error_clear.c \
--						 lib/zip_fdopen.c lib/zip_fopen_encrypted.c lib/zip_fopen_index_encrypted.c \
--						 lib/zip_get_compression_implementation.c lib/zip_get_encryption_implementation.c \
--						 lib/zip_get_file_extra.c lib/zip_get_num_entries.c lib/zip_set_default_password.c \
--						 lib/zip_set_file_extra.c lib/zip_source_close.c lib/zip_source_crc.c \
--						 lib/zip_source_deflate.c lib/zip_source_error.c lib/zip_source_layered.c \
--						 lib/zip_source_open.c lib/zip_source_pkware.c lib/zip_source_pop.c \
--						 lib/zip_source_read.c lib/zip_source_stat.c"
--
++    PHP_ZIP_SOURCES="$PHP_ZIP_SOURCES lib/zip_add.c lib/zip_error.c lib/zip_fclose.c \
+                          lib/zip_fread.c lib/zip_open.c lib/zip_source_filep.c  \
+                          lib/zip_strerror.c lib/zip_close.c lib/zip_error_get.c \
+                          lib/zip_file_error_get.c lib/zip_free.c lib/zip_rename.c \
+@@ -98,10 +136,11 @@ yes
+ 						 lib/zip_source_open.c lib/zip_source_pkware.c lib/zip_source_pop.c \
+ 						 lib/zip_source_read.c lib/zip_source_stat.c"
+ 
 -  AC_DEFINE(HAVE_ZIP,1,[ ])
 -  PHP_NEW_EXTENSION(zip, php_zip.c zip_stream.c $PHP_ZIP_SOURCES, $ext_shared)
 -  PHP_ADD_BUILD_DIR($ext_builddir/lib, 1)
 -  PHP_SUBST(ZIP_SHARED_LIBADD)
-+    PHP_ZIP_SOURCES="$PHP_ZIP_SOURCES lib/zip_add.c lib/zip_error.c lib/zip_fclose.c \
-+                           lib/zip_fread.c lib/zip_open.c lib/zip_source_filep.c  \
-+                           lib/zip_strerror.c lib/zip_close.c lib/zip_error_get.c \
-+                           lib/zip_file_error_get.c lib/zip_free.c lib/zip_rename.c \
-+                           lib/zip_source_free.c lib/zip_unchange_all.c lib/zip_delete.c \
-+                           lib/zip_error_get_sys_type.c lib/zip_file_get_offset.c \
-+                           lib/zip_get_name.c lib/zip_replace.c lib/zip_source_function.c \
-+                           lib/zip_unchange.c lib/zip_dirent.c lib/zip_error_strerror.c \
-+                           lib/zip_filerange_crc.c lib/zip_file_strerror.c lib/zip_get_num_files.c \
-+                           lib/zip_get_archive_flag.c lib/zip_set_archive_flag.c \
-+                           lib/zip_set_name.c lib/zip_source_zip.c lib/zip_unchange_data.c \
-+                           lib/zip_entry_free.c lib/zip_error_to_str.c lib/zip_fopen.c \
-+                           lib/zip_name_locate.c lib/zip_source_buffer.c lib/zip_stat.c \
-+                           lib/zip_entry_new.c lib/zip_err_str.c lib/zip_fopen_index.c \
-+                           lib/zip_get_archive_comment.c lib/zip_get_file_comment.c \
-+                           lib/zip_new.c lib/zip_source_file.c lib/zip_stat_index.c \
-+                           lib/zip_set_archive_comment.c lib/zip_set_file_comment.c \
-+                           lib/zip_unchange_archive.c lib/zip_memdup.c lib/zip_stat_init.c lib/zip_add_dir.c \
-+                           lib/zip_error_clear.c lib/zip_file_error_clear.c \
-+                           lib/zip_fdopen.c lib/zip_fopen_encrypted.c lib/zip_fopen_index_encrypted.c \
-+                           lib/zip_get_compression_implementation.c lib/zip_get_encryption_implementation.c \
-+                           lib/zip_get_file_extra.c lib/zip_get_num_entries.c lib/zip_set_default_password.c \
-+                           lib/zip_set_file_extra.c lib/zip_source_close.c lib/zip_source_crc.c \
-+                           lib/zip_source_deflate.c lib/zip_source_error.c lib/zip_source_layered.c \
-+                           lib/zip_source_open.c lib/zip_source_pkware.c lib/zip_source_pop.c \
-+                           lib/zip_source_read.c lib/zip_source_stat.c"
-+
 +    AC_DEFINE(HAVE_ZIP,1,[ ])
 +    PHP_NEW_EXTENSION(zip, php_zip.c zip_stream.c $PHP_ZIP_SOURCES, $ext_shared)
 +    PHP_ADD_BUILD_DIR($ext_builddir/lib, 1)
@@ -209,8 +162,8 @@
  
    dnl so we always include the known-good working hack.
    PHP_ADD_MAKEFILE_FRAGMENT
---- php-5.4.16/ext/zip/php_zip.c.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/php_zip.c	2013-06-07 17:39:25.992253775 +0200
+--- php-5.5.4/ext/zip/php_zip.c.external_libzip.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/zip/php_zip.c	2013-10-01 21:48:33.092262779 +0200
 @@ -30,8 +30,230 @@
  #include "ext/pcre/php_pcre.h"
  #include "ext/standard/php_filestat.h"
@@ -464,8 +417,8 @@
  	/* TODO: fix  _zip_replace */
  	if (cur_idx >= 0) {
  		if (zip_delete(intern, cur_idx) == -1) {
---- php-5.4.16/ext/zip/php_zip.h.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/php_zip.h	2013-06-07 17:36:42.350736948 +0200
+--- php-5.5.4/ext/zip/php_zip.h.external_libzip.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/zip/php_zip.h	2013-10-01 21:48:33.092262779 +0200
 @@ -28,7 +28,11 @@ extern zend_module_entry zip_module_entr
  #include "TSRM.h"
  #endif
@@ -478,8 +431,8 @@
  
  #define PHP_ZIP_VERSION_STRING "1.11.0"
  
---- php-5.4.16/ext/zip/tests/bug38943.phpt.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/tests/bug38943.phpt	2013-06-07 17:36:42.350736948 +0200
+--- php-5.5.4/ext/zip/tests/bug38943.phpt.external_libzip.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/zip/tests/bug38943.phpt	2013-10-01 21:48:33.092262779 +0200
 @@ -27,7 +27,7 @@ array(1) {
    [0]=>
    int(1)
@@ -489,8 +442,8 @@
    ["test":"myZip":private]=>
    int(0)
    ["testp"]=>
---- php-5.4.16/ext/zip/tests/pecl12414.phpt.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/tests/pecl12414.phpt	2013-06-07 17:36:42.350736948 +0200
+--- php-5.5.4/ext/zip/tests/pecl12414.phpt.external_libzip.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/zip/tests/pecl12414.phpt	2013-10-01 21:48:33.092262779 +0200
 @@ -5,6 +5,8 @@ Bug #12414 ( extracting files from damag
  /*$ */
  if(!extension_loaded('zip')) die('skip');
@@ -500,8 +453,8 @@
  --FILE--
  <?php
  $filename = 'MYLOGOV2.GFX';
---- php-5.4.16/ext/zip/zip_stream.c.external_libzip.droplet	2013-06-05 07:03:57.000000000 +0200
-+++ php-5.4.16/ext/zip/zip_stream.c	2013-06-07 17:36:42.350736948 +0200
+--- php-5.5.4/ext/zip/zip_stream.c.external_libzip.droplet	2013-09-18 15:08:04.000000000 +0200
++++ php-5.5.4/ext/zip/zip_stream.c	2013-10-01 21:48:33.092262779 +0200
 @@ -6,7 +6,11 @@
  #if HAVE_ZIP
  #ifdef ZEND_ENGINE_2

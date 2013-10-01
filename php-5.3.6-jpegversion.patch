@@ -1,5 +1,5 @@
---- ext/gd/libgd/gd_compat.c.jpegversion	2011-03-19 04:07:02.000000000 +0100
-+++ ext/gd/libgd/gd_compat.c	2011-03-19 04:07:45.000000000 +0100
+--- ext/gd/gd_compat.c.jpegversion	2011-03-19 04:07:02.000000000 +0100
++++ ext/gd/gd_compat.c	2011-03-19 04:07:45.000000000 +0100
 @@ -20,6 +20,12 @@
  		case 62:
  			return "6b";
