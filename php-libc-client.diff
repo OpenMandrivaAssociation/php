@@ -1,12 +1,12 @@
---- php-5.5.4/ext/imap/config.m4.libc-client-php.droplet	2013-10-01 22:24:24.856172786 +0200
-+++ php-5.5.4/ext/imap/config.m4	2013-10-01 22:26:48.265166788 +0200
+--- php-5.5.5/ext/imap/config.m4.libc-client-php.droplet	2013-10-19 15:41:59.216630129 +0200
++++ php-5.5.5/ext/imap/config.m4	2013-10-19 15:43:08.238767234 +0200
 @@ -198,20 +198,14 @@ if test "$PHP_IMAP" != "no"; then
        AC_MSG_ERROR(Cannot find rfc822.h. Please check your c-client installation.)
      fi
  
--    if test ! -r "$IMAP_DIR/c-client/libc-client.a" && -r "$IMAP_DIR/c-client/c-client.a" ; then
+-    if test ! -r "$IMAP_DIR/c-client/libc-client.a" && test -r "$IMAP_DIR/c-client/c-client.a" ; then
 -      ln -s "$IMAP_DIR/c-client/c-client.a" "$IMAP_DIR/c-client/libc-client.a" >/dev/null 2>&1
--    elif test ! -r "$IMAP_DIR/$PHP_LIBDIR/libc-client.a" && -r "$IMAP_DIR/$PHP_LIBDIR/c-client.a"; then
+-    elif test ! -r "$IMAP_DIR/$PHP_LIBDIR/libc-client.a" && test -r "$IMAP_DIR/$PHP_LIBDIR/c-client.a"; then
 -      ln -s "$IMAP_DIR/$PHP_LIBDIR/c-client.a" "$IMAP_DIR/$PHP_LIBDIR/libc-client.a" >/dev/null 2>&1
 -    fi
 -
