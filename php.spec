@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.5.5
+Version:	5.5.6
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -43,6 +43,7 @@ Patch7:		php-no_libedit.diff
 Patch8:		php-xmlrpc_epi.patch
 Patch9:		php-xmlrpc_no_rpath.diff
 Patch11:	php-5.3.8-bdb-5.2.diff
+Patch12:	php-5.5.6-db-6.0.patch
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -1174,6 +1175,7 @@ fi
 %patch8 -p0 -b .xmlrpc_epi_header
 %patch9 -p0 -b .xmlrpc_no_rpath.droplet
 %patch11 -p0 -b .bdb-5.2.droplet
+%patch12 -p1 -b .db60~
 
 #####################################################################
 # Stolen from PLD

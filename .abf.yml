@@ -3,5 +3,6 @@ removed_sources:
   php-5.4.16.tar.gz: e7a9e798821fa186ae297392353be8f1d3de6edd
   php-5.4.19.tar.gz: 1a6ba23004061a5a58a6c03c0a2f031a6f64cc66
   php-5.5.4.tar.gz: 46650c06dc8865f3ac7e5f615a7b0b6a2da4b268
-sources:
   php-5.5.5.tar.gz: f08e6c2a5e1e171c1808ba2da8b8102a778f0690
+sources:
+  php-5.5.6.tar.gz: 9620ea261a9864001c69cbcdf7773886eecad897
