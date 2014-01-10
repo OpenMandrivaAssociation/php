@@ -127,7 +127,7 @@ BuildRequires:	libmcrypt-devel
 BuildRequires:	sasl-devel
 BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
-BuildRequires:	mysql-devel >= 4.1.7
+BuildRequires:	mariadb-devel >= 4.1.7 mariadb-common
 BuildRequires:	net-snmp-devel
 BuildRequires:	net-snmp-mibs
 BuildRequires:	onig-devel >= 5.9.2
