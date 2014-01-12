@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.5.7
+Version:	5.5.8
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -1175,7 +1175,7 @@ fi
 %patch7 -p1 -b .no_libedit.droplet
 %patch8 -p0 -b .xmlrpc_epi_header
 %patch9 -p0 -b .xmlrpc_no_rpath.droplet
-%patch10 -p1 -b .ft252~
+#patch10 -p1 -b .ft252~
 %patch11 -p0 -b .bdb-5.2.droplet
 %patch12 -p1 -b .db60~
 
