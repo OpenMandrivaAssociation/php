@@ -17,7 +17,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.5.10
-Release:	1
+Release:	2
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
 License:	PHP License
@@ -30,6 +30,7 @@ Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
 # S7 comes from ext/fileinfo/create_data_file.php but could be removed someday
 Source7:	create_data_file.php
+Source10:	php.ini
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch3:		php-libtool.diff
@@ -589,6 +590,8 @@ directory entries for people, and perhaps equipment or documents.
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{epoch}:%{version}
+# To make it easier to find for e.g. Roundcube requesting php-multibyte
+Provides:	%{name}-multibyte = %{EVRD}
 
 %description	mbstring
 This is a dynamic shared object (DSO) for PHP that will add multibyte string
@@ -1153,9 +1156,62 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 This package contains the FastCGI Process Manager. You must also install
 libphp5_common.
 
-%prep
+%package -n	apache-mod_php
+Summary:	The PHP HTML-embedded scripting language for use with apache
+Group:		System/Servers
+Requires(pre,postun):	rpm-helper
+Requires:	%{libname} = %{EVRD}
+Requires:	apache-base >= 2.4.0
+Requires:	apache-modules >= 2.4.0
+Requires:	apache-mpm >= 2.4.0
+Requires:	%{name}-ctype = %{EVRD}
+Requires:	%{name}-filter = %{EVRD}
+Requires:	%{name}-ftp = %{EVRD}
+Requires:	%{name}-gettext = %{EVRD}
+Requires:	%{name}-hash = %{EVRD}
+Requires:	%{name}-ini >= %{version}
+Requires:	%{name}-json = %{EVRD}
+Requires:	%{name}-openssl = %{EVRD}
+Requires:	%{name}-pcre = %{EVRD}
+Requires:	%{name}-posix = %{EVRD}
+Requires:	%{name}-session = %{EVRD}
+Requires:	%{name}-sysvsem = %{EVRD}
+Requires:	%{name}-tokenizer = %{EVRD}
+Requires:	%{name}-xmlreader = %{EVRD}
+Requires:	%{name}-xmlwriter = %{EVRD}
+Requires:	%{name}-zlib = %{EVRD}
+Requires:	%{name}-xml = %{EVRD}
+Requires:	%{name}-timezonedb >= 3:2009.10
+Suggests:	%{name}-suhosin >= 0.9.29
+Conflicts:	%{name}-suhosin < 0.9.29
+Conflicts:	apache-mpm-worker >= 2.4.0
+Conflicts:	apache-mpm-event >= 2.4.0
+Provides:	mod_php = %{EVRD}
+BuildRequires:	dos2unix
 
-%setup -q -n php-%{version}
+%description -n apache-mod_php
+PHP5 is an HTML-embedded scripting language. PHP5 attempts to make it easy for
+developers to write dynamically generated web pages. PHP5 also offers built-in
+database integration for several commercial and non-commercial database
+management systems, so writing a database-enabled web page with PHP5 is fairly
+simple. The most common use of PHP coding is probably as a replacement for CGI
+scripts. The %{name} module enables the apache web server to understand
+and process the embedded PHP language in web pages.
+
+This package contains PHP version 5. You'll also need to install the apache web
+server.
+
+
+%package -n	php-ini
+Summary:	INI files for PHP
+Group:		Development/Other
+
+%description -n	php-ini
+The php-ini package contains the ini file required for PHP.
+
+
+%prep
+%setup -q
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
@@ -1444,6 +1500,23 @@ cp -af php_config.h.fpm main/php_config.h
 make -f Makefile.fpm sapi/fpm/php-fpm
 cp -af php_config.h.apxs main/php_config.h
 
+# make apache-mod_php
+mkdir mod_php
+cd mod_php
+cp -dpR ../php-devel/sapi/apache2handler/* .
+cp ../main/internal_functions.c .
+cp ../ext/date/lib/timelib_config.h .
+sed -i -e 's,php5_module,php_module,g' *
+mv mod_php5.c mod_php.c
+find . -type f |xargs dos2unix
+apxs \
+	`apr-1-config --link-ld --libs` \
+	`xml2-config --cflags` \
+	-I. -I.. -I../main -I../Zend -I../TSRM \
+	-L../libs -lphp5_common \
+	-c mod_php.c sapi_apache2.c apache_config.c \
+	php_functions.c internal_functions.c
+
 %install
 
 install -d %{buildroot}%{_libdir}
@@ -1573,6 +1646,21 @@ EOF
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
 
+# mod_php
+install -d %{buildroot}%{_libdir}/apache
+install -d %{buildroot}%{_sysconfdir}/httpd/modules.d
+install -m 755 mod_php/.libs/*.so %{buildroot}%{_libdir}/apache/
+
+cat > %{buildroot}%{_sysconfdir}/httpd/modules.d/170_mod_php.conf << EOF
+LoadModule php_module %{_libdir}/apache/mod_php.so
+
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php .phtml
+AddType application/x-httpd-php-source .phps
+
+DirectoryIndex index.php index.phtml
+EOF
+
 # fix docs
 cp Zend/LICENSE Zend/ZEND_LICENSE
 cp README.SELF-CONTAINED-EXTENSIONS SELF-CONTAINED-EXTENSIONS
@@ -1595,6 +1683,14 @@ if [ -L %{buildroot}%{_bindir}/phar ]; then
     rm -f %{buildroot}%{_bindir}/phar
     mv %{buildroot}%{_bindir}/phar.phar %{buildroot}%{_bindir}/phar
 fi
+
+# inis
+install -d -m 755 %{buildroot}%{_sysconfdir}/php.d
+install -d -m 755 %{buildroot}%{_libdir}/php/extensions
+install -d -m 755 %{buildroot}%{_datadir}/php
+
+sed -i -e 's,/usr/lib,%{_libdir},g' %{SOURCE10} >%{buildroot}%{_sysconfdir}/php.ini
+cp %{buildroot}%{_sysconfdir}/php.ini %{buildroot}%{_sysconfdir}/php-cgi-fcgi.ini
 
 # house cleaning
 rm -f %{buildroot}%{_bindir}/pear
@@ -2264,6 +2360,14 @@ if [ $1 -ge 1 ]; then
 fi
 %_postun_userdel apache
 
+%post -n apache-mod_php
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun -n apache-mod_php
+if [ "$1" = "0" ]; then
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
 %files doc
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
@@ -2571,3 +2675,15 @@ fi
 %attr(0711,apache,apache) %dir /var/lib/php-fpm
 %attr(0711,apache,apache) %dir /var/log/php-fpm
 %attr(0711,apache,apache) %dir /var/run/php-fpm
+
+%files -n apache-mod_php
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/modules.d/*.conf
+%attr(0755,root,root) %{_libdir}/apache/*.so
+
+%files -n php-ini
+%config(noreplace) %{_sysconfdir}/php.ini
+%config(noreplace) %{_sysconfdir}/php-cgi-fcgi.ini
+%dir %{_sysconfdir}/php.d
+%dir %{_libdir}/php
+%dir %{_libdir}/php/extensions
+%dir %{_datadir}/php

@@ -1,4 +1,2 @@
-removed_sources:
-  php-5.5.8.tar.gz: 19af9180c664c4b8f6c46fc10fbad9f935e07b52
 sources:
   php-5.5.10.tar.gz: fa13e3634373791a8cb427d43ab4dcf9fcb3e526
