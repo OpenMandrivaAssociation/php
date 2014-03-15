@@ -159,28 +159,27 @@ most common use of PHP5 coding is probably as a replacement for CGI scripts.
 %package	cli
 Summary:	PHP5 CLI interface
 Group:		Development/Other
-Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ctype >= %{epoch}:%{version}
-Requires:	php-filter >= %{epoch}:%{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-hash >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-ctype >= %{EVRD}
+Requires:	php-filter >= %{EVRD}
+Requires:	php-ftp >= %{EVRD}
+Requires:	php-gettext >= %{EVRD}
+Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
-Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-json >= %{EVRD}
+Requires:	php-openssl >= %{EVRD}
+Requires:	php-posix >= %{EVRD}
+Requires:	php-session >= %{EVRD}
 Suggests:	php-suhosin >= 0.9.33
-Requires:	php-sysvsem >= %{epoch}:%{version}
-Requires:	php-sysvshm >= %{epoch}:%{version}
+Requires:	php-sysvsem >= %{EVRD}
+Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
-Requires:	php-tokenizer >= %{epoch}:%{version}
-Requires:	php-xmlreader >= %{epoch}:%{version}
-Requires:	php-xmlwriter >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-xml >= %{epoch}:%{version}
-Provides:	php = %{epoch}:%{version}
+Requires:	php-tokenizer >= %{EVRD}
+Requires:	php-xmlreader >= %{EVRD}
+Requires:	php-xmlwriter >= %{EVRD}
+Requires:	php-zlib >= %{EVRD}
+Requires:	php-xml >= %{EVRD}
+Provides:	php = %{EVRD}
 
 %description	cli
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -195,32 +194,31 @@ install the apache-mod_php package.
 %package	cgi
 Summary:	PHP5 CGI interface
 Group:		Development/Other
-Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ctype >= %{epoch}:%{version}
-Requires:	php-filter >= %{epoch}:%{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-hash >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-ctype >= %{EVRD}
+Requires:	php-filter >= %{EVRD}
+Requires:	php-ftp >= %{EVRD}
+Requires:	php-gettext >= %{EVRD}
+Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
-Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-json >= %{EVRD}
+Requires:	php-openssl >= %{EVRD}
+Requires:	php-posix >= %{EVRD}
+Requires:	php-session >= %{EVRD}
 Suggests:	php-suhosin >= 0.9.33
-Requires:	php-sysvsem >= %{epoch}:%{version}
-Requires:	php-sysvshm >= %{epoch}:%{version}
+Requires:	php-sysvsem >= %{EVRD}
+Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
-Requires:	php-tokenizer >= %{epoch}:%{version}
-Requires:	php-xmlreader >= %{epoch}:%{version}
-Requires:	php-xmlwriter >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-xml >= %{epoch}:%{version}
-Provides:	php = %{epoch}:%{version}
-Provides:	php-fcgi = %{epoch}:%{version}-%{release}
+Requires:	php-tokenizer >= %{EVRD}
+Requires:	php-xmlreader >= %{EVRD}
+Requires:	php-xmlwriter >= %{EVRD}
+Requires:	php-zlib >= %{EVRD}
+Requires:	php-xml >= %{EVRD}
+Provides:	php = %{EVRD}
+Provides:	php-fcgi = %{EVRD}
 Obsoletes:	php-fcgi
 # because of a added compat softlink
-Conflicts:	php-fcgi < %{epoch}:%{version}-%{release}
+Conflicts:	php-fcgi < %{EVRD}
 
 %description	cgi
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
@@ -235,8 +233,8 @@ also need to install the apache-mod_php package.
 %package -n	%{libname}
 Summary:	Shared library for PHP5
 Group:		Development/Other
-Provides:	php-pcre = %{epoch}:%{version}
-Provides:	php-simplexml = %{epoch}:%{version}
+Provides:	php-pcre = %{EVRD}
+Provides:	php-simplexml = %{EVRD}
 Requires:	systemd-units
 Requires(post): systemd-units
 Requires(preun): systemd-units
@@ -250,7 +248,7 @@ webserver with php support (ie: apache-mod_php).
 %package	devel
 Summary:	Development package for PHP5
 Group:		Development/C
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 Requires:	autoconf automake libtool
 Requires:	bison
 Requires:	byacc
@@ -277,7 +275,7 @@ SELF-CONTAINED-EXTENSIONS.
 %package	openssl
 Summary:	OpenSSL extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	openssl
 This is a dynamic shared object (DSO) for PHP that will add OpenSSL support.
@@ -285,7 +283,7 @@ This is a dynamic shared object (DSO) for PHP that will add OpenSSL support.
 %package	zlib
 Summary:	Zlib extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	zlib
 This is a dynamic shared object (DSO) for PHP that will add zlib compression
@@ -301,7 +299,7 @@ Documentation for php.
 %package	bcmath
 Summary:	The bcmath module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	bcmath
 This is a dynamic shared object (DSO) for PHP that will add bc style precision
@@ -313,7 +311,7 @@ supports numbers of any size and precision, represented as strings.
 %package	bz2
 Summary:	Bzip2 extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	bz2
 This is a dynamic shared object (DSO) for PHP that will add bzip2 compression
@@ -325,7 +323,7 @@ compressed files.
 %package	calendar
 Summary:	Calendar extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	calendar
 This is a dynamic shared object (DSO) for PHP that will add calendar support.
@@ -344,7 +342,7 @@ included in these instructions, and are in quotes.
 %package	ctype
 Summary:	Ctype extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	ctype
 This is a dynamic shared object (DSO) for PHP that will add ctype support.
@@ -356,7 +354,7 @@ setlocale()).
 %package	curl
 Summary:	Curl extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	curl
 This is a dynamic shared object (DSO) for PHP that will add curl support.
@@ -372,7 +370,7 @@ user+password authentication.
 %package	dba
 Summary:	DBA extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	dba
 This is a dynamic shared object (DSO) for PHP that will add flat-file databases
@@ -388,7 +386,7 @@ IBM's DB2 software, which is supported through the ODBC functions.)
 %package	dom
 Summary:	Dom extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	dom
 This is a dynamic shared object (DSO) for PHP that will add dom support.
@@ -402,7 +400,7 @@ The extension allows you to operate on an XML document with the DOM API.
 %package	enchant
 Summary:	Libenchant binder, support near all spelling tools
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	enchant
 Enchant is a binder for libenchant. Libenchant provides a common API for many
@@ -419,8 +417,8 @@ spell libraries:
 %package	exif
 Summary:	EXIF extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-mbstring >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-mbstring >= %{EVRD}
 
 %description	exif
 This is a dynamic shared object (DSO) for PHP that will add EXIF tags support
@@ -434,7 +432,7 @@ images.
 %package	fileinfo
 Summary:	Fileinfo extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	fileinfo
 This extension allows retrieval of information regarding vast majority of file.
@@ -446,7 +444,7 @@ file and for text files proper language encoding.
 %package	filter
 Summary:	Extension for safely dealing with input parameters
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	filter
 The Input Filter extension is meant to address this issue by implementing a set
@@ -455,7 +453,7 @@ of filters and mechanisms that users can use to safely access their input data.
 %package	ftp
 Summary:	FTP extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	ftp
 This is a dynamic shared object (DSO) for PHP that will add FTP support.
@@ -471,7 +469,7 @@ intuitive interface.
 %package	gd
 Summary:	GD extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	gd
 This is a dynamic shared object (DSO) for PHP that will add GD support,
@@ -490,7 +488,7 @@ TIFF and JPEG2000 images.
 %package	gettext
 Summary:	Gettext extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	gettext
 This is a dynamic shared object (DSO) for PHP that will add gettext support.
@@ -503,7 +501,7 @@ view the docs at http://www.gnu.org/software/gettext/manual/gettext.html.
 %package	gmp
 Summary:	Gmp extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	gmp
 This is a dynamic shared object (DSO) for PHP that will add arbitrary length
@@ -512,7 +510,7 @@ number support using the GNU MP library.
 %package	hash
 Summary:	HASH Message Digest Framework
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	hash
 Native implementations of common message digest algorithms using a generic
@@ -524,7 +522,7 @@ arbitrary length messages using a variety of hashing algorithms.
 %package	iconv
 Summary:	Iconv extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	iconv
 This is a dynamic shared object (DSO) for PHP that will add iconv support.
@@ -540,7 +538,7 @@ It will most likely end up with more consistent results.
 %package	imap
 Summary:	IMAP extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	imap
 This is a dynamic shared object (DSO) for PHP that will add IMAP support.
@@ -552,7 +550,7 @@ methods.
 %package	intl
 Summary:	Internationalization extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	intl
 This is a dynamic shared object (DSO) for PHP that will add
@@ -563,7 +561,7 @@ Internationalization extension implements ICU library functionality in PHP.
 %package	json
 Summary:	JavaScript Object Notation
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	json
 Support for JSON (JavaScript Object Notation) serialization.
@@ -571,7 +569,7 @@ Support for JSON (JavaScript Object Notation) serialization.
 %package	ldap
 Summary:	LDAP extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	ldap
 This is a dynamic shared object (DSO) for PHP that will add LDAP support.
@@ -589,7 +587,7 @@ directory entries for people, and perhaps equipment or documents.
 %package	mbstring
 Summary:	MBstring extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 # To make it easier to find for e.g. Roundcube requesting php-multibyte
 Provides:	%{name}-multibyte = %{EVRD}
 
@@ -606,7 +604,7 @@ encodings for convenience.
 %package	mcrypt
 Summary:	Mcrypt extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	mcrypt
 This is a dynamic shared object (DSO) for PHP that will add mcrypt support.
@@ -620,7 +618,7 @@ Additionally, it supports RC6 and IDEA which are considered "non-free".
 Summary:	MS SQL extension module for PHP
 Group:		Development/PHP
 Requires:       freetds >= 0.63
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	mssql
 This is a dynamic shared object (DSO) for PHP that will add MS SQL databases
@@ -629,7 +627,7 @@ support using the FreeTDS library.
 %package	mysql
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	mysql
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -643,7 +641,7 @@ Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 %package	mysqli
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	mysqli
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -665,7 +663,7 @@ Documentation for MySQLi can be found at http://www.php.net/manual/en/mysqli.ove
 %package	mysqlnd
 Summary:	MySQL native database module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	mysqlnd
 This is a dynamic shared object (DSO) for PHP that will add MySQL native
@@ -679,7 +677,7 @@ Documentation for MySQL can be found at http://dev.mysql.com/doc/.
 %package	odbc
 Summary:	ODBC extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	odbc
 This is a dynamic shared object (DSO) for PHP that will add ODBC support.
@@ -693,7 +691,7 @@ ODBC functions.
 %package	opcache
 Summary:	Opcode cache for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	opcache
 Opcode cache for PHP
@@ -701,7 +699,7 @@ Opcode cache for PHP
 %package	pcntl
 Summary:	Process Control extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pcntl
 This is a dynamic shared object (DSO) for PHP that will add process spawning
@@ -717,7 +715,7 @@ environment.
 %package	pdo
 Summary:	PHP Data Objects Interface
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pdo
 PDO provides a uniform data access interface, sporting advanced features such
@@ -731,8 +729,8 @@ Read the documentation at http://www.php.net/pdo for more information.
 Summary:	Sybase Interface driver for PDO
 Group:		Development/PHP
 Requires:       freetds >= 0.63
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pdo_dblib
 PDO_DBLIB is a driver that implements the PHP Data Objects (PDO) interface to
@@ -742,8 +740,8 @@ FreeTDS libary.
 %package	pdo_mysql
 Summary:	MySQL Interface driver for PDO
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pdo_mysql
 PDO_MYSQL is a driver that implements the PHP Data Objects (PDO) interface to
@@ -756,8 +754,8 @@ libraries, PDO will emulate them for you.
 %package	pdo_odbc
 Summary:	ODBC v3 Interface driver for PDO
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pdo_odbc
 PDO_ODBC is a driver that implements the PHP Data Objects (PDO) interface to
@@ -777,8 +775,8 @@ different "flavours" of database drivers:
 %package	pdo_pgsql
 Summary:	PostgreSQL interface driver for PDO
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pdo_pgsql
@@ -788,8 +786,8 @@ enable access from PHP to PostgreSQL databases.
 %package	pdo_sqlite
 Summary:	SQLite v3 Interface driver for PDO
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pdo_sqlite
 PDO_SQLITE is a driver that implements the PHP Data Objects (PDO) interface to
@@ -803,7 +801,7 @@ support for prepared statements with bound parameters and improved concurrency.
 %package	pgsql
 Summary:	PostgreSQL database module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 Requires:	postgresql-libs >= %{postgresql_version}
 
 %description	pgsql
@@ -820,7 +818,7 @@ an open source descendant of this original Berkeley code.
 %package	phar
 Summary:	Allows running of complete applications out of .phar files
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 Requires:	php-bz2
 Requires:	php-hash
 
@@ -844,7 +842,7 @@ well.
 %package	posix
 Summary:	POSIX extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	posix
 This is a dynamic shared object (DSO) for PHP that will add POSIX functions
@@ -860,7 +858,7 @@ module tries to remedy this by providing easy access to these functions.
 %package	pspell
 Summary:	Pspell extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	pspell
 This is a dynamic shared object (DSO) for PHP that will add pspell support to
@@ -872,7 +870,7 @@ suggestions.
 %package	readline
 Summary:	Readline extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	readline
 This PHP module adds support for readline functions (only for cli and cgi
@@ -888,7 +886,7 @@ writing scripts used from a command line.
 %package	recode
 Summary:	Recode extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	recode
 This is a dynamic shared object (DSO) for PHP that will add recode support
@@ -906,7 +904,7 @@ Summary:	Session extension module for PHP
 Group:		Development/PHP
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	session
 This is a dynamic shared object (DSO) for PHP that will add session support.
@@ -922,7 +920,7 @@ in the URL.
 %package	shmop
 Summary:	Shared Memory Operations extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	shmop
 This is a dynamic shared object (DSO) for PHP that will add Shared Memory
@@ -935,7 +933,7 @@ and delete Unix shared memory segments.
 Summary:	NET-SNMP extension module for PHP
 Group:		Development/PHP
 Requires:	net-snmp-mibs
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	snmp
 This is a dynamic shared object (DSO) for PHP that will add SNMP support using
@@ -946,7 +944,7 @@ In order to use the SNMP functions you need to install the NET-SNMP package.
 %package	soap
 Summary:	Soap extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	soap
 This is a dynamic shared object (DSO) for PHP that will add soap support.
@@ -957,7 +955,7 @@ subsets of SOAP 1.1, SOAP 1.2 and WSDL 1.1 specifications.
 %package	sockets
 Summary:	Sockets extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	sockets
 This is a dynamic shared object (DSO) for PHP that will add sockets support.
@@ -969,8 +967,8 @@ possibility to act as a socket server as well as a client.
 %package	sqlite3
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
-Requires:	php-pdo >= %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	php-pdo >= %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 Obsoletes:	%name-sqlite
 
 %description	sqlite3
@@ -987,8 +985,8 @@ database files on disk.
 Summary:	Sybase extension module for PHP
 Group:		Development/PHP
 Obsoletes:	php-sybase
-Provides:	php-sybase = %{epoch}:%{version}
-Requires:	%{libname} >= %{epoch}:%{version}
+Provides:	php-sybase = %{EVRD}
+Requires:	%{libname} >= %{EVRD}
 
 %description	sybase_ct
 This is a dynamic shared object (DSO) for PHP that will add Sybase support to
@@ -997,7 +995,7 @@ PHP.
 %package	sysvmsg
 Summary:	SysV msg extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	sysvmsg
 This is a dynamic shared object (DSO) for PHP that will add SysV message queues
@@ -1006,7 +1004,7 @@ support.
 %package	sysvsem
 Summary:	SysV sem extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	sysvsem
 This is a dynamic shared object (DSO) for PHP that will add SysV semaphores
@@ -1015,7 +1013,7 @@ support.
 %package	sysvshm
 Summary:	SysV shm extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	sysvshm
 This is a dynamic shared object (DSO) for PHP that will add SysV Shared Memory
@@ -1024,7 +1022,7 @@ support.
 %package	tidy
 Summary:	Tidy HTML Repairing and Parsing for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	tidy
 Tidy is a binding for the Tidy HTML clean and repair utility which allows you
@@ -1034,7 +1032,7 @@ the document tree using the Zend Engine 2 OO semantics.
 %package	tokenizer
 Summary:	Tokenizer extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	tokenizer
 This is a dynamic shared object (DSO) for PHP that will add Tokenizer support.
@@ -1047,7 +1045,7 @@ specification at the lexical level.
 %package	xml
 Summary:	XML extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	xml
 This is a dynamic shared object (DSO) for PHP that will add XML support. This
@@ -1058,7 +1056,7 @@ XML events.
 Summary:	Xmlreader extension module for PHP
 Group:		Development/PHP
 Requires:	php-dom
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	xmlreader
 XMLReader represents a reader that provides non-cached, forward-only access to
@@ -1067,7 +1065,7 @@ XML data. It is based upon the xmlTextReader api from libxml
 %package	xmlrpc
 Summary:	Xmlrpc extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	xmlrpc
 This is a dynamic shared object (DSO) for PHP that will add XMLRPC support.
@@ -1080,7 +1078,7 @@ http://xmlrpc-epi.sourceforge.net/.
 %package	xmlwriter
 Summary:	Provides fast, non-cached, forward-only means to write XML data
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	xmlwriter
 This extension wraps the libxml xmlWriter API. Represents a writer that
@@ -1090,7 +1088,7 @@ containing XML data.
 %package	xsl
 Summary:	Xsl extension module for PHP
 Group:		Development/PHP
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	xsl
 This is a dynamic shared object (DSO) for PHP that will add xsl support.
@@ -1102,7 +1100,7 @@ using the libxslt library
 Summary:	WDDX serialization functions
 Group:		Development/PHP
 Requires:	php-xml
-Requires:	%{libname} >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
 
 %description	wddx
 This is a dynamic shared object (DSO) that adds wddx support to PHP. 
@@ -1124,28 +1122,27 @@ Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre): rpm-helper
 Requires(postun): rpm-helper
-Requires:	%{libname} >= %{epoch}:%{version}
-Requires:	php-ctype >= %{epoch}:%{version}
-Requires:	php-filter >= %{epoch}:%{version}
-Requires:	php-ftp >= %{epoch}:%{version}
-Requires:	php-gettext >= %{epoch}:%{version}
-Requires:	php-hash >= %{epoch}:%{version}
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-ctype >= %{EVRD}
+Requires:	php-filter >= %{EVRD}
+Requires:	php-ftp >= %{EVRD}
+Requires:	php-gettext >= %{EVRD}
+Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{epoch}:%{version}
-Requires:	php-openssl >= %{epoch}:%{version}
-Requires:	php-pcre >= %{epoch}:%{version}
-Requires:	php-posix >= %{epoch}:%{version}
-Requires:	php-session >= %{epoch}:%{version}
+Requires:	php-json >= %{EVRD}
+Requires:	php-openssl >= %{EVRD}
+Requires:	php-posix >= %{EVRD}
+Requires:	php-session >= %{EVRD}
 Suggests:	php-suhosin >= 0.9.33
-Requires:	php-sysvsem >= %{epoch}:%{version}
-Requires:	php-sysvshm >= %{epoch}:%{version}
+Requires:	php-sysvsem >= %{EVRD}
+Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
-Requires:	php-tokenizer >= %{epoch}:%{version}
-Requires:	php-xmlreader >= %{epoch}:%{version}
-Requires:	php-xmlwriter >= %{epoch}:%{version}
-Requires:	php-zlib >= %{epoch}:%{version}
-Requires:	php-xml >= %{epoch}:%{version}
-Provides:	php = %{epoch}:%{version}
+Requires:	php-tokenizer >= %{EVRD}
+Requires:	php-xmlreader >= %{EVRD}
+Requires:	php-xmlwriter >= %{EVRD}
+Requires:	php-zlib >= %{EVRD}
+Requires:	php-xml >= %{EVRD}
+Provides:	php = %{EVRD}
 
 %description	fpm
 PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
