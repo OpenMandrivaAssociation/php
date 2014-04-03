@@ -17,7 +17,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.5.10
-Release:	2
+Release:	3
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
 License:	PHP License
@@ -30,6 +30,7 @@ Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
 # S7 comes from ext/fileinfo/create_data_file.php but could be removed someday
 Source7:	create_data_file.php
+Source9:        php-fpm-tmpfiles.conf
 Source10:	php.ini
 Patch0:		php-init.diff
 Patch1:		php-shared.diff
@@ -128,7 +129,7 @@ BuildRequires:	libmcrypt-devel
 BuildRequires:	sasl-devel
 BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
-BuildRequires:	mariadb-devel >= 4.1.7 mariadb-common
+BuildRequires:	mysql-devel >= 4.1.7
 BuildRequires:	net-snmp-devel
 BuildRequires:	net-snmp-mibs
 BuildRequires:	onig-devel >= 5.9.2
@@ -1554,7 +1555,8 @@ install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}%{_mandir}/man8
 install -d %{buildroot}/var/lib/php-fpm
 install -d %{buildroot}/var/log/php-fpm
-install -d %{buildroot}/var/run/php-fpm
+install -d %{buildroot}/run/php-fpm
+install -D -p -m 0644 %{SOURCE9} %{buildroot}%{_tmpfilesdir}/php-fpm.conf
 # a small bug here...
 echo "; place your config here" > %{buildroot}%{_sysconfdir}/php-fpm.d/default.conf
 
@@ -1564,6 +1566,8 @@ install -m0644 sapi/fpm/php-fpm.conf %{buildroot}%{_sysconfdir}/
 install -m0644 php-fpm.service %{buildroot}/lib/systemd/system/
 install -m0644 php-fpm.sysconf %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
 install -m0644 php-fpm.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
+
+perl -pi -e "s|^pid.*|pid = /run/php-fpm/php-fpm.pid|g" %{buildroot}%{_sysconfdir}/php-fpm.conf
 
 ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
 
@@ -2334,12 +2338,15 @@ if [ "$1" = "0" ]; then
 fi
 
 %post fpm
+%tmpfiles_create php-fpm
+%_post_service php-fpm
 if [ $1 = 1 ]; then
     # Initial installation
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %pre fpm
+%_preun_service php-fpm
 %_pre_useradd apache /var/www /bin/sh
 
 %preun fpm
@@ -2671,7 +2678,8 @@ fi
 %attr(0644,root,root) %{_mandir}/man8/php-fpm.8*
 %attr(0711,apache,apache) %dir /var/lib/php-fpm
 %attr(0711,apache,apache) %dir /var/log/php-fpm
-%attr(0711,apache,apache) %dir /var/run/php-fpm
+%attr(0711,apache,apache) %dir /run/php-fpm
+%{_tmpfilesdir}/php-fpm.conf
 
 %files -n apache-mod_php
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/modules.d/*.conf

@@ -4,9 +4,9 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-PIDFile=/var/run/php-fpm/php-fpm.pid
+PIDFile=/run/php-fpm/php-fpm.pid
 EnvironmentFile=/etc/sysconfig/php-fpm
-ExecStart=/usr/sbin/php-fpm ${PHP_FPM_OPTIONS}
+ExecStart=/usr/sbin/php-fpm --daemonize --fpm-config /etc/php-fpm.conf $PHP_FPM_OPTIONS
 ExecReload=/bin/kill -USR2 $MAINPID
 
 [Install]
