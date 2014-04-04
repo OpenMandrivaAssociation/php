@@ -1690,7 +1690,7 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/php.d
 install -d -m 755 %{buildroot}%{_libdir}/php/extensions
 install -d -m 755 %{buildroot}%{_datadir}/php
 
-sed -i -e 's,/usr/lib,%{_libdir},g' %{SOURCE10} >%{buildroot}%{_sysconfdir}/php.ini
+sed -e 's,/usr/lib,%{_libdir},g' %{SOURCE10} >%{buildroot}%{_sysconfdir}/php.ini
 cp %{buildroot}%{_sysconfdir}/php.ini %{buildroot}%{_sysconfdir}/php-cgi-fcgi.ini
 
 # house cleaning
