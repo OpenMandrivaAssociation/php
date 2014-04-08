@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.5.10
+Version:	5.5.11
 Release:	4
 Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
 Group:		Development/PHP
@@ -171,7 +171,7 @@ Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-#Suggests:	php-suhosin >= 0.9.33
+# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -206,7 +206,7 @@ Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-#Suggests:	php-suhosin >= 0.9.33
+# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -1134,7 +1134,7 @@ Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-#Suggests:	php-suhosin >= 0.9.33
+# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -1180,7 +1180,7 @@ Requires:	%{name}-xmlwriter = %{EVRD}
 Requires:	%{name}-zlib = %{EVRD}
 Requires:	%{name}-xml = %{EVRD}
 Requires:	%{name}-timezonedb >= 3:2009.10
-#Suggests:	%{name}-suhosin >= 0.9.29
+# Suggests:	%{name}-suhosin >= 0.9.29
 Conflicts:	%{name}-suhosin < 0.9.29
 Conflicts:	apache-mpm-worker >= 2.4.0
 Conflicts:	apache-mpm-event >= 2.4.0
