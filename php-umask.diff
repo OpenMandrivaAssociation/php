@@ -1,6 +1,7 @@
---- php-5.4.1RC2/sapi/apache2handler/sapi_apache2.c.umask.droplet	2012-04-12 07:07:50.000000000 +0200
-+++ php-5.4.1RC2/sapi/apache2handler/sapi_apache2.c	2012-04-17 21:13:56.819217671 +0200
-@@ -468,6 +468,19 @@ static apr_status_t php_server_context_c
+diff -Naur php-5.5.12.orig/sapi/apache2handler/sapi_apache2.c php-5.5.12/sapi/apache2handler/sapi_apache2.c
+--- php-5.5.12.orig/sapi/apache2handler/sapi_apache2.c	2014-05-06 15:44:47.596348472 +0400
++++ php-5.5.12/sapi/apache2handler/sapi_apache2.c	2014-05-06 15:44:49.308203944 +0400
+@@ -468,6 +468,19 @@
  	return APR_SUCCESS;
  }
  
@@ -20,7 +21,7 @@
  static int php_apache_request_ctor(request_rec *r, php_struct *ctx TSRMLS_DC)
  {
  	char *content_length;
-@@ -658,6 +671,8 @@ zend_first_try {
+@@ -658,6 +671,8 @@
  	} else {
  		zend_file_handle zfd;
  
@@ -29,12 +30,12 @@
  		zfd.type = ZEND_HANDLE_FILENAME;
  		zfd.filename = (char *) r->filename;
  		zfd.free_filename = 0;
-@@ -669,6 +684,8 @@ zend_first_try {
+@@ -669,6 +684,8 @@
  			zend_execute_scripts(ZEND_INCLUDE TSRMLS_CC, NULL, 1, &zfd);
  		}
  
 +		php_restore_umask();
 +
  		apr_table_set(r->notes, "mod_php_memory_usage",
- 			apr_psprintf(ctx->r->pool, "%zu", zend_memory_peak_usage(1 TSRMLS_CC)));
+ 			apr_psprintf(ctx->r->pool, "%" APR_SIZE_T_FMT, zend_memory_peak_usage(1 TSRMLS_CC)));
  	}
