@@ -1,2 +1,9 @@
+removed_sources:
+  php-5.5.10.tar.gz: fa13e3634373791a8cb427d43ab4dcf9fcb3e526
+  php-5.5.11.tar.gz: 3ad9c5b66c4b52aab9898b364899e8cf242c32f8
+  php-5.5.12.tar.gz: aed3c850e219689408efc36ea75b74526e3a150a
+  php-5.5.13.tar.gz: 64713e0db59a7125c433ca4f54e67dafc03f4fd8
+  php-5.5.14.tar.gz: be2e4bf894952760275fe59a0390c6976a17a82e
+  php-5.5.18.tar.gz: 49954ba7ca7212137d0fc028ae2ab59c751bf0db
 sources:
-  php-5.5.15.tar.gz: d9df11b97a9f1c686194e91165602f47e3bd74e6
+  php-5.5.19.tar.gz: 505268a53a015f77528b6151ac19f33f97e8c4bf
