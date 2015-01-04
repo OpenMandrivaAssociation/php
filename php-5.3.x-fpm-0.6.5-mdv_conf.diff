@@ -26,7 +26,7 @@
  ; syslog_facility is used to specify what type of program is logging the
  ; message. This lets syslogd specify that messages from different facilities
 @@ -156,7 +157,8 @@ group = @php_fpm_group@
- ;                            specific port;
+ ;                            (IPv6 and IPv4-mapped) on a specific port;
  ;   '/path/to/unix/socket' - to listen on a unix socket.
  ; Note: This value is mandatory.
 -listen = 127.0.0.1:9000
