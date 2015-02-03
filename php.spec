@@ -16,9 +16,9 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.5.20
+Version:	5.5.21
 Release:	1
-Source0:	http://se.php.net/distributions/php-%{version}.tar.gz
+Source0:	http://se.php.net/distributions/php-%{version}.tar.bz2
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
