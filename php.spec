@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.5.22
+Version:	5.6.6
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.bz2
 Group:		Development/PHP
@@ -53,7 +53,6 @@ Patch20:	php-mail.diff
 Patch21:	php-filter-shared.diff
 Patch22:	php-dba-link.patch
 Patch23:	php-zlib-for-getimagesize.patch
-Patch25:	php-5.3.10-external_libzip.diff
 Patch26:	php-5.3.9RC2-mcrypt-libs.diff
 # for kolab2
 # P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
@@ -1239,7 +1238,6 @@ fi
 %patch21 -p0 -b .filter-shared.droplet
 %patch22 -p0 -b .dba-link.droplet
 %patch23 -p0 -b .zlib-for-getimagesize.droplet
-%patch25 -p1 -b .external_libzip.droplet
 %patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
 %patch27 -p1 -b .imap-annotation.droplet
@@ -2376,8 +2374,7 @@ fi
 %doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
 %doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
-%doc README.PHP4-TO-PHP5-THIN-CHANGES
-%doc README.EXTENSIONS README.EXT_SKEL README.input_filter
+%doc README.EXT_SKEL README.input_filter
 %doc README.PARAMETER_PARSING_API README.STREAMS
 
 %files -n %{libname}
