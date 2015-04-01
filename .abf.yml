@@ -8,5 +8,6 @@ removed_sources:
   php-5.5.19.tar.gz: 505268a53a015f77528b6151ac19f33f97e8c4bf
   php-5.5.20.tar.gz: 53069044f71ad0491160db02028824fa867bdb8c
   php-5.5.21.tar.bz2: a6251bb3565f144593df4329fd15bedd70ae13a8
-sources:
   php-5.5.22.tar.xz: 7c7657bc18e709b90046bb53334970fd559709f6
+sources:
+  php-5.5.23.tar.xz: e174f1c2bcfb90bbbd53dd8b1e2947aeceb0184d
