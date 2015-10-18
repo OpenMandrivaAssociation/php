@@ -16,7 +16,7 @@
 
 Summary:	The PHP5 scripting language
 Name:		php
-Version:	5.6.13
+Version:	5.6.14
 Release:	1
 Source0:	http://se.php.net/distributions/php-%{version}.tar.xz
 Group:		Development/PHP
@@ -1428,7 +1428,7 @@ for i in fpm cgi cli apxs; do
     --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
     --with-mcrypt=shared,%{_prefix} \
     --with-mssql=shared,%{_prefix} \
-    --with-mysql=shared,%{_prefix} --with-mysql-sock=/var/lib/mysql/mysql.sock --with-zlib-dir=%{_prefix} \
+    --with-mysql=shared,%{_prefix} --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
     --enable-mysqlnd=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
