@@ -1,6 +1,8 @@
 %define _build_pkgcheck_set %{nil}
 %define _build_pkgcheck_srpm %{nil}
 
+%define _disable_lto 1
+
 %define build_test 1
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
@@ -17,7 +19,7 @@
 Summary:	The PHP5 scripting language
 Name:		php
 Version:	5.6.14
-Release:	1
+Release:	2
 Source0:	http://se.php.net/distributions/php-%{version}.tar.xz
 Group:		Development/PHP
 License:	PHP License
@@ -1391,14 +1393,11 @@ for i in fpm cgi cli apxs; do
     --with-config-file-scan-dir=%{_sysconfdir}/php.d \
     --disable-debug  \
     --enable-inline-optimization \
-    --with-exec-dir=%{_bindir} \
     --with-regex=system \
     --with-pcre-regex=%{_prefix} \
     --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
     --with-png-dir=%{_prefix} \
     --with-pdo-odbc=unixODBC \
-    --enable-magic-quotes \
-    --enable-safe-mode \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
     --with-openssl=shared,%{_prefix} \
     --enable-libxml=%{_prefix} --with-libxml-dir=%{_prefix} \
@@ -1408,7 +1407,7 @@ for i in fpm cgi cli apxs; do
     --with-bz2=shared,%{_prefix} \
     --enable-calendar=shared \
     --enable-ctype=shared \
-    --with-curl=shared,%{_prefix} --without-curlwrappers \
+    --with-curl=shared,%{_prefix} \
     --enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
     --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --with-enchant=shared,%{_prefix} \
@@ -1443,10 +1442,9 @@ for i in fpm cgi cli apxs; do
     --enable-session=shared,%{_prefix} \
     --enable-shmop=shared,%{_prefix} \
     --enable-simplexml \
-    --with-snmp=shared,%{_prefix} --enable-ucd-snmp-hack \
+    --with-snmp=shared,%{_prefix} \
     --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
     --enable-sockets=shared,%{_prefix} \
-    --with-sqlite=shared,%{_prefix} \
     --with-sqlite3=shared,%{_prefix} \
     --with-sybase-ct=shared,%{_prefix} \
     --enable-sysvmsg=shared,%{_prefix} \
