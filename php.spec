@@ -1458,7 +1458,7 @@ for i in fpm cgi cli apxs; do
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
     --enable-wddx=shared --with-libxml-dir=%{_prefix} \
-    --enable-zip=shared --with-libzip=%{_prefix}
+    --enable-zip=shared --with-libzip=%{_prefix} || (cat config.log && exit 1)
 
 cp -f Makefile Makefile.$i
 
