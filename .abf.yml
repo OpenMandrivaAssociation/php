@@ -1,5 +1,6 @@
 removed_sources:
   php-5.6.11.tar.bz2: 513bbde88a8b8270b2bff357d41c4f1c42e51fcd
   php-5.6.13.tar.xz: df56720836522c7521002785a03ee5149aa4df85
-sources:
   php-5.6.14.tar.xz: d11fb26775bb8fc6351358fafcb677ff6396609c
+sources:
+  php-5.6.17.tar.xz: 077c99b67fb427360796824a581e954b1623b0de
