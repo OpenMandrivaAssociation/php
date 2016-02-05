@@ -66,7 +66,7 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +
 +	/* set the callback for the GET_ACL function */
 +	mail_parameters(NIL, SET_MYRIGHTS, (void *) mail_myrights);
-+	if(!imap_myrights(imap_le_struct->imap_stream, Z_STRVAL_PP(mailbox))) {
++	if(!imap_myrights(imap_le_struct->imap_stream, Z_STRVAL_P(*mailbox))) {
 +		php_error(E_WARNING, "c-client imap_myrights failed");
 +		zval_dtor(return_value);
 +		RETURN_FALSE;

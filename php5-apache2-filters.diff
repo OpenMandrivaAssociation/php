@@ -1,12 +1,5 @@
-
- Description: Enables mod_php to manually add apache output filters
- Author: Paul Querna
- URL: http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
-      http://www.outoforder.cc/presentations/apachecon2004/mod_transform/tu19_mod_transform_slides.pdf
- 
-diff -Naurp php-5.3.0RC1/sapi/apache2handler/php_functions.c php-5.3.0RC1.oden/sapi/apache2handler/php_functions.c
---- php-5.3.0RC1/sapi/apache2handler/php_functions.c	2009-01-19 20:32:40.000000000 +0100
-+++ php-5.3.0RC1.oden/sapi/apache2handler/php_functions.c	2009-03-27 12:08:05.000000000 +0100
+--- php-7.0.1/sapi/apache2handler/php_functions.c.apache2-filters.droplet	2015-12-16 11:41:55.000000000 +0100
++++ php-7.0.1/sapi/apache2handler/php_functions.c	2015-12-29 00:12:07.202603653 +0100
 @@ -216,6 +216,65 @@ PHP_FUNCTION(apache_response_headers)
  }
  /* }}} */
@@ -32,7 +25,7 @@ diff -Naurp php-5.3.0RC1/sapi/apache2handler/php_functions.c php-5.3.0RC1.oden/s
 +       ff = ctx->r->output_filters;
 +
 +       do {
-+               add_next_index_string(return_value, ff->frec->name, 1);
++               add_next_index_string(return_value, ff->frec->name);
 +               ff = ff->next ;
 +       } while (ff);
 +
@@ -57,7 +50,7 @@ diff -Naurp php-5.3.0RC1/sapi/apache2handler/php_functions.c php-5.3.0RC1.oden/s
 +
 +       convert_to_string_ex(filter_name);
 +
-+        ap_filter = ap_get_output_filter_handle(Z_STRVAL_PP(filter_name));
++        ap_filter = ap_get_output_filter_handle(Z_STRVAL_P(*filter_name));
 +
 +        /* requested output filter was not found */
 +       if(ap_filter == NULL) {
@@ -73,12 +66,12 @@ diff -Naurp php-5.3.0RC1/sapi/apache2handler/php_functions.c php-5.3.0RC1.oden/s
  /* {{{ proto string apache_note(string note_name [, string note_value])
     Get and set Apache request notes */
  PHP_FUNCTION(apache_note)
-@@ -516,6 +575,8 @@ ZEND_END_ARG_INFO()
+@@ -520,6 +579,8 @@ ZEND_END_ARG_INFO()
  static const zend_function_entry apache_functions[] = {
  	PHP_FE(apache_lookup_uri, 		arginfo_apache2handler_lookup_uri)
- 	PHP_FE(virtual, 				arginfo_apache2handler_virtual) 
-+ 	PHP_FE(apache_get_output_filters, NULL)
-+ 	PHP_FE(apache_add_output_filter, NULL)
+ 	PHP_FE(virtual, 				arginfo_apache2handler_virtual)
++    PHP_FE(apache_get_output_filters, NULL)
++    PHP_FE(apache_add_output_filter, NULL)
  	PHP_FE(apache_request_headers, 	arginfo_apache2handler_getallheaders)
  	PHP_FE(apache_response_headers, arginfo_apache2handler_response_headers)
  	PHP_FE(apache_setenv, 		arginfo_apache2handler_setenv)

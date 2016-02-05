@@ -132,10 +132,10 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +        }
 +        
 +        // fill in annotation values
-+        annotation->mbox = Z_STRVAL_PP(mailbox);
-+        annotation->entry = Z_STRVAL_PP(entry);
-+        annotation->values->attr = Z_STRVAL_PP(attr);
-+        annotation->values->value = Z_STRVAL_PP(value);
++        annotation->mbox = Z_STRVAL_P(*mailbox);
++        annotation->entry = Z_STRVAL_P(*entry);
++        annotation->values->attr = Z_STRVAL_P(*attr);
++        annotation->values->value = Z_STRVAL_P(*value);
 +        
 +        ret = imap_setannotation(imap_le_struct->imap_stream, annotation);
 +                
@@ -179,23 +179,23 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +            RETURN_FALSE;
 +        
 +        STRINGLIST *cur = entries;
-+        cur->text.data = (unsigned char *)cpystr(Z_STRVAL_PP(entry));
-+        cur->text.size = Z_STRLEN_PP(entry);
++        cur->text.data = (unsigned char *)cpystr(Z_STRVAL_P(*entry));
++        cur->text.size = Z_STRLEN_P(*entry);
 +        cur->next = NIL;
 +        
 +        STRINGLIST *attributes = mail_newstringlist();
 +        if (!attributes)
 +            RETURN_FALSE;
 +        cur = attributes;
-+        cur->text.data = (unsigned char *)cpystr (Z_STRVAL_PP(attr));
-+        cur->text.size = Z_STRLEN_PP(attr);
++        cur->text.data = (unsigned char *)cpystr (Z_STRVAL_P(*attr));
++        cur->text.size = Z_STRLEN_P(*attr);
 +        cur->next = NIL;
 +        
 +        IMAPG(imap_annotation_list) = return_value;
 +        
 +        /* set the callback for the GET_ANNOTATION function */
 +	mail_parameters(NIL, SET_ANNOTATION, (void *) mail_getannotation);
-+        ret = imap_getannotation(imap_le_struct->imap_stream, Z_STRVAL_PP(mailbox), entries, attributes);
++        ret = imap_getannotation(imap_le_struct->imap_stream, Z_STRVAL_P(+mailbox), entries, attributes);
 +        
 +        mail_free_stringlist(&entries);
 +        mail_free_stringlist(&attributes);

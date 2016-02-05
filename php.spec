@@ -11,20 +11,19 @@
 %{?_with_libmagic: %{expand: %%global build_libmagic 1}}
 %{?_without_libmagic: %{expand: %%global build_libmagic 0}}
 
-%define php5_common_major 5
-%define libname %mklibname php5_common %{php5_common_major}
+%define php7_common_major 5
+%define libname %mklibname php7_common %{php7_common_major}
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-Summary:	The PHP5 scripting language
+Summary:	The PHP7 scripting language
 Name:		php
-Version:	5.6.14
-Release:	2
-Source0:	http://se.php.net/distributions/php-%{version}.tar.xz
+Version:	7.0.3
+Release:	1
+Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 Group:		Development/PHP
 License:	PHP License
 URL:		http://www.php.net
-Source1:	php-test.ini
 Source2:	maxlifetime
 Source3:	php.crond
 Source4:	php-fpm.service
@@ -34,13 +33,12 @@ Source6:	php-fpm.logrotate
 Source7:	create_data_file.php
 Source9:        php-fpm-tmpfiles.conf
 Source10:	php.ini
-Patch0:		php-init.diff
 Patch1:		php-shared.diff
 Patch3:		php-libtool.diff
 Patch4:		php-phpize.diff
 Patch5:		php-phpbuilddir.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
-# http://www.outoforder.cc/projects/apache/mod_transform/patches/php5-apache2-filters.patch
+# http://www.outoforder.cc/projects/apache/mod_transform/patches/php7-apache2-filters.patch
 Patch6:		php5-apache2-filters.diff
 # remove libedit once and for all
 Patch7:		php-no_libedit.diff
@@ -49,6 +47,7 @@ Patch9:		php-xmlrpc_no_rpath.diff
 Patch10:	php-5.5.7-detect-freetype-2.5.x.patch
 Patch11:	php-5.3.8-bdb-5.2.diff
 Patch12:	php-5.5.6-db-6.0.patch
+Patch13:	php-7.0.1-clang-warnings.patch
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
@@ -153,13 +152,13 @@ Epoch: 3
 %define postgresql_version %(pg_config &>/dev/null && pg_config 2>/dev/null | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null || echo 0)
 
 %description
-PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
+PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP5 is fairly simple. The
-most common use of PHP5 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP7 is fairly simple. The
+most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 %package	cli
-Summary:	PHP5 CLI interface
+Summary:	PHP7 CLI interface
 Group:		Development/Other
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
@@ -184,17 +183,52 @@ Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 
 %description	cli
-PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
+PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP5 is fairly simple. The
-most common use of PHP5 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP7 is fairly simple. The
+most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains a command-line (CLI) version of php. You must also
-install libphp5_common. If you need apache module support, you also need to
+install libphp7_common. If you need apache module support, you also need to
+install the apache-mod_php package.
+
+%package	dbg
+Summary:	Debugging version of the PHP7 CLI interface
+Group:		Development/Other
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-ctype >= %{EVRD}
+Requires:	php-filter >= %{EVRD}
+Requires:	php-ftp >= %{EVRD}
+Requires:	php-gettext >= %{EVRD}
+Requires:	php-hash >= %{EVRD}
+Requires:	php-ini >= %{version}
+Requires:	php-json >= %{EVRD}
+Requires:	php-openssl >= %{EVRD}
+Requires:	php-posix >= %{EVRD}
+Requires:	php-session >= %{EVRD}
+# Suggests:	php-suhosin >= 0.9.33
+Requires:	php-sysvsem >= %{EVRD}
+Requires:	php-sysvshm >= %{EVRD}
+Requires:	php-timezonedb >= 3:2009.10
+Requires:	php-tokenizer >= %{EVRD}
+Requires:	php-xmlreader >= %{EVRD}
+Requires:	php-xmlwriter >= %{EVRD}
+Requires:	php-zlib >= %{EVRD}
+Requires:	php-xml >= %{EVRD}
+Provides:	php = %{EVRD}
+
+%description	dbg
+PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+integration for several commercial and non-commercial database management
+systems, so writing a database-enabled script with PHP7 is fairly simple. The
+most common use of PHP7 coding is probably as a replacement for CGI scripts.
+
+This package contains a debugging version of php. You must also
+install libphp7_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
 %package	cgi
-Summary:	PHP5 CGI interface
+Summary:	PHP7 CGI interface
 Group:		Development/Other
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
@@ -223,17 +257,17 @@ Obsoletes:	php-fcgi
 Conflicts:	php-fcgi < %{EVRD}
 
 %description	cgi
-PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
+PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP5 is fairly simple. The
-most common use of PHP5 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP7 is fairly simple. The
+most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains a standalone (CGI) version of php with FastCGI support.
-You must also install libphp5_common. If you need apache module support, you
+You must also install libphp7_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
 %package -n	%{libname}
-Summary:	Shared library for PHP5
+Summary:	Shared library for PHP7
 Group:		Development/Other
 Provides:	php-pcre = %{EVRD}
 Provides:	php-simplexml = %{EVRD}
@@ -244,11 +278,11 @@ Requires(postun): systemd-units
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
-PHP5. You need this package if you install the php standalone package or a
+PHP7. You need this package if you install the php standalone package or a
 webserver with php support (ie: apache-mod_php).
 
 %package	devel
-Summary:	Development package for PHP5
+Summary:	Development package for PHP7
 Group:		Development/C
 Requires:	%{libname} >= %{EVRD}
 Requires:	autoconf automake libtool
@@ -268,7 +302,7 @@ Requires:	pkgconfig(openssl)
 
 
 %description	devel
-The php-devel package lets you compile dynamic extensions to PHP5. Included
+The php-devel package lets you compile dynamic extensions to PHP7. Included
 here is the source for the php extensions. Instead of recompiling the whole php
 binary to add support for, say, oracle, install this package and use the new
 self-contained extensions support. For more information, read the file
@@ -616,34 +650,11 @@ block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64,
 SAFER-SK128, TWOFISH, TEA, RC3 and GOST in CBC, OFB, CFB and ECB cipher modes.
 Additionally, it supports RC6 and IDEA which are considered "non-free".
 
-%package	mssql
-Summary:	MS SQL extension module for PHP
-Group:		Development/PHP
-Requires:       freetds >= 0.63
-Requires:	%{libname} >= %{EVRD}
-
-%description	mssql
-This is a dynamic shared object (DSO) for PHP that will add MS SQL databases
-support using the FreeTDS library.
-
-%package	mysql
-Summary:	MySQL database module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	mysql
-This is a dynamic shared object (DSO) for PHP that will add MySQL database
-support.
-
-These functions allow you to access MySQL database servers. More information
-about MySQL can be found at http://www.mysql.com/.
-
-Documentation for MySQL can be found at http://dev.mysql.com/doc/.
-
 %package	mysqli
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{EVRD}
+Obsoletes:	%{name}-mysql < %{EVRD}
 
 %description	mysqli
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -983,17 +994,6 @@ SQLite is not a client library used to connect to a big database server. SQLite
 is the server. The SQLite library reads and writes directly to and from the
 database files on disk.
 
-%package	sybase_ct
-Summary:	Sybase extension module for PHP
-Group:		Development/PHP
-Obsoletes:	php-sybase
-Provides:	php-sybase = %{EVRD}
-Requires:	%{libname} >= %{EVRD}
-
-%description	sybase_ct
-This is a dynamic shared object (DSO) for PHP that will add Sybase support to
-PHP.
-
 %package	sysvmsg
 Summary:	SysV msg extension module for PHP
 Group:		Development/PHP
@@ -1118,7 +1118,7 @@ This is a dynamic shared object (DSO) for PHP that will add zip support to
 create and read zip files using the libzip library.
 
 %package	fpm
-Summary:	PHP5 FastCGI Process Manager
+Summary:	PHP7 FastCGI Process Manager
 Group:		Development/Other
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -1147,13 +1147,13 @@ Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 
 %description	fpm
-PHP5 is an HTML-embeddable scripting language. PHP5 offers built-in database
+PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP5 is fairly simple. The
-most common use of PHP5 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP7 is fairly simple. The
+most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains the FastCGI Process Manager. You must also install
-libphp5_common.
+libphp7_common.
 
 %package -n	apache-mod_php
 Summary:	The PHP HTML-embedded scripting language for use with apache
@@ -1189,10 +1189,10 @@ Provides:	mod_php = %{EVRD}
 BuildRequires:	dos2unix
 
 %description -n apache-mod_php
-PHP5 is an HTML-embedded scripting language. PHP5 attempts to make it easy for
-developers to write dynamically generated web pages. PHP5 also offers built-in
+PHP7 is an HTML-embedded scripting language. PHP7 attempts to make it easy for
+developers to write dynamically generated web pages. PHP7 also offers built-in
 database integration for several commercial and non-commercial database
-management systems, so writing a database-enabled web page with PHP5 is fairly
+management systems, so writing a database-enabled web page with PHP7 is fairly
 simple. The most common use of PHP coding is probably as a replacement for CGI
 scripts. The %{name} module enables the apache web server to understand
 and process the embedded PHP language in web pages.
@@ -1221,29 +1221,31 @@ fi
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
-%patch0 -p0 -b .init.droplet
 %patch1 -p1 -b .shared.droplet
 %patch3 -p0 -b .libtool.droplet
 %patch4 -p1 -b .phpize.droplet
 %patch5 -p1 -b .phpbuilddir.droplet
 %patch6 -p1 -b .apache2-filters.droplet
-%patch7 -p1 -b .no_libedit.droplet
-%patch8 -p0 -b .xmlrpc_epi_header
+#patch7 -p1 -b .no_libedit.droplet
+%patch8 -p1 -b .xmlrpc_epi_header
 %patch9 -p0 -b .xmlrpc_no_rpath.droplet
 #patch10 -p1 -b .ft252~
-%patch11 -p0 -b .bdb-5.2.droplet
+%patch11 -p1 -b .bdb-5.2.droplet
 %patch12 -p1 -b .db60~
+%patch13 -p1 -b .clangwarn~
 
 #####################################################################
 # Stolen from PLD
-%patch20 -p1 -b .mail.droplet
+# FIXME needs porting
+#patch20 -p1 -b .mail.droplet
 %patch21 -p0 -b .filter-shared.droplet
 %patch22 -p0 -b .dba-link.droplet
-%patch23 -p0 -b .zlib-for-getimagesize.droplet
+%patch23 -p1 -b .zlib-for-getimagesize.droplet
 %patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
-%patch27 -p1 -b .imap-annotation.droplet
-%patch28 -p1 -b .imap-myrights.droplet
+# FIXME needs porting
+#patch27 -p1 -b .imap-annotation.droplet
+#patch28 -p1 -b .imap-myrights.droplet
 # fpm stuff
 %patch29 -p1 -b .shared-fpm.droplet
 %patch30 -p1 -b .fpmmdv.droplet
@@ -1256,11 +1258,11 @@ fi
 #####################################################################
 # Stolen from fedora
 %patch101 -p1 -b .cxx.droplet
-%patch102 -p0 -b .install.droplet
+%patch102 -p1 -b .install.droplet
 %patch105 -p1 -b .umask.droplet
 %patch113 -p1 -b .libc-client-php.droplet
 %patch114 -p0 -b .no_pam_in_c-client.droplet
-%patch115 -p0 -b .dlopen.droplet
+%patch115 -p1 -b .dlopen.droplet
 
 # upstream fixes
 %patch120 -p1 -b .tests-wddx.droplet
@@ -1270,7 +1272,6 @@ fi
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 
-cp %{SOURCE1} php-test.ini
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
 cp %{SOURCE4} php-fpm.service
@@ -1366,7 +1367,7 @@ export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
 
-# Configure php5
+# Configure php7
 # FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
 for i in fpm cgi cli apxs; do
 ./configure \
@@ -1474,7 +1475,7 @@ done
 perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/php-doc/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
 cp config.nice configure_command; chmod 644 configure_command
 
-%make
+%make PHPDBG_EXTRA_LIBS="-lreadline"
 
 %if %{build_libmagic}
 # keep in sync with latest system magic, the next best thing when system libmagic can't be used...
@@ -1500,14 +1501,14 @@ cd mod_php
 cp -dpR ../php-devel/sapi/apache2handler/* .
 cp ../main/internal_functions.c .
 cp ../ext/date/lib/timelib_config.h .
-sed -i -e 's,php5_module,php_module,g' *
-mv mod_php5.c mod_php.c
+sed -i -e 's,php7_module,php_module,g' *
+mv mod_php7.c mod_php.c
 find . -type f |xargs dos2unix
 apxs \
 	`apr-1-config --link-ld --libs` \
 	`xml2-config --cflags` \
 	-I. -I.. -I../main -I../Zend -I../TSRM \
-	-L../libs -lphp5_common \
+	-L../libs -lphp7_common \
 	-c mod_php.c sapi_apache2.c apache_config.c \
 	php_functions.c internal_functions.c
 
@@ -1524,7 +1525,7 @@ install -d %{buildroot}/var/lib/php
 
 make -f Makefile.apxs install \
 	INSTALL_ROOT=%{buildroot} \
-	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp5_common.la %{buildroot}%{_libdir}/"
+	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp7_common.la %{buildroot}%{_libdir}/"
 
 # borked autopoo
 rm -f %{buildroot}%{_bindir}/php %{buildroot}%{_bindir}/php-cgi
@@ -1591,8 +1592,6 @@ echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
 echo "extension = mbstring.so"		> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
 echo "extension = mcrypt.so"		> %{buildroot}%{_sysconfdir}/php.d/30_mcrypt.ini
 echo "extension = fileinfo.so"		> %{buildroot}%{_sysconfdir}/php.d/32_fileinfo.ini
-echo "extension = mssql.so"		> %{buildroot}%{_sysconfdir}/php.d/35_mssql.ini
-echo "extension = mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/36_mysql.ini
 echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqli.ini
 echo "extension = enchant.so"		> %{buildroot}%{_sysconfdir}/php.d/38_enchant.ini
 echo "extension = odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/39_odbc.ini
@@ -1615,7 +1614,6 @@ echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
 echo "extension = sqlite3.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite3.ini
-echo "extension = sybase_ct.so"		> %{buildroot}%{_sysconfdir}/php.d/46_sybase_ct.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
 echo "extension = sysvsem.so"		> %{buildroot}%{_sysconfdir}/php.d/57_sysvsem.ini
 echo "extension = sysvshm.so"		> %{buildroot}%{_sysconfdir}/php.d/58_sysvshm.ini
@@ -1718,7 +1716,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ldap
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/libxml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mbstring
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mcrypt
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mssql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqlnd
@@ -1746,7 +1743,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite3
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sybase_ct
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
@@ -1799,7 +1795,40 @@ for f in $disable_tests; do
   [[ -f "$f" ]] && mv $f $f.disabled
 done
 
-TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -c ./php-test.ini run-tests.php
+cat >php-test.ini <<EOF
+[PHP]
+extension_dir="`pwd`/modules"
+EOF
+for i in modules/*.so; do
+	B="`basename $i`"
+	case "$B" in
+	opcache.so)
+		echo zend_extension=$B >>php-test.ini
+		;;
+	wddx.so|xsl.so)
+		# Unresolved symbols, need fixing
+		;;
+#	ctype.so|dom.so|openssl.so|zlib.so|ftp.so|gettext.so|posix.so|session.so|hash.so|sysvsem.so|sysvshm.so|tokenizer.so|xml.so|xmlreader.so|xmlwriter.so|filter.so|json.so)
+		# Apparently loaded by default without a need to mention them in the ini file
+#		;;
+	*)
+		echo extension=$B >>php-test.ini
+		;;
+	esac
+done
+cat >>php-test.ini <<EOF
+open_basedir=
+safe_mode=0
+output_buffering=0
+output_handler=0
+magic_quotes_runtime=0
+memory_limit=1G
+
+[Session]
+session.save_path="."
+EOF
+
+TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -n -c ./php-test.ini run-tests.php
 %endif
 
 %post bcmath
@@ -2018,22 +2047,6 @@ if [ "$1" = "0" ]; then
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%post mssql
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mssql
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mysql
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mysql
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
 %post mysqli
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -2221,14 +2234,6 @@ if [ "$1" = "0" ]; then
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%post sybase_ct
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sybase_ct
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
 %post sysvmsg
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -2376,12 +2381,16 @@ fi
 %doc README.PARAMETER_PARSING_API README.STREAMS
 
 %files -n %{libname}
-%{_libdir}/libphp5_common.so.%{php5_common_major}*
+%{_libdir}/libphp7_common.so.%{php7_common_major}*
 
 %files cli
 %doc CREDITS.cli README.cli TODO.cli
 %attr(0755,root,root) %{_bindir}/php
 %attr(0644,root,root) %{_mandir}/man1/php.1*
+
+%files dbg
+%attr(0755,root,root) %{_bindir}/phpdbg
+%attr(0644,root,root) %{_mandir}/man1/phpdbg.1*
 
 %files cgi
 %doc CREDITS.cgi README.fcgi
@@ -2394,7 +2403,7 @@ fi
 %doc Zend/ZEND_* README.TESTING*
 %attr(0755,root,root) %{_bindir}/php-config
 %attr(0755,root,root) %{_bindir}/phpize
-%attr(0755,root,root) %{_libdir}/libphp5_common.so
+%attr(0755,root,root) %{_libdir}/libphp7_common.so
 %{_libdir}/php/build
 %{_usrsrc}/php-devel
 %{multiarch_includedir}/php/main/build-defs.h
@@ -2503,14 +2512,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/30_mcrypt.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
 
-%files mssql
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/35_mssql.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mssql.so
-
-%files mysql
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/36_mysql.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mysql.so
-
 %files mysqli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
@@ -2608,10 +2609,6 @@ fi
 %files sqlite3
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite3.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sqlite3.so
-
-%files sybase_ct
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_sybase_ct.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/sybase_ct.so
 
 %files sysvmsg
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/56_sysvmsg.ini

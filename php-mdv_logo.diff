@@ -1,7 +1,7 @@
 --- php-5.4.1RC2/ext/standard/info.c.mdv_logo.droplet	2012-04-17 21:19:24.887225033 +0200
 +++ php-5.4.1RC2/ext/standard/info.c	2012-04-17 21:19:24.890225033 +0200
 @@ -800,6 +800,22 @@ PHPAPI void php_print_info(int flag TSRM
- 			zend_html_puts(zend_version, strlen(zend_version) TSRMLS_CC);
+ 			zend_html_puts(zend_version, strlen(zend_version));
  		}
  		php_info_print_box_end();
 +

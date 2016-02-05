@@ -1,6 +1,6 @@
---- Zend/zend.h	2007-04-26 21:08:58.000000000 +0200
-+++ Zend/zend.h.oden	2007-06-20 13:12:39.000000000 +0200
-@@ -102,11 +102,11 @@
+--- php-7.0.1/Zend/zend_portability.h.omv~	2015-12-29 00:42:17.227051483 +0100
++++ php-7.0.1/Zend/zend_portability.h	2015-12-29 00:42:37.209011427 +0100
+@@ -138,11 +138,11 @@
  # endif
  
  # if defined(RTLD_GROUP) && defined(RTLD_WORLD) && defined(RTLD_PARENT)
