@@ -19,7 +19,7 @@
 Summary:	The PHP7 scripting language
 Name:		php
 Version:	7.0.6
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 Group:		Development/PHP
 License:	PHP License
@@ -181,6 +181,7 @@ Requires:	php-xmlwriter >= %{EVRD}
 Requires:	php-zlib >= %{EVRD}
 Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
+Provides:	/usr/bin/php
 
 %description	cli
 PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
