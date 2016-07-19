@@ -22,7 +22,7 @@ Summary:	The PHP7 scripting language
 Name:		php
 Version:	7.1.0
 %if "%{beta}" != ""
-Release:	0.%{beta}.1
+Release:	0.%{beta}.2
 Source0:	https://downloads.php.net/~krakjoe/php-%{version}%{beta}.tar.xz
 %else
 Release:	1
@@ -1298,6 +1298,10 @@ find -name "*.inc" | xargs chmod 644
 find -name "*.php*" | xargs chmod 644
 find -name "*README*" | xargs chmod 644
 
+# php7_module -> php_module to ease upgrades
+find -type f |xargs sed -i -e 's,php7_module,php_module,g'
+sed -i -e 's,APLOG_USE_MODULE(php7,APLOG_USE_MODULE(php,g' sapi/apache2handler/*
+
 mkdir -p php-devel/extensions
 mkdir -p php-devel/sapi
 
@@ -1509,7 +1513,6 @@ cd mod_php
 cp -dpR ../php-devel/sapi/apache2handler/* .
 cp ../main/internal_functions.c .
 cp ../ext/date/lib/timelib_config.h .
-sed -i -e 's,php7_module,php_module,g' *
 mv mod_php7.c mod_php.c
 find . -type f |xargs dos2unix
 apxs \
