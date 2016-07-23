@@ -16,14 +16,14 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta alpha3
+%define beta beta1
 
 Summary:	The PHP7 scripting language
 Name:		php
 Version:	7.1.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.2
-Source0:	https://downloads.php.net/~krakjoe/php-%{version}%{beta}.tar.xz
+Source0:	https://downloads.php.net/~ab/php-%{version}%{beta}.tar.xz
 %else
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
@@ -1218,6 +1218,10 @@ The php-ini package contains the ini file required for PHP.
 
 
 %prep
+export LC_ALL=en_US.utf-8
+export LANG=en_US.utf-8
+export LANGUAGE=en_US.utf-8
+export LANGUAGES=en_US.utf-8
 %setup -qn %{name}-%{version}%{beta}
 
 %if %{build_libmagic}
