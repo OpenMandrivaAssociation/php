@@ -16,14 +16,14 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta beta1
+%define beta RC2
 
 Summary:	The PHP7 scripting language
 Name:		php
 Version:	7.1.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.2
-Source0:	https://downloads.php.net/~ab/php-%{version}%{beta}.tar.xz
+Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
 %else
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
