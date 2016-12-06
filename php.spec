@@ -16,7 +16,7 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta RC3
+%define beta %{nil}
 
 Summary:	The PHP7 scripting language
 Name:		php
