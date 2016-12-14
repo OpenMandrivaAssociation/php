@@ -18,7 +18,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.0.13
+Version:	7.0.14
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 Group:		Development/PHP
