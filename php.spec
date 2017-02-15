@@ -3,7 +3,7 @@
 
 %define _disable_lto 1
 
-%define build_test 1
+%define build_test 0
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
 
@@ -20,7 +20,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.1.0
+Version:	7.1.2
 %if "%{beta}" != ""
 Release:	0.%{beta}.2
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
@@ -1832,7 +1832,7 @@ for i in modules/*.so; do
 	esac
 done
 cat >>php-test.ini <<EOF
-open_basedir=
+open_basedir="`pwd`"
 safe_mode=0
 output_buffering=0
 output_handler=0
@@ -1840,7 +1840,7 @@ magic_quotes_runtime=0
 memory_limit=1G
 
 [Session]
-session.save_path="."
+session.save_path="`pwd`"
 EOF
 
 TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -n -c ./php-test.ini run-tests.php
