@@ -20,7 +20,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.1.5
+Version:	7.1.11
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
@@ -1775,10 +1775,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
 # php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
 find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
 
-%multiarch_includes %{buildroot}%{_includedir}/php/main/build-defs.h
-
-%multiarch_includes %{buildroot}%{_includedir}/php/main/php_config.h
-
 %if %{build_test}
 # do a make test
 export NO_INTERACTION=1
@@ -2421,8 +2417,6 @@ fi
 %attr(0755,root,root) %{_libdir}/libphp7_common.so
 %{_libdir}/php/build
 %{_usrsrc}/php-devel
-%{multiarch_includedir}/php/main/build-defs.h
-%{multiarch_includedir}/php/main/php_config.h
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
