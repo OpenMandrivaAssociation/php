@@ -1,5 +1,5 @@
---- php-7.1.2/build/build2.mk.phpize.droplet	2017-02-14 19:35:48.000000000 +0100
-+++ php-7.1.2/build/build2.mk	2017-02-15 13:58:55.419500297 +0100
+--- php-7.2.0/build/build2.mk.phpize.droplet	2017-11-28 10:22:53.000000000 +0100
++++ php-7.2.0/build/build2.mk	2017-11-29 12:30:58.813928044 +0100
 @@ -29,6 +29,7 @@ targets = $(TOUCH_FILES) configure $(con
  
  PHP_AUTOCONF ?= 'autoconf'
@@ -8,15 +8,15 @@
  
  SUPPRESS_WARNINGS ?= 2>&1 | (egrep -v '(AC_TRY_RUN called without default to allow cross compiling|AC_PROG_CXXCPP was called before AC_PROG_CXX|defined in acinclude.m4 but never used|AC_PROG_LEX invoked multiple times|AC_DECL_YYTEXT is expanded from...|the top level)'||true)
  
---- php-7.1.2/scripts/phpize.in.phpize.droplet	2017-02-14 19:35:47.000000000 +0100
-+++ php-7.1.2/scripts/phpize.in	2017-02-15 13:59:50.486977376 +0100
+--- php-7.2.0/scripts/phpize.in.phpize.droplet	2017-11-28 10:23:05.000000000 +0100
++++ php-7.2.0/scripts/phpize.in	2017-11-29 12:51:51.304325469 +0100
 @@ -11,7 +11,7 @@ SED="@SED@"
  
  FILES_BUILD="mkdep.awk scan_makefile_in.awk shtool libtool.m4 ax_check_compile_flag.m4"
  FILES="acinclude.m4 Makefile.global config.sub config.guess ltmain.sh run-tests*.php"
 -CLEAN_FILES="$FILES *.o *.lo *.la .deps .libs/ build/ modules/ install-sh \
-+CLEAN_FILES="$FILES *.so *.o *.lo *.la .deps .libs/ build/ modules/ install-sh \
- 	mkinstalldirs missing config.nice config.sub config.guess configure configure.in \
++CLEAN_FILES="$FILES *.o *.so *.lo *.la .deps .libs/ build/ modules/ install-sh \
+ 	mkinstalldirs missing config.nice config.sub config.guess configure configure.ac \
  	aclocal.m4 config.h config.h.in conftest* ltmain.sh libtool config.cache autom4te.cache/ \
  	config.log config.status Makefile Makefile.fragments Makefile.objects confdefs.h \
 @@ -121,6 +121,7 @@ phpize_check_autotools()
@@ -48,7 +48,7 @@
  {
 -  $SED \
 -  -e "s#@prefix@#$prefix#" \
--  < "$phpdir/phpize.m4" > configure.in
+-  < "$phpdir/phpize.m4" > configure.ac
 +  cp $phpdir/phpize.m4 configure.in
  }
  

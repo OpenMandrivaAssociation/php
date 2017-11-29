@@ -20,7 +20,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.1.11
+Version:	7.2.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
@@ -55,13 +55,13 @@ Patch10:	php-5.5.7-detect-freetype-2.5.x.patch
 Patch11:	php-5.3.8-bdb-5.2.diff
 Patch12:	php-5.5.6-db-6.0.patch
 Patch13:	php-7.0.1-clang-warnings.patch
+Patch14:	php-7.2.0-visibility.patch
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
 Patch21:	php-filter-shared.diff
 Patch22:	php-dba-link.patch
 Patch23:	php-zlib-for-getimagesize.patch
-Patch26:	php-5.3.9RC2-mcrypt-libs.diff
 # for kolab2
 # P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
 Patch27:	php-imap-annotation+status-current.diff
@@ -87,7 +87,6 @@ Patch115:	php-dlopen.diff
 Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
-Patch226:	php-no-fvisibility_hidden_fix.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
 
@@ -132,7 +131,6 @@ BuildRequires:	gpm-devel
 BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
 BuildRequires:	openldap-devel
-BuildRequires:	libmcrypt-devel
 BuildRequires:	sasl-devel
 BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
@@ -644,19 +642,6 @@ multibyte encodings in PHP. In addition to that, mbstring handles character
 encoding conversion between the possible encoding pairs. mbstring is designed
 to handle Unicode-based encodings such as UTF-8 and UCS-2 and many single-byte
 encodings for convenience.
-
-%package	mcrypt
-Summary:	Mcrypt extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	mcrypt
-This is a dynamic shared object (DSO) for PHP that will add mcrypt support.
-
-This is an interface to the mcrypt library, which supports a wide variety of
-block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64,
-SAFER-SK128, TWOFISH, TEA, RC3 and GOST in CBC, OFB, CFB and ECB cipher modes.
-Additionally, it supports RC6 and IDEA which are considered "non-free".
 
 %package	mysqli
 Summary:	MySQL database module for PHP
@@ -1245,6 +1230,7 @@ fi
 %patch11 -p1 -b .bdb-5.2.droplet
 %patch12 -p1 -b .db60~
 %patch13 -p1 -b .clangwarn~
+%patch14 -p1 -b .0014~
 
 #####################################################################
 # Stolen from PLD
@@ -1253,7 +1239,6 @@ fi
 %patch21 -p0 -b .filter-shared.droplet
 %patch22 -p0 -b .dba-link.droplet
 %patch23 -p1 -b .zlib-for-getimagesize.droplet
-%patch26 -p0 -b .mcrypt-libs.droplet
 # for kolab2
 # FIXME needs porting
 #patch27 -p1 -b .imap-annotation.droplet
@@ -1265,7 +1250,7 @@ fi
 #####################################################################
 # stolen from debian
 %patch50 -p1 -b .session.save_path.droplet
-%patch51 -p0 -b .exif_nesting_level.droplet
+%patch51 -p1 -b .exif_nesting_level.droplet
 
 #####################################################################
 # Stolen from fedora
@@ -1280,7 +1265,6 @@ fi
 %patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
 %patch123 -p0 -b .bug43589.droplet
-%patch226 -p0 -b .no-fvisibility_hidden.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
 
@@ -1442,7 +1426,6 @@ for i in fpm cgi cli apxs; do
     --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
     --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
     --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
-    --with-mcrypt=shared,%{_prefix} \
     --with-mssql=shared,%{_prefix} \
     --with-mysql=shared,%{_prefix} --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,%{_bindir}/mysql_config \
@@ -1605,7 +1588,6 @@ echo "extension = imap.so"		> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
 echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
 echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
 echo "extension = mbstring.so"		> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
-echo "extension = mcrypt.so"		> %{buildroot}%{_sysconfdir}/php.d/30_mcrypt.ini
 echo "extension = fileinfo.so"		> %{buildroot}%{_sysconfdir}/php.d/32_fileinfo.ini
 echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqli.ini
 echo "extension = enchant.so"		> %{buildroot}%{_sysconfdir}/php.d/38_enchant.ini
@@ -1730,7 +1712,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/json
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ldap
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/libxml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mbstring
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mcrypt
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqlnd
@@ -2046,14 +2027,6 @@ fi
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun mbstring
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mcrypt
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mcrypt
 if [ "$1" = "0" ]; then
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
@@ -2516,10 +2489,6 @@ fi
 %files mbstring
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/29_mbstring.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mbstring.so
-
-%files mcrypt
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/30_mcrypt.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mcrypt.so
 
 %files mysqli
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini

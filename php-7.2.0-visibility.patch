@@ -1,0 +1,97 @@
+--- php-7.2.0/ext/date/php_date.c.omv~	2017-11-29 13:24:17.183364915 +0100
++++ php-7.2.0/ext/date/php_date.c	2017-11-29 13:24:28.970391388 +0100
+@@ -664,7 +664,7 @@ static zval *date_period_read_property(z
+ static void date_period_write_property(zval *object, zval *member, zval *value, void **cache_slot);
+ 
+ /* {{{ Module struct */
+-zend_module_entry date_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry date_module_entry = {
+ 	STANDARD_MODULE_HEADER_EX,
+ 	NULL,
+ 	NULL,
+--- php-7.2.0/ext/libxml/libxml.c.omv~	2017-11-29 13:29:29.380067310 +0100
++++ php-7.2.0/ext/libxml/libxml.c	2017-11-29 13:29:45.521103681 +0100
+@@ -135,7 +135,7 @@ static const zend_function_entry libxml_
+ 	PHP_FE_END
+ };
+ 
+-zend_module_entry libxml_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry libxml_module_entry = {
+ 	STANDARD_MODULE_HEADER,
+ 	"libxml",                /* extension name */
+ 	libxml_functions,        /* extension function list */
+--- php-7.2.0/ext/pcre/php_pcre.c.omv~	2017-11-29 13:29:59.452135074 +0100
++++ php-7.2.0/ext/pcre/php_pcre.c	2017-11-29 13:30:04.050145437 +0100
+@@ -2715,7 +2715,7 @@ static const zend_function_entry pcre_fu
+ 	PHP_FE_END
+ };
+ 
+-zend_module_entry pcre_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry pcre_module_entry = {
+ 	STANDARD_MODULE_HEADER,
+    "pcre",
+ 	pcre_functions,
+--- php-7.2.0/ext/reflection/php_reflection.c.omv~	2017-11-29 13:30:13.372166447 +0100
++++ php-7.2.0/ext/reflection/php_reflection.c	2017-11-29 13:30:34.731214591 +0100
+@@ -6830,7 +6830,7 @@ PHP_MINFO_FUNCTION(reflection) /* {{{ */
+ 	php_info_print_table_end();
+ } /* }}} */
+ 
+-zend_module_entry reflection_module_entry = { /* {{{ */
++__attribute__((visibility("default"))) zend_module_entry reflection_module_entry = { /* {{{ */
+ 	STANDARD_MODULE_HEADER,
+ 	"Reflection",
+ 	reflection_ext_functions,
+--- php-7.2.0/ext/simplexml/simplexml.c.omv~	2017-11-29 13:31:10.373294945 +0100
++++ php-7.2.0/ext/simplexml/simplexml.c	2017-11-29 13:31:14.562304390 +0100
+@@ -2676,7 +2676,7 @@ static const zend_module_dep simplexml_d
+ };
+ /* }}} */
+ 
+-zend_module_entry simplexml_module_entry = { /* {{{ */
++__attribute__((visibility("default"))) zend_module_entry simplexml_module_entry = { /* {{{ */
+ 	STANDARD_MODULE_HEADER_EX, NULL,
+ 	simplexml_deps,
+ 	"SimpleXML",
+--- php-7.2.0/ext/spl/php_spl.c.omv~	2017-11-29 13:30:51.564252538 +0100
++++ php-7.2.0/ext/spl/php_spl.c	2017-11-29 13:31:00.361272372 +0100
+@@ -1015,7 +1015,7 @@ PHP_RSHUTDOWN_FUNCTION(spl) /* {{{ */
+ 
+ /* {{{ spl_module_entry
+  */
+-zend_module_entry spl_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry spl_module_entry = {
+ 	STANDARD_MODULE_HEADER,
+ 	"SPL",
+ 	spl_functions,
+--- php-7.2.0/ext/standard/basic_functions.c.omv~	2017-11-29 13:31:35.333351228 +0100
++++ php-7.2.0/ext/standard/basic_functions.c	2017-11-29 13:31:39.891361507 +0100
+@@ -3422,7 +3422,7 @@ static const zend_module_dep standard_de
+ };
+ /* }}} */
+ 
+-zend_module_entry basic_functions_module = { /* {{{ */
++__attribute__((visibility("default"))) zend_module_entry basic_functions_module = { /* {{{ */
+ 	STANDARD_MODULE_HEADER_EX,
+ 	NULL,
+ 	standard_deps,
+--- php-7.2.0/Zend/zend_signal.c.omv~	2017-11-29 13:31:58.788404124 +0100
++++ php-7.2.0/Zend/zend_signal.c	2017-11-29 13:32:19.265450309 +0100
+@@ -377,7 +377,7 @@ static void zend_signal_globals_ctor(zen
+ }
+ /* }}} */
+ 
+-void zend_signal_init(void) /* {{{ */
++__attribute__((visibility("default"))) void zend_signal_init(void) /* {{{ */
+ {
+ 	int signo;
+ 	struct sigaction sa;
+@@ -399,7 +399,7 @@ void zend_signal_init(void) /* {{{ */
+ 
+ /* {{{ zend_signal_startup
+  * alloc zend signal globals */
+-void zend_signal_startup(void)
++__attribute__((visibility("default"))) void zend_signal_startup(void)
+ {
+ 
+ #ifdef ZTS
