@@ -25,7 +25,7 @@ Version:	7.2.0
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -800,7 +800,7 @@ PDO_SQLITE is a driver that implements the PHP Data Objects (PDO) interface to
 enable access to SQLite 3 databases.
 
 This extension provides an SQLite v3 driver for PDO. SQLite V3 is NOT
-compatible with the bundled SQLite 2 in PHP 5, but is a significant step
+compatible with the bundled SQLite 2 in PHP 7, but is a significant step
 forwards, featuring complete utf-8 support, native support for blobs, native
 support for prepared statements with bound parameters and improved concurrency.
 
@@ -1177,7 +1177,9 @@ Requires:	%{name}-timezonedb >= 3:2009.10
 # Suggests:	%{name}-suhosin >= 0.9.29
 Conflicts:	%{name}-suhosin < 0.9.29
 Conflicts:	apache-mpm-worker >= 2.4.0
-Conflicts:	apache-mpm-event >= 2.4.0
+# mod_php with the event mpm is not an recommended by php devs, but
+# is (at least somewhat) working. Let's not do a hard conflict.
+# Conflicts:	apache-mpm-event >= 2.4.0
 Provides:	mod_php = %{EVRD}
 BuildRequires:	dos2unix
 
@@ -1190,7 +1192,7 @@ simple. The most common use of PHP coding is probably as a replacement for CGI
 scripts. The %{name} module enables the apache web server to understand
 and process the embedded PHP language in web pages.
 
-This package contains PHP version 5. You'll also need to install the apache web
+This package contains PHP version 7. You'll also need to install the apache web
 server.
 
 
