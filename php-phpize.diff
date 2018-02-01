@@ -1,5 +1,5 @@
---- php-5.5.4/build/build2.mk.phpize.droplet	2013-09-18 15:08:04.000000000 +0200
-+++ php-5.5.4/build/build2.mk	2013-10-01 20:48:25.826413645 +0200
+--- php-7.2.0/build/build2.mk.phpize.droplet	2017-11-28 10:22:53.000000000 +0100
++++ php-7.2.0/build/build2.mk	2017-11-29 12:30:58.813928044 +0100
 @@ -29,6 +29,7 @@ targets = $(TOUCH_FILES) configure $(con
  
  PHP_AUTOCONF ?= 'autoconf'
@@ -8,22 +8,18 @@
  
  SUPPRESS_WARNINGS ?= 2>&1 | (egrep -v '(AC_TRY_RUN called without default to allow cross compiling|AC_PROG_CXXCPP was called before AC_PROG_CXX|defined in acinclude.m4 but never used|AC_PROG_LEX invoked multiple times|AC_DECL_YYTEXT is expanded from...|the top level)'||true)
  
---- php-5.5.4/scripts/phpize.in.phpize.droplet	2013-09-18 15:08:04.000000000 +0200
-+++ php-5.5.4/scripts/phpize.in	2013-10-01 20:50:39.732408045 +0200
-@@ -9,9 +9,11 @@ includedir="`eval echo @includedir@`/php
- builddir="`pwd`"
- SED="@SED@"
+--- php-7.2.0/scripts/phpize.in.phpize.droplet	2017-11-28 10:23:05.000000000 +0100
++++ php-7.2.0/scripts/phpize.in	2017-11-29 12:51:51.304325469 +0100
+@@ -11,7 +11,7 @@ SED="@SED@"
  
-+export WANT_AUTOCONF_2_5=1
-+
  FILES_BUILD="mkdep.awk scan_makefile_in.awk shtool libtool.m4 ax_check_compile_flag.m4"
  FILES="acinclude.m4 Makefile.global config.sub config.guess ltmain.sh run-tests*.php"
 -CLEAN_FILES="$FILES *.o *.lo *.la .deps .libs/ build/ modules/ install-sh \
-+CLEAN_FILES="$FILES *.so *.o *.lo *.la .deps .libs/ build/ modules/ install-sh \
- 	mkinstalldirs missing config.nice config.sub config.guess configure configure.in \
++CLEAN_FILES="$FILES *.o *.so *.lo *.la .deps .libs/ build/ modules/ install-sh \
+ 	mkinstalldirs missing config.nice config.sub config.guess configure configure.ac \
  	aclocal.m4 config.h config.h.in conftest* ltmain.sh libtool config.cache autom4te.cache/ \
  	config.log config.status Makefile Makefile.fragments Makefile.objects confdefs.h \
-@@ -121,6 +123,7 @@ phpize_check_autotools()
+@@ -121,6 +121,7 @@ phpize_check_autotools()
  {
    test -z "$PHP_AUTOCONF" && PHP_AUTOCONF=autoconf
    test -z "$PHP_AUTOHEADER" && PHP_AUTOHEADER=autoheader
@@ -31,7 +27,7 @@
    
    if test ! -x "$PHP_AUTOCONF" && test ! -x "`$php_shtool path $PHP_AUTOCONF`"; then
      cat <<EOF
-@@ -138,6 +141,14 @@ Cannot find autoheader. Please check you
+@@ -138,6 +139,14 @@ Cannot find autoheader. Please check you
  EOF
      exit 1
    fi
@@ -46,13 +42,13 @@
  }
  
  phpize_copy_files()
-@@ -151,13 +162,13 @@ phpize_copy_files()
+@@ -151,13 +160,13 @@ phpize_copy_files()
  
  phpize_replace_prefix()
  {
 -  $SED \
 -  -e "s#@prefix@#$prefix#" \
--  < "$phpdir/phpize.m4" > configure.in
+-  < "$phpdir/phpize.m4" > configure.ac
 +  cp $phpdir/phpize.m4 configure.in
  }
  
