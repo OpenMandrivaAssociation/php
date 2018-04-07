@@ -20,12 +20,12 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.2.3
+Version:	7.2.4
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
 %else
-Release:	2
+Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -41,6 +41,7 @@ Source7:	create_data_file.php
 Source9:        php-fpm-tmpfiles.conf
 Source10:	php.ini
 Patch1:		php-shared.diff
+Patch2:		php-mariadb-10.3.patch
 Patch3:		php-libtool.diff
 Patch4:		php-phpize.diff
 Patch5:		php-phpbuilddir.diff
@@ -1221,6 +1222,7 @@ fi
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
 %patch1 -p1 -b .shared.droplet
+%patch2 -p1 -b .mariadb~
 %patch3 -p0 -b .libtool.droplet
 %patch4 -p1 -b .phpize.droplet
 %patch5 -p1 -b .phpbuilddir.droplet
@@ -1430,7 +1432,7 @@ for i in fpm cgi cli apxs; do
     --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
     --with-mssql=shared,%{_prefix} \
     --with-mysql=shared,%{_prefix} --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
-    --with-mysqli=shared,%{_bindir}/mysql_config \
+    --with-mysqli=shared,mysqlnd \
     --enable-mysqlnd=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
     --enable-pcntl=shared \
