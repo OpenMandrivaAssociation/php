@@ -100,6 +100,7 @@ BuildRequires:	flex
 BuildRequires:	lemon
 BuildRequires:	libtool
 BuildRequires:	openssl
+BuildRequires:	systemd
 BuildRequires:	re2c >= 0.13.4
 
 BuildRequires:	pkgconfig(enchant)
