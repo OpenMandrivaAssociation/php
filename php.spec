@@ -25,7 +25,7 @@ Version:	7.2.5
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -149,6 +149,8 @@ BuildRequires:	t1lib-devel
 BuildRequires:	tidy-devel
 BuildRequires:	unixODBC-devel >= 2.2.1
 BuildRequires:	xmlrpc-epi-devel
+# For _pre_useradd
+BuildRequires:	rpm-helper
 %if %{build_libmagic}
 BuildRequires:	magic-devel
 %endif
@@ -911,8 +913,7 @@ between almost any pair. Most RFC 1345 character sets are supported.
 %package	session
 Summary:	Session extension module for PHP
 Group:		Development/PHP
-Requires(pre): rpm-helper
-Requires(postun): rpm-helper
+Requires(pre,postun): rpm-helper
 Requires:	%{libname} >= %{EVRD}
 
 %description	session
