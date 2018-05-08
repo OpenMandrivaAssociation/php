@@ -90,6 +90,8 @@ Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
 Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
 Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
+# Use pkg-config instead of (removed as of 2.9.1) freetype-config
+Patch229:	php-7.2.5-freetype-2.9.1.patch
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -109,6 +111,7 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libzip)
@@ -1274,6 +1277,8 @@ fi
 %patch123 -p0 -b .bug43589.droplet
 %patch227 -p0 -b .enchant_lib64_fix.droplet
 %patch228 -p0 -b .xmlrpc-epi_fix.droplet
+
+%patch229 -p1 -b .ft291~
 
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
