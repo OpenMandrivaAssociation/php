@@ -118,6 +118,7 @@ BuildRequires:	pkgconfig(libzip)
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(sqlite3)
+BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xpm)
 
