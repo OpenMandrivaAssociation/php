@@ -1363,9 +1363,9 @@ EOF
 
 chmod 755 php-devel/buildext
 
-#export PHP_AUTOCONF=autoconf-2.13
 rm -f configure
 rm -rf autom4te.cache
+libtoolize --force
 ./buildconf --force
 
 # Do this patch with a perl hack...
