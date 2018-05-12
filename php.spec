@@ -1365,7 +1365,6 @@ chmod 755 php-devel/buildext
 
 rm -f configure
 rm -rf autom4te.cache
-libtoolize --force
 ./buildconf --force
 
 # Do this patch with a perl hack...
