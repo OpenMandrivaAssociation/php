@@ -1,11 +1,12 @@
---- php-5.5.6/ext/dba/config.m4.omv~	2013-12-04 20:05:47.245593536 +0100
-+++ php-5.5.6/ext/dba/config.m4	2013-12-04 20:06:15.171244417 +0100
-@@ -245,7 +245,7 @@ AC_DEFUN([PHP_DBA_DB_CHECK],[
-         ],[
+diff -up php-7.3.0RC1/ext/dba/config.m4.db60~ php-7.3.0RC1/ext/dba/config.m4
+--- php-7.3.0RC1/ext/dba/config.m4.db60~	2018-09-13 22:48:02.122654318 +0200
++++ php-7.3.0RC1/ext/dba/config.m4	2018-09-13 22:48:47.222861935 +0200
+@@ -277,7 +277,7 @@ AC_DEFUN([PHP_DBA_DB_CHECK],[
+         ]])],[
            AC_EGREP_CPP(yes,[
  #include "$THIS_INCLUDE"
 -#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR == 5)
-+#if DB_VERSION_MAJOR == $1 || ($1 == 4 && (DB_VERSION_MAJOR == 5 || DB_VERSION_MAJOR == 6))
++#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR >= 5)
              yes
  #endif
            ],[

@@ -16,14 +16,14 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta %{nil}
+%define beta RC1
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.2.9
+Version:	7.3.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
-Source0:	https://downloads.php.net/~davey/php-%{version}%{beta}.tar.xz
+Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
 %else
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
@@ -48,11 +48,9 @@ Patch5:		php-phpbuilddir.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php7-apache2-filters.patch
 Patch6:		php5-apache2-filters.diff
-# remove libedit once and for all
-Patch7:		php-no_libedit.diff
 Patch8:		php-xmlrpc_epi.patch
 Patch9:		php-xmlrpc_no_rpath.diff
-Patch10:	php-5.5.7-detect-freetype-2.5.x.patch
+Patch10:	php-7.3.0rc1-compile.patch
 Patch11:	php-5.3.8-bdb-5.2.diff
 Patch12:	php-5.5.6-db-6.0.patch
 Patch13:	php-7.0.1-clang-warnings.patch
@@ -1234,10 +1232,9 @@ fi
 %patch4 -p1 -b .phpize.droplet
 %patch5 -p1 -b .phpbuilddir.droplet
 %patch6 -p1 -b .apache2-filters.droplet
-#patch7 -p1 -b .no_libedit.droplet
 %patch8 -p1 -b .xmlrpc_epi_header
 %patch9 -p0 -b .xmlrpc_no_rpath.droplet
-#patch10 -p1 -b .ft252~
+%patch10 -p1 -b .compile~
 %patch11 -p1 -b .bdb-5.2.droplet
 %patch12 -p1 -b .db60~
 %patch13 -p1 -b .clangwarn~
@@ -1248,7 +1245,7 @@ fi
 # FIXME needs porting
 #patch20 -p1 -b .mail.droplet
 %patch21 -p0 -b .filter-shared.droplet
-%patch22 -p0 -b .dba-link.droplet
+%patch22 -p1 -b .dba-link.droplet
 %patch23 -p1 -b .zlib-for-getimagesize.droplet
 # for kolab2
 # FIXME needs porting
@@ -1269,7 +1266,7 @@ fi
 %patch102 -p1 -b .install.droplet
 %patch105 -p1 -b .umask.droplet
 %patch113 -p1 -b .libc-client-php.droplet
-%patch114 -p0 -b .no_pam_in_c-client.droplet
+%patch114 -p1 -b .no_pam_in_c-client.droplet
 %patch115 -p1 -b .dlopen.droplet
 
 # upstream fixes
@@ -1339,6 +1336,8 @@ rm -rf ext/xmlrpc/libxmlrpc
 
 %build
 %serverbuild
+
+cp -f %{_datadir}/libtool/build-aux/config.* .
 
 # it does not work with -fPIE and someone added that to the serverbuild macro...
 CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
@@ -1680,7 +1679,6 @@ cp sapi/cgi/README.FastCGI README.fcgi
 # cli docs
 cp sapi/cli/CREDITS CREDITS.cli
 cp sapi/cli/README README.cli
-cp sapi/cli/TODO TODO.cli
 
 # phar fixes
 if [ -L %{buildroot}%{_bindir}/phar ]; then
@@ -2380,7 +2378,7 @@ fi
 %{_libdir}/libphp7_common.so.%{php7_common_major}*
 
 %files cli
-%doc CREDITS.cli README.cli TODO.cli
+%doc CREDITS.cli README.cli
 %attr(0755,root,root) %{_bindir}/php
 %attr(0644,root,root) %{_mandir}/man1/php.1*
 

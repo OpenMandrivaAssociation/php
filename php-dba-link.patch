@@ -1,6 +1,7 @@
---- ext/dba/config.m4	2007-05-21 13:38:53.000000000 +0200
-+++ ext/dba/config.m4.oden	2007-06-01 10:33:10.000000000 +0200
-@@ -186,6 +186,8 @@
+diff -up php-7.3.0RC1/ext/dba/config.m4.dba-link.droplet php-7.3.0RC1/ext/dba/config.m4
+--- php-7.3.0RC1/ext/dba/config.m4.dba-link.droplet	2018-09-13 22:49:02.287930835 +0200
++++ php-7.3.0RC1/ext/dba/config.m4	2018-09-13 23:19:59.940775252 +0200
+@@ -282,6 +282,8 @@ AC_DEFUN([PHP_DBA_DB_CHECK],[
  #endif
            ],[
              THIS_LIBS=$LIB
@@ -8,4 +9,4 @@
 +            LIBS=$old_LIBS
              lib_found=1
            ])
-         ])
+         ],[])
