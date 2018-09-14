@@ -119,6 +119,7 @@ BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xpm)
+BuildRequires:	pkgconfig(libxcrypt)
 
 BuildRequires:	apache-devel >= 2.2.0
 BuildRequires:	aspell-devel
