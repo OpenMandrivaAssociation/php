@@ -120,6 +120,10 @@ BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libxcrypt)
+BuildRequires:	pkgconfig(libpcre2-posix)
+BuildRequires:	pkgconfig(libpcre2-8)
+BuildRequires:	pkgconfig(libpcre2-16)
+BuildRequires:	pkgconfig(libpcre2-32)
 
 BuildRequires:	apache-devel >= 2.2.0
 BuildRequires:	aspell-devel
