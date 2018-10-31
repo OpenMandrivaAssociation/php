@@ -25,7 +25,7 @@ Version:	7.3.0
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
