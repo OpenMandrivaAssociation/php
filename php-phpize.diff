@@ -16,8 +16,8 @@ diff -up php-7.3.0RC1/scripts/phpize.in.phpize.droplet php-7.3.0RC1/scripts/phpi
  
  FILES_BUILD="mkdep.awk scan_makefile_in.awk shtool libtool.m4 ax_check_compile_flag.m4 ax_gcc_func_attribute.m4"
  FILES="acinclude.m4 Makefile.global config.sub config.guess ltmain.sh run-tests*.php"
--CLEAN_FILES="$FILES *.o *.lo *.la .deps .libs/ build/ modules/ install-sh \
-+CLEAN_FILES="$FILES *.o *.so *.lo *.la .deps .libs/ build/ modules/ install-sh \
+-CLEAN_FILES="$FILES *.o *.lo *.la .libs/ build/ modules/ install-sh \
++CLEAN_FILES="$FILES *.o *.so *.lo *.la .libs/ build/ modules/ install-sh \
  	mkinstalldirs missing config.nice config.sub config.guess configure configure.ac \
  	aclocal.m4 config.h config.h.in conftest* ltmain.sh libtool config.cache autom4te.cache/ \
  	config.log config.status Makefile Makefile.fragments Makefile.objects confdefs.h \
@@ -26,7 +26,7 @@ diff -up php-7.3.0RC1/scripts/phpize.in.phpize.droplet php-7.3.0RC1/scripts/phpi
    test -z "$PHP_AUTOCONF" && PHP_AUTOCONF=autoconf
    test -z "$PHP_AUTOHEADER" && PHP_AUTOHEADER=autoheader
 +  test -z "$PHP_ACLOCAL" && PHP_ACLOCAL=aclocal
-   
+ 
    if test ! -x "$PHP_AUTOCONF" && test ! -x "`$php_shtool path $PHP_AUTOCONF`"; then
      cat <<EOF
 @@ -138,6 +139,14 @@ Cannot find autoheader. Please check you
