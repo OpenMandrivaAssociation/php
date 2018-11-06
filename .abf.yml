@@ -1,4 +1,5 @@
 removed_sources:
+  php-7.2.10.tar.xz: ac2d6ae8c332649d2ad9265f0227237f938a9e21
   php-7.2.3.tar.xz: e697b0f170207cbd1b830a5c909ac4f25f5bd382
 sources:
-  php-7.2.10.tar.xz: ac2d6ae8c332649d2ad9265f0227237f938a9e21
+  php-7.2.11.tar.xz: 4fd355950fdbe39cdab1b2bac03f25160bd441ec
