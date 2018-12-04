@@ -16,7 +16,7 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta RC4
+%define beta %{nil}
 
 Summary:	The PHP7 scripting language
 Name:		php
@@ -25,7 +25,7 @@ Version:	7.3.0
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
 %else
-Release:	2
+Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
