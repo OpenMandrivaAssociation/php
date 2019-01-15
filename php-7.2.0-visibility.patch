@@ -86,12 +86,3 @@
  {
  	int signo;
  	struct sigaction sa;
-@@ -399,7 +399,7 @@ void zend_signal_init(void) /* {{{ */
- 
- /* {{{ zend_signal_startup
-  * alloc zend signal globals */
--void zend_signal_startup(void)
-+__attribute__((visibility("default"))) void zend_signal_startup(void)
- {
- 
- #ifdef ZTS
