@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   php-7.3.1.tar.xz: 16495262ef9f13b62a615d68ad4ebce22169837d
+sources:
+  php-7.3.2.tar.xz: f56e54d35daeec4a090567ddf7eacc1904c56bd8
