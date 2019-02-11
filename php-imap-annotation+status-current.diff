@@ -110,7 +110,7 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +        long ret;
 +	
 +        // TODO: Use zend_parse_parameters here
-+	if (ZEND_NUM_ARGS() != 5 || zend_get_parameters_ex(5, &streamind, &mailbox, &entry, &attr, &value) == FAILURE) {
++	if (ZEND_NUM_ARGS() != 5 || zend_parse_parameters(5 TSRMLS_CC, "zzzzz", &streamind, &mailbox, &entry, &attr, &value) == FAILURE) {
 +		ZEND_WRONG_PARAM_COUNT();
 +	}
 +
@@ -158,7 +158,7 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +	pils *imap_le_struct;
 +        long ret;
 +
-+	if(ZEND_NUM_ARGS() != 4 || zend_get_parameters_ex(4, &streamind, &mailbox, &entry, &attr) == FAILURE) {
++	if(ZEND_NUM_ARGS() != 4 || zend_parse_parameters(4 TSRMLS_CC, "zzzz", &streamind, &mailbox, &entry, &attr) == FAILURE) {
 +		ZEND_WRONG_PARAM_COUNT();
 +	}
  
@@ -226,7 +226,7 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +	pils *imap_le_struct;
 +	long flags = 0L;
 +
-+ 	if (ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &streamind, &pflags) == FAILURE) {
++ 	if (ZEND_NUM_ARGS() != 2 || zend_parse_parameters(2, "zz", &streamind, &pflags) == FAILURE) {
 + 		ZEND_WRONG_PARAM_COUNT();
 + 	}
 +

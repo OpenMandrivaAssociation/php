@@ -1,6 +1,6 @@
 --- php-7.0.1/sapi/apache2handler/php_functions.c.apache2-filters.droplet	2015-12-16 11:41:55.000000000 +0100
 +++ php-7.0.1/sapi/apache2handler/php_functions.c	2015-12-29 00:12:07.202603653 +0100
-@@ -216,6 +216,65 @@ PHP_FUNCTION(apache_response_headers)
+@@ -216,6 +216,63 @@ PHP_FUNCTION(apache_response_headers)
  }
  /* }}} */
  
@@ -38,19 +38,17 @@
 +{
 +       php_struct *ctx;
 +       int arg_count = ZEND_NUM_ARGS();
-+       zval **filter_name;
++       char *filter_name;
 +       ap_filter_rec_t* ap_filter;
 +
 +       if (arg_count != 1 ||
-+               zend_get_parameters_ex(arg_count, &filter_name) == FAILURE) {
++               zend_parse_parameters(arg_count TSRMLS_CC, "s", &filter_name) == FAILURE) {
 +               WRONG_PARAM_COUNT;
 +       }
 +
 +       ctx = SG(server_context);
 +
-+       convert_to_string_ex(filter_name);
-+
-+        ap_filter = ap_get_output_filter_handle(Z_STRVAL_P(*filter_name));
++        ap_filter = ap_get_output_filter_handle(filter_name);
 +
 +        /* requested output filter was not found */
 +       if(ap_filter == NULL) {

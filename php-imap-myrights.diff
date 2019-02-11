@@ -54,7 +54,7 @@ diff -Naurp php-5.3.4RC1/ext/imap/php_imap.c php-5.3.4RC1.oden/ext/imap/php_imap
 +	zval **streamind, **mailbox;
 +	pils *imap_le_struct;
 +
-+	if(ZEND_NUM_ARGS() != 2 || zend_get_parameters_ex(2, &streamind, &mailbox) == FAILURE) {
++	if(ZEND_NUM_ARGS() != 2 || zend_parse_parameters(2 TSRMLS_CC, "zz", &streamind, &mailbox) == FAILURE) {
 +		ZEND_WRONG_PARAM_COUNT();
 +	}
 +
