@@ -1,7 +1,10 @@
 %define _build_pkgcheck_set %{nil}
 %define _build_pkgcheck_srpm %{nil}
 
-%define _disable_lto 1
+# LTO causes a build failure because something forces a linking step of
+# libphp7_common to barf because libtool foolishly takes -flto out of
+# compiler flags
+#define _disable_lto 1
 
 %define build_test 0
 %{?_with_test: %{expand: %%global build_test 1}}
@@ -20,7 +23,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.3.3
+Version:	7.3.4
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
@@ -40,9 +43,9 @@ Source6:	php-fpm.logrotate
 Source7:	create_data_file.php
 Source9:        php-fpm-tmpfiles.conf
 Source10:	php.ini
+Patch0:		php-7.3.4-libtool-2.4.6.patch
 Patch1:		php-shared.diff
 Patch2:		php-mariadb-10.3.patch
-Patch3:		php-libtool.diff
 Patch4:		php-phpize.diff
 Patch5:		php-phpbuilddir.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
@@ -1231,9 +1234,9 @@ fi
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
 
+%patch0 -p1 -b .libtool246~
 %patch1 -p1 -b .shared.droplet
 %patch2 -p1 -b .mariadb~
-%patch3 -p0 -b .libtool.droplet
 %patch4 -p1 -b .phpize.droplet
 %patch5 -p1 -b .phpbuilddir.droplet
 %patch6 -p1 -b .apache2-filters.droplet
@@ -1339,6 +1342,11 @@ rm -rf ext/pcre/pcrelib
 rm -rf ext/pdo_sqlite/sqlite
 rm -rf ext/xmlrpc/libxmlrpc
 
+# Included ltmain.sh is obsolete and breaks lto
+rm -f ltmain.sh
+libtoolize --force
+aclocal
+
 %build
 %serverbuild
 
@@ -1355,7 +1363,7 @@ export RPM_OPT_FLAGS="${CFLAGS}"
 
 cat > php-devel/buildext <<EOF
 #!/bin/bash
-gcc -Wall -fPIC -shared $CFLAGS \\
+exec %{__cc} -Wall -fPIC -shared $CFLAGS \\
     -I. \`%{_bindir}/php-config --includes\` \\
     -I%{_includedir}/libxml2 \\
     -I%{_includedir}/freetype \\
@@ -1490,24 +1498,24 @@ done
 perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/php-doc/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
 cp config.nice configure_command; chmod 644 configure_command
 
-%make PHPDBG_EXTRA_LIBS="-lreadline"
+%make PHPDBG_EXTRA_LIBS="-lreadline" CXX=%{__cxx}
 
 %if %{build_libmagic}
 # keep in sync with latest system magic, the next best thing when system libmagic can't be used...
 sapi/cli/php create_data_file.php %{_datadir}/misc/magic.mgc > ext/fileinfo/data_file.c
 rm -rf ext/fileinfo/.libs ext/fileinfo/*.lo ext/fileinfo/*.la modules/fileinfo.so modules/fileinfo.la
 cp -p ext/fileinfo/data_file.c php-devel/extensions/fileinfo/data_file.c
-%make
+%make CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
 %endif
 
 # make php-cgi
 cp -af php_config.h.cgi main/php_config.h
-make -f Makefile.cgi sapi/cgi/php-cgi
+make -f Makefile.cgi sapi/cgi/php-cgi CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
 cp -af php_config.h.apxs main/php_config.h
 
 # make php-fpm
 cp -af php_config.h.fpm main/php_config.h
-make -f Makefile.fpm sapi/fpm/php-fpm
+make -f Makefile.fpm sapi/fpm/php-fpm CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
 cp -af php_config.h.apxs main/php_config.h
 
 # make apache-mod_php
@@ -1538,6 +1546,7 @@ install -d %{buildroot}%{_sysconfdir}/cron.d
 install -d %{buildroot}/var/lib/php
 
 make -f Makefile.apxs install \
+	PHPDBG_EXTRA_LIBS="-lreadline" \
 	INSTALL_ROOT=%{buildroot} \
 	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp7_common.la %{buildroot}%{_libdir}/"
 
