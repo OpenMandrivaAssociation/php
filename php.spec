@@ -23,7 +23,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.3.6
+Version:	7.3.8
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
