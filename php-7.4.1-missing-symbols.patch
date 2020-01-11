@@ -1,0 +1,36 @@
+diff -up php-7.4.1/build/Makefile.global.omv~ php-7.4.1/build/Makefile.global
+--- php-7.4.1/build/Makefile.global.omv~	2020-01-09 17:28:46.652882773 +0100
++++ php-7.4.1/build/Makefile.global	2020-01-09 17:28:59.936882128 +0100
+@@ -16,7 +16,7 @@ build-modules: $(PHP_MODULES) $(PHP_ZEND
+ build-binaries: $(PHP_BINARIES)
+ 
+ libphp$(PHP_MAJOR_VERSION)_common.la: $(PHP_GLOBAL_OBJS)
+-	$(LIBTOOL) --mode=link --tag=CC $(CC) $(CFLAGS) $(EXTRA_CFLAGS) -version-info 8:0:3 -rpath $(phptempdir) $(LDFLAGS) $(PHP_RPATHS) $(PHP_GLOBAL_OBJS) $(EXTRA_LIBS) $(ZEND_EXTRA_LIBS) -o $@
++	$(LIBTOOL) --mode=link --tag=CC $(CC) $(CFLAGS) $(EXTRA_CFLAGS) -version-info 8:0:3 -rpath $(phptempdir) $(LDFLAGS) $(PHP_RPATHS) $(PHP_GLOBAL_OBJS) $(EXTRA_LIBS) $(ZEND_EXTRA_LIBS) -lz -o $@
+ 	-@$(LIBTOOL) --silent --mode=install cp $@ $(phptempdir)/$@ >/dev/null 2>&1
+ 
+ libphp$(PHP_MAJOR_VERSION).la: libphp$(PHP_MAJOR_VERSION)_common.la $(PHP_SAPI_OBJS)
+diff -up php-7.4.1/ext/hash/hash.c.omv~ php-7.4.1/ext/hash/hash.c
+--- php-7.4.1/ext/hash/hash.c.omv~	2020-01-09 15:43:14.481189986 +0100
++++ php-7.4.1/ext/hash/hash.c	2020-01-09 15:43:30.344189217 +0100
+@@ -1486,7 +1486,7 @@ static const zend_function_entry hash_fu
+ 
+ /* {{{ hash_module_entry
+  */
+-zend_module_entry hash_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry hash_module_entry = {
+ 	STANDARD_MODULE_HEADER,
+ 	PHP_HASH_EXTNAME,
+ 	hash_functions,
+diff -up php-7.4.1/ext/gd/gd.c.omv~ php-7.4.1/ext/gd/gd.c
+--- php-7.4.1/ext/gd/gd.c.omv~	2020-01-10 21:34:30.189975665 +0100
++++ php-7.4.1/ext/gd/gd.c	2020-01-10 21:34:43.455975021 +0100
+@@ -1018,7 +1018,7 @@ static const zend_function_entry gd_func
+ };
+ /* }}} */
+ 
+-zend_module_entry gd_module_entry = {
++__attribute__((visibility("default"))) zend_module_entry gd_module_entry = {
+ 	STANDARD_MODULE_HEADER,
+ 	"gd",
+ 	gd_functions,

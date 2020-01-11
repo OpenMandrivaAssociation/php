@@ -1,6 +1,6 @@
-diff -up php-7.3.4/Makefile.global.omv~ php-7.3.4/Makefile.global
---- php-7.3.4/Makefile.global.omv~	2019-04-03 03:49:31.503343477 +0200
-+++ php-7.3.4/Makefile.global	2019-04-03 03:49:41.524376338 +0200
+diff -up php-7.3.4/build/Makefile.global.omv~ php-7.3.4/build/Makefile.global
+--- php-7.3.4/build/Makefile.global.omv~	2019-04-03 03:49:31.503343477 +0200
++++ php-7.3.4/build/Makefile.global	2019-04-03 03:49:41.524376338 +0200
 @@ -16,7 +16,7 @@ build-modules: $(PHP_MODULES) $(PHP_ZEND
  build-binaries: $(PHP_BINARIES)
  

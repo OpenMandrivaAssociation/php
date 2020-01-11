@@ -23,7 +23,7 @@
 
 Summary:	The PHP7 scripting language
 Name:		php
-Version:	7.3.13
+Version:	7.4.1
 %if "%{beta}" != ""
 Release:	1
 Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
@@ -46,13 +46,13 @@ Source10:	php.ini
 Patch0:		php-7.3.4-libtool-2.4.6.patch
 Patch1:		php-shared.diff
 Patch2:		php-mariadb-10.3.patch
-Patch4:		php-phpize.diff
+Patch3:		php-7.4.1-missing-symbols.patch
+Patch4:		https://src.fedoraproject.org/rpms/php/raw/master/f/php-7.4.0-phpize.patch
 Patch5:		php-phpbuilddir.diff
 # http://www.outoforder.cc/projects/apache/mod_transform/
 # http://www.outoforder.cc/projects/apache/mod_transform/patches/php7-apache2-filters.patch
 Patch6:		php5-apache2-filters.diff
 Patch8:		php-xmlrpc_epi.patch
-Patch9:		php-xmlrpc_no_rpath.diff
 Patch10:	php-7.3.0rc1-compile.patch
 Patch11:	php-5.3.8-bdb-5.2.diff
 Patch12:	php-5.5.6-db-6.0.patch
@@ -61,7 +61,6 @@ Patch14:	php-7.2.0-visibility.patch
 #####################################################################
 # Stolen from PLD
 Patch20:	php-mail.diff
-Patch21:	php-filter-shared.diff
 Patch22:	php-dba-link.patch
 Patch23:	php-zlib-for-getimagesize.patch
 # for kolab2
@@ -77,22 +76,14 @@ Patch50:	php-session.save_path.diff
 Patch51:	php-exif_nesting_level.diff
 #####################################################################
 # Stolen from fedora
-Patch101:	php-cxx.diff
 Patch102:	php-install.diff
 Patch105:	php-umask.diff
 # Fixes for extension modules
 Patch113:	php-libc-client.diff
 Patch114:	php-no_pam_in_c-client.diff
-# Functional changes
-Patch115:	php-dlopen.diff
 # Fix bugs
-Patch120:	php-tests-wddx.diff
 Patch121:	php-bug43221.diff
 Patch123:	php-bug43589.diff
-Patch227:	php-5.3.0RC1-enchant_lib64_fix.diff
-Patch228:	php-5.3.0RC2-xmlrpc-epi_fix.diff
-# Use pkg-config instead of (removed as of 2.9.1) freetype-config
-Patch229:	php-7.2.5-freetype-2.9.1.patch
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -185,7 +176,8 @@ Requires:	php-ctype >= %{EVRD}
 Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
-Requires:	php-hash >= %{EVRD}
+# As of 7.4, php-hash seems to be builtin-only
+%rename 	php-hash
 Requires:	php-ini >= %{version}
 Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
@@ -221,7 +213,6 @@ Requires:	php-ctype >= %{EVRD}
 Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
-Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
 Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
@@ -256,7 +247,6 @@ Requires:	php-ctype >= %{EVRD}
 Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
-Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
 Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
@@ -273,9 +263,7 @@ Requires:	php-zlib >= %{EVRD}
 Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 Provides:	php-fcgi = %{EVRD}
-Obsoletes:	php-fcgi
-# because of a added compat softlink
-Conflicts:	php-fcgi < %{EVRD}
+Obsoletes:	php-fcgi < %{EVRD}
 
 %description	cgi
 PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
@@ -841,7 +829,6 @@ Summary:	Allows running of complete applications out of .phar files
 Group:		Development/PHP
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-bz2
-Requires:	php-hash
 
 %description	phar
 This is the extension version of PEAR's PHP_Archive package. Support for
@@ -1105,17 +1092,6 @@ This is a dynamic shared object (DSO) for PHP that will add xsl support.
 The XSL extension implements the XSL standard, performing XSLT transformations
 using the libxslt library
 
-%package	wddx
-Summary:	WDDX serialization functions
-Group:		Development/PHP
-Requires:	php-xml
-Requires:	%{libname} >= %{EVRD}
-
-%description	wddx
-This is a dynamic shared object (DSO) that adds wddx support to PHP. 
-
-These functions are intended for work with WDDX (http://www.openwddx.org/)
-
 %package	zip
 Summary:	A zip management extension for PHP
 Group:		Development/PHP
@@ -1136,7 +1112,6 @@ Requires:	php-ctype >= %{EVRD}
 Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
-Requires:	php-hash >= %{EVRD}
 Requires:	php-ini >= %{version}
 Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
@@ -1174,7 +1149,6 @@ Requires:	%{name}-ctype = %{EVRD}
 Requires:	%{name}-filter = %{EVRD}
 Requires:	%{name}-ftp = %{EVRD}
 Requires:	%{name}-gettext = %{EVRD}
-Requires:	%{name}-hash = %{EVRD}
 Requires:	%{name}-ini >= %{version}
 Requires:	%{name}-json = %{EVRD}
 Requires:	%{name}-openssl = %{EVRD}
@@ -1233,15 +1207,16 @@ fi
 %endif
 
 # the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
+# (same goes for the more common "~" suffix)
 
 %patch0 -p1 -b .libtool246~
 %patch1 -p1 -b .shared.droplet
 %patch2 -p1 -b .mariadb~
-%patch4 -p1 -b .phpize.droplet
+%patch3 -p1 -b .missingsym~
+%patch4 -p1 -b .phpize~
 %patch5 -p1 -b .phpbuilddir.droplet
 %patch6 -p1 -b .apache2-filters.droplet
 %patch8 -p1 -b .xmlrpc_epi_header
-%patch9 -p0 -b .xmlrpc_no_rpath.droplet
 %patch10 -p1 -b .compile~
 %patch11 -p1 -b .bdb-5.2.droplet
 %patch12 -p1 -b .db60~
@@ -1252,7 +1227,6 @@ fi
 # Stolen from PLD
 # FIXME needs porting
 #patch20 -p1 -b .mail.droplet
-%patch21 -p0 -b .filter-shared.droplet
 %patch22 -p1 -b .dba-link.droplet
 %patch23 -p1 -b .zlib-for-getimagesize.droplet
 # for kolab2
@@ -1270,21 +1244,14 @@ fi
 
 #####################################################################
 # Stolen from fedora
-%patch101 -p1 -b .cxx.droplet
 %patch102 -p1 -b .install.droplet
 %patch105 -p1 -b .umask.droplet
 %patch113 -p1 -b .libc-client-php.droplet
 %patch114 -p1 -b .no_pam_in_c-client.droplet
-%patch115 -p1 -b .dlopen.droplet
 
 # upstream fixes
-%patch120 -p1 -b .tests-wddx.droplet
 %patch121 -p0 -b .bug43221.droplet
 %patch123 -p0 -b .bug43589.droplet
-%patch227 -p0 -b .enchant_lib64_fix.droplet
-%patch228 -p0 -b .xmlrpc-epi_fix.droplet
-
-%patch229 -p1 -b .ft291~
 
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
@@ -1327,7 +1294,7 @@ rm -f php-devel/sapi/fastcgi/php.sym
 rm -f php-devel/sapi/pi3web/php.sym
 
 # cleanup
-find php-devel -name "*.droplet" | xargs rm -f
+find php-devel -name "*.droplet" -o -name "*~" | xargs rm -f
 
 # don't ship MS Windows source
 rm -rf php-devel/extensions/com_dotnet
@@ -1378,6 +1345,7 @@ chmod 755 php-devel/buildext
 rm -f configure
 rm -rf autom4te.cache
 ./buildconf --force
+cp -f %{_bindir}/libtool .
 
 # Do this patch with a perl hack...
 perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
@@ -1386,7 +1354,12 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
-SAFE_LDFLAGS=`echo %{ldflags}|sed -e 's|-Wl,--no-undefined||g'`
+# FIXME
+# -fuse-ld=gold is a workaround for a very weird bug showing with lld 9.0.1
+# and php 7.4.1: "cannot apply additional memory protection after relocation"
+# Check if we can get rid of this after lld 10 is released.
+SAFE_LDFLAGS=`echo %{ldflags} -fuse-ld=gold|sed -e 's|-Wl,--no-undefined||g'`
+export EXTRA_LIBS="-lz -lgd"
 export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
@@ -1395,7 +1368,7 @@ export LDFLAGS="$SAFE_LDFLAGS"
 # FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
 for i in fpm cgi cli apxs; do
 ./configure \
-    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-libxml-dir=%{_prefix} --with-fpm-user=apache --with-fpm-group=apache` \
+    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=apache --with-fpm-group=apache` \
     `[ $i = cgi ] && echo --disable-cli` \
     `[ $i = cli ] && echo --disable-cgi --enable-cli` \
     `[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
@@ -1411,22 +1384,19 @@ for i in fpm cgi cli apxs; do
     --libexecdir=%{_libexecdir} \
     --localstatedir=/var/lib \
     --mandir=%{_mandir} \
+    --enable-rtld-now \
     --enable-shared=yes \
     --enable-static=no \
+    --with-external-pcre \
     --with-libdir=%{_lib} \
     --with-config-file-path=%{_sysconfdir} \
     --with-config-file-scan-dir=%{_sysconfdir}/php.d \
     --disable-debug  \
     --enable-inline-optimization \
-    --with-regex=system \
-    --with-pcre-regex=%{_prefix} \
-    --with-freetype-dir=%{_prefix} --with-zlib=%{_prefix} \
-    --with-png-dir=%{_prefix} \
+    --with-zlib=%{_prefix} \
     --with-pdo-odbc=unixODBC \
     --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
     --with-openssl=shared,%{_prefix} \
-    --enable-libxml=%{_prefix} --with-libxml-dir=%{_prefix} \
-    --enable-mod_charset \
     --without-pear \
     --enable-bcmath=shared \
     --with-bz2=shared,%{_prefix} \
@@ -1434,24 +1404,22 @@ for i in fpm cgi cli apxs; do
     --enable-ctype=shared \
     --with-curl=shared,%{_prefix} \
     --enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
-    --enable-dom=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --enable-dom=shared,%{_prefix} \
     --with-enchant=shared,%{_prefix} \
     --enable-exif=shared \
     --enable-fileinfo=shared \
-    --enable-filter=shared --with-pcre-dir=%{_prefix} \
-    --enable-intl=shared --with-icu-dir=%{_prefix} \
+    --enable-filter=shared \
+    --enable-intl=shared \
     --enable-json=shared \
     --with-openssl-dir=%{_prefix} --enable-ftp=shared \
-    --with-gd=shared --with-jpeg-dir=%{_prefix} --with-png-dir=%{_prefix} --with-zlib-dir=%{_prefix} --with-xpm-dir=%{_prefix}/X11R6 --with-freetype-dir=%{_prefix} --enable-gd-native-ttf --with-t1lib=%{_prefix} \
+    --with-zlib-dir=%{_prefix} \
     --with-gettext=shared,%{_prefix} \
     --with-gmp=shared,%{_prefix} \
-    --enable-hash=shared,%{_prefix} \
     --with-iconv=shared \
     --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
     --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
-    --enable-mbstring=shared,%{_prefix} --enable-mbregex --with-libmbfl=%{_prefix} --with-onig=%{_prefix} \
-    --with-mssql=shared,%{_prefix} \
-    --with-mysql=shared,%{_prefix} --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
+    --enable-mbstring=shared,%{_prefix} --enable-mbregex \
+    --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
     --with-mysqli=shared,mysqlnd \
     --enable-mysqlnd=shared,%{_prefix} \
     --with-unixODBC=shared,%{_prefix} \
@@ -1462,29 +1430,30 @@ for i in fpm cgi cli apxs; do
     --enable-posix=shared \
     --with-pspell=shared,%{_prefix} \
     --with-readline=shared,%{_prefix} \
-    --with-recode=shared,%{_prefix} \
     --enable-session=shared,%{_prefix} \
     --enable-shmop=shared,%{_prefix} \
     --enable-simplexml \
     --with-snmp=shared,%{_prefix} \
-    --enable-soap=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --enable-soap=shared,%{_prefix} \
     --enable-sockets=shared,%{_prefix} \
     --with-sqlite3=shared,%{_prefix} \
-    --with-sybase-ct=shared,%{_prefix} \
     --enable-sysvmsg=shared,%{_prefix} \
     --enable-sysvsem=shared,%{_prefix} \
     --enable-sysvshm=shared,%{_prefix} \
     --with-tidy=shared,%{_prefix} \
     --enable-tokenizer=shared,%{_prefix} \
-    --enable-xml=shared,%{_prefix} --with-libxml-dir=%{_prefix} \
+    --enable-xml=shared,%{_prefix} \
     --enable-xmlreader=shared,%{_prefix} \
     --with-xmlrpc=shared,%{_prefix} \
     --enable-xmlwriter=shared,%{_prefix} \
     --with-xsl=shared,%{_prefix} \
-    --enable-wddx=shared --with-libxml-dir=%{_prefix} \
-    --enable-zip=shared --with-libzip=%{_prefix} || (cat config.log && exit 1)
+    --enable-gd=shared --with-external-gd \
+    --with-zip=shared,%{_prefix} \
+    --with-mhash=shared \
+    || (cat config.log && exit 1)
 
 cp -f Makefile Makefile.$i
+cp -f %{_bindir}/libtool .
 
 # left for debugging purposes
 cp -f main/php_config.h php_config.h.$i
@@ -1607,7 +1576,7 @@ echo "extension = ftp.so"		> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
 echo "extension = gd.so"		> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
 echo "extension = gettext.so"		> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
 echo "extension = gmp.so"		> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
-echo "extension = hash.so"		> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
+#echo "extension = hash.so"		> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
 echo "extension = iconv.so"		> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
 echo "extension = imap.so"		> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
 echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
@@ -1629,7 +1598,7 @@ echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
 echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
 echo "extension = pspell.so"		> %{buildroot}%{_sysconfdir}/php.d/44_pspell.ini
 echo "extension = readline.so"		> %{buildroot}%{_sysconfdir}/php.d/45_readline.ini
-echo "extension = recode.so"		> %{buildroot}%{_sysconfdir}/php.d/46_recode.ini
+#echo "extension = recode.so"		> %{buildroot}%{_sysconfdir}/php.d/46_recode.ini
 echo "extension = session.so"		> %{buildroot}%{_sysconfdir}/php.d/47_session.ini
 echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
@@ -1646,7 +1615,6 @@ echo "extension = xmlreader.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xmlreader
 echo "extension = xmlrpc.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xmlrpc.ini
 echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter.ini
 echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
-echo "extension = wddx.so"		> %{buildroot}%{_sysconfdir}/php.d/63_wddx.ini
 echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
 echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
 echo "extension = phar.so"		> %{buildroot}%{_sysconfdir}/php.d/84_phar.ini
@@ -1677,22 +1645,6 @@ AddType application/x-httpd-php-source .phps
 
 DirectoryIndex index.php index.phtml
 EOF
-
-# fix docs
-cp Zend/LICENSE Zend/ZEND_LICENSE
-cp README.SELF-CONTAINED-EXTENSIONS SELF-CONTAINED-EXTENSIONS
-cp ext/openssl/README README.openssl
-cp ext/spl/README README.spl
-cp ext/libxml/CREDITS CREDITS.libxml
-cp ext/zlib/CREDITS CREDITS.zlib
-
-# cgi docs
-cp sapi/cgi/CREDITS CREDITS.cgi
-cp sapi/cgi/README.FastCGI README.fcgi
-
-# cli docs
-cp sapi/cli/CREDITS CREDITS.cli
-cp sapi/cli/README README.cli
 
 # phar fixes
 if [ -L %{buildroot}%{_bindir}/phar ]; then
@@ -1768,7 +1720,6 @@ rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tidy
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tokenizer
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/wddx
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xml
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlreader
 rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlrpc
@@ -1821,7 +1772,7 @@ for i in modules/*.so; do
 	opcache.so)
 		echo zend_extension=$B >>php-test.ini
 		;;
-	wddx.so|xsl.so)
+	xsl.so)
 		# Unresolved symbols, need fixing
 		;;
 #	ctype.so|dom.so|openssl.so|zlib.so|ftp.so|gettext.so|posix.so|session.so|hash.so|sysvsem.so|sysvshm.so|tokenizer.so|xml.so|xmlreader.so|xmlwriter.so|filter.so|json.so)
@@ -2282,14 +2233,6 @@ if [ "$1" = "0" ]; then
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%post wddx
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun wddx
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
 %post xml
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -2382,17 +2325,12 @@ if [ "$1" = "0" ]; then
 fi
 
 %files doc
-%doc CREDITS INSTALL LICENSE NEWS Zend/ZEND_LICENSE 
 %doc php.ini-production php.ini-development configure_command
-%doc README.openssl README.spl CREDITS.libxml CREDITS.zlib
-%doc README.EXT_SKEL README.input_filter
-%doc README.PARAMETER_PARSING_API README.STREAMS
 
 %files -n %{libname}
 %{_libdir}/libphp7_common.so.%{php7_common_major}*
 
 %files cli
-%doc CREDITS.cli README.cli
 %attr(0755,root,root) %{_bindir}/php
 %attr(0644,root,root) %{_mandir}/man1/php.1*
 
@@ -2401,14 +2339,12 @@ fi
 %attr(0644,root,root) %{_mandir}/man1/phpdbg.1*
 
 %files cgi
-%doc CREDITS.cgi README.fcgi
 %attr(0755,root,root) %{_bindir}/php-cgi
 %attr(0755,root,root) %{_bindir}/php-fcgi
 %{_mandir}/man1/php-cgi.1*
 
 %files devel
-%doc SELF-CONTAINED-EXTENSIONS CODING_STANDARDS README.* EXTENSIONS
-%doc Zend/ZEND_* README.TESTING*
+%doc README.* EXTENSIONS
 %attr(0755,root,root) %{_bindir}/php-config
 %attr(0755,root,root) %{_bindir}/phpize
 %attr(0755,root,root) %{_libdir}/libphp7_common.so
@@ -2486,9 +2422,9 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/25_gmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gmp.so
 
-%files hash
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/54_hash.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/hash.so
+#files hash
+#attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/54_hash.ini
+#attr(0755,root,root) %{_libdir}/php/extensions/hash.so
 
 %files iconv
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/26_iconv.ini
@@ -2581,9 +2517,9 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/45_readline.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/readline.so
 
-%files recode
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_recode.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/recode.so
+#files recode
+#attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_recode.ini
+#attr(0755,root,root) %{_libdir}/php/extensions/recode.so
 
 %files session
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/47_session.ini
@@ -2652,16 +2588,12 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xsl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xsl.so
 
-%files wddx
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_wddx.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/wddx.so
-
 %files zip
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/83_zip.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/zip.so
 
 %files fpm
-%doc sapi/fpm/CREDITS sapi/fpm/LICENSE
+%doc sapi/fpm/LICENSE
 /lib/systemd/system/php-fpm.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm

@@ -1,5 +1,5 @@
---- php-7.2.0/Makefile.global.shared.droplet	2017-11-28 10:22:51.000000000 +0100
-+++ php-7.2.0/Makefile.global	2017-11-29 00:28:39.001984696 +0100
+--- php-7.2.0/build/Makefile.global.shared.droplet	2017-11-28 10:22:51.000000000 +0100
++++ php-7.2.0/build/Makefile.global	2017-11-29 00:28:39.001984696 +0100
 @@ -15,8 +15,12 @@ build-modules: $(PHP_MODULES) $(PHP_ZEND
  
  build-binaries: $(PHP_BINARIES)
