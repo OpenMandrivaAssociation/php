@@ -1359,7 +1359,7 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # and php 7.4.1: "cannot apply additional memory protection after relocation"
 # Check if we can get rid of this after lld 10 is released.
 SAFE_LDFLAGS=`echo %{ldflags} -fuse-ld=gold|sed -e 's|-Wl,--no-undefined||g'`
-export EXTRA_LIBS="-lz -lgd"
+export EXTRA_LIBS="-lz"
 export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
