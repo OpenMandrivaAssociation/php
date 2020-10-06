@@ -1,11 +1,12 @@
---- php-7.2.0/ext/exif/exif.c.exif_nesting_level.droplet	2017-11-29 12:55:33.396697427 +0100
-+++ php-7.2.0/ext/exif/exif.c	2017-11-29 12:55:51.777730539 +0100
-@@ -89,7 +89,7 @@ typedef unsigned char uchar;
+diff -up php-7.4.11/ext/exif/exif.c.exif_nesting_level.droplet php-7.4.11/ext/exif/exif.c
+--- php-7.4.11/ext/exif/exif.c.exif_nesting_level.droplet	2020-10-06 12:54:21.452086401 +0200
++++ php-7.4.11/ext/exif/exif.c	2020-10-06 12:55:17.908929045 +0200
+@@ -64,7 +64,7 @@ typedef unsigned char uchar;
  
  #define EFREE_IF(ptr)	if (ptr) efree(ptr)
  
--#define MAX_IFD_NESTING_LEVEL 150
-+#define MAX_IFD_NESTING_LEVEL 250
+-#define MAX_IFD_NESTING_LEVEL 10
++#define MAX_IFD_NESTING_LEVEL 50
+ #define MAX_IFD_TAGS 1000
  
  /* {{{ arginfo */
- ZEND_BEGIN_ARG_INFO(arginfo_exif_tagname, 0)

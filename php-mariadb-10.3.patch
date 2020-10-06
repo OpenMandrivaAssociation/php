@@ -1,7 +1,7 @@
-diff -up php-7.2.4/ext/mysqli/mysqli_api.c.omv~ php-7.2.4/ext/mysqli/mysqli_api.c
---- php-7.2.4/ext/mysqli/mysqli_api.c.omv~	2018-04-06 21:50:05.183703414 +0200
-+++ php-7.2.4/ext/mysqli/mysqli_api.c	2018-04-06 21:50:16.436829372 +0200
-@@ -616,7 +616,7 @@ PHP_FUNCTION(mysqli_change_user)
+diff -up php-7.4.11/ext/mysqli/mysqli_api.c.mariadb~ php-7.4.11/ext/mysqli/mysqli_api.c
+--- php-7.4.11/ext/mysqli/mysqli_api.c.mariadb~	2020-09-29 12:17:09.000000000 +0200
++++ php-7.4.11/ext/mysqli/mysqli_api.c	2020-10-06 12:49:49.534565626 +0200
+@@ -614,7 +614,7 @@ PHP_FUNCTION(mysqli_change_user)
  	size_t			user_len, password_len, dbname_len;
  	zend_ulong		rc;
  #if !defined(MYSQLI_USE_MYSQLND) && defined(HAVE_MYSQLI_SET_CHARSET)
@@ -10,10 +10,10 @@ diff -up php-7.2.4/ext/mysqli/mysqli_api.c.omv~ php-7.2.4/ext/mysqli/mysqli_api.
  #endif
  
  	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Osss!", &mysql_link, mysqli_link_class_entry, &user, &user_len, &password, &password_len, &dbname, &dbname_len) == FAILURE) {
-diff -up php-7.2.4/ext/mysqli/mysqli.c.omv~ php-7.2.4/ext/mysqli/mysqli.c
---- php-7.2.4/ext/mysqli/mysqli.c.omv~	2018-04-06 21:49:41.782434506 +0200
-+++ php-7.2.4/ext/mysqli/mysqli.c	2018-04-06 21:49:52.708561249 +0200
-@@ -26,6 +26,7 @@
+diff -up php-7.4.11/ext/mysqli/mysqli.c.mariadb~ php-7.4.11/ext/mysqli/mysqli.c
+--- php-7.4.11/ext/mysqli/mysqli.c.mariadb~	2020-09-29 12:17:09.000000000 +0200
++++ php-7.4.11/ext/mysqli/mysqli.c	2020-10-06 12:49:49.534565626 +0200
+@@ -24,6 +24,7 @@
  
  #include <signal.h>
  
@@ -21,21 +21,21 @@ diff -up php-7.2.4/ext/mysqli/mysqli.c.omv~ php-7.2.4/ext/mysqli/mysqli.c
  #include "php.h"
  #include "php_ini.h"
  #include "ext/standard/info.h"
-diff -up php-7.2.4/ext/mysqli/mysqli_nonapi.c.omv~ php-7.2.4/ext/mysqli/mysqli_nonapi.c
---- php-7.2.4/ext/mysqli/mysqli_nonapi.c.omv~	2018-04-06 21:51:43.217399945 +0200
-+++ php-7.2.4/ext/mysqli/mysqli_nonapi.c	2018-04-06 21:58:52.799445824 +0200
-@@ -263,7 +263,7 @@ void mysqli_common_connect(INTERNAL_FUNC
+diff -up php-7.4.11/ext/mysqli/mysqli_nonapi.c.mariadb~ php-7.4.11/ext/mysqli/mysqli_nonapi.c
+--- php-7.4.11/ext/mysqli/mysqli_nonapi.c.mariadb~	2020-10-06 12:49:49.534565626 +0200
++++ php-7.4.11/ext/mysqli/mysqli_nonapi.c	2020-10-06 12:53:07.251854500 +0200
+@@ -328,7 +328,7 @@ void mysqli_common_connect(INTERNAL_FUNC
  	php_mysqli_set_error(mysql_errno(mysql->mysql), (char *) mysql_error(mysql->mysql));
  
  #if !defined(MYSQLI_USE_MYSQLND)
 -	mysql->mysql->reconnect = MyG(reconnect);
-+/*	mysql->mysql->reconnect = MyG(reconnect); */
++//	mysql->mysql->reconnect = MyG(reconnect);
  #endif
- 
- 	mysql_options(mysql->mysql, MYSQL_OPT_LOCAL_INFILE, (char *)&MyG(allow_local_infile));
-diff -up php-7.2.4/ext/mysqli/mysqli_prop.c.omv~ php-7.2.4/ext/mysqli/mysqli_prop.c
---- php-7.2.4/ext/mysqli/mysqli_prop.c.omv~	2018-04-06 21:50:25.687842714 +0200
-+++ php-7.2.4/ext/mysqli/mysqli_prop.c	2018-04-06 21:50:35.116768902 +0200
+ 	unsigned int allow_local_infile = MyG(allow_local_infile);
+ 	mysql_options(mysql->mysql, MYSQL_OPT_LOCAL_INFILE, (char *)&allow_local_infile);
+diff -up php-7.4.11/ext/mysqli/mysqli_prop.c.mariadb~ php-7.4.11/ext/mysqli/mysqli_prop.c
+--- php-7.4.11/ext/mysqli/mysqli_prop.c.mariadb~	2020-09-29 12:17:09.000000000 +0200
++++ php-7.4.11/ext/mysqli/mysqli_prop.c	2020-10-06 12:49:49.534565626 +0200
 @@ -23,6 +23,7 @@
  
  #include <signal.h>
@@ -44,10 +44,10 @@ diff -up php-7.2.4/ext/mysqli/mysqli_prop.c.omv~ php-7.2.4/ext/mysqli/mysqli_pro
  #include "php.h"
  #include "php_ini.h"
  #include "ext/standard/info.h"
-diff -up php-7.2.4/ext/mysqli/php_mysqli_structs.h.omv~ php-7.2.4/ext/mysqli/php_mysqli_structs.h
---- php-7.2.4/ext/mysqli/php_mysqli_structs.h.omv~	2018-04-06 21:49:12.161080045 +0200
-+++ php-7.2.4/ext/mysqli/php_mysqli_structs.h	2018-04-06 21:58:44.599503172 +0200
-@@ -79,11 +79,7 @@
+diff -up php-7.4.11/ext/mysqli/php_mysqli_structs.h.mariadb~ php-7.4.11/ext/mysqli/php_mysqli_structs.h
+--- php-7.4.11/ext/mysqli/php_mysqli_structs.h.mariadb~	2020-09-29 12:17:09.000000000 +0200
++++ php-7.4.11/ext/mysqli/php_mysqli_structs.h	2020-10-06 12:49:49.534565626 +0200
+@@ -73,11 +73,7 @@
  #include <my_sys.h>
  #include <mysql.h>
  #include <errmsg.h>

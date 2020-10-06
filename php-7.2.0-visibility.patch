@@ -1,8 +1,8 @@
-diff -up php-7.4.1/ext/date/php_date.c.0014~ php-7.4.1/ext/date/php_date.c
---- php-7.4.1/ext/date/php_date.c.0014~	2020-01-08 22:20:30.379225363 +0100
-+++ php-7.4.1/ext/date/php_date.c	2020-01-08 22:21:05.566223656 +0100
-@@ -681,7 +681,7 @@ static zval *date_period_write_property(
- static zval *date_period_get_property_ptr_ptr(zval *object, zval *member, int type, void **cache_slot);
+diff -up php-7.4.11/ext/date/php_date.c.0014~ php-7.4.11/ext/date/php_date.c
+--- php-7.4.11/ext/date/php_date.c.0014~	2020-10-06 12:53:28.911922273 +0200
++++ php-7.4.11/ext/date/php_date.c	2020-10-06 12:54:00.485354281 +0200
+@@ -683,7 +683,7 @@ static zval *date_period_get_property_pt
+ static int date_object_compare_timezone(zval *tz1, zval *tz2);
  
  /* {{{ Module struct */
 -zend_module_entry date_module_entry = {
@@ -10,9 +10,9 @@ diff -up php-7.4.1/ext/date/php_date.c.0014~ php-7.4.1/ext/date/php_date.c
  	STANDARD_MODULE_HEADER_EX,
  	NULL,
  	NULL,
-diff -up php-7.4.1/ext/libxml/libxml.c.0014~ php-7.4.1/ext/libxml/libxml.c
---- php-7.4.1/ext/libxml/libxml.c.0014~	2019-12-17 17:36:00.000000000 +0100
-+++ php-7.4.1/ext/libxml/libxml.c	2020-01-08 22:20:30.379225363 +0100
+diff -up php-7.4.11/ext/libxml/libxml.c.0014~ php-7.4.11/ext/libxml/libxml.c
+--- php-7.4.11/ext/libxml/libxml.c.0014~	2020-09-29 12:17:08.000000000 +0200
++++ php-7.4.11/ext/libxml/libxml.c	2020-10-06 12:53:28.911922273 +0200
 @@ -130,7 +130,7 @@ static const zend_function_entry libxml_
  	PHP_FE_END
  };
@@ -22,10 +22,10 @@ diff -up php-7.4.1/ext/libxml/libxml.c.0014~ php-7.4.1/ext/libxml/libxml.c
  	STANDARD_MODULE_HEADER,
  	"libxml",                /* extension name */
  	libxml_functions,        /* extension function list */
-diff -up php-7.4.1/ext/pcre/php_pcre.c.0014~ php-7.4.1/ext/pcre/php_pcre.c
---- php-7.4.1/ext/pcre/php_pcre.c.0014~	2019-12-17 17:36:11.000000000 +0100
-+++ php-7.4.1/ext/pcre/php_pcre.c	2020-01-08 22:20:30.380225363 +0100
-@@ -3029,7 +3029,7 @@ static const zend_function_entry pcre_fu
+diff -up php-7.4.11/ext/pcre/php_pcre.c.0014~ php-7.4.11/ext/pcre/php_pcre.c
+--- php-7.4.11/ext/pcre/php_pcre.c.0014~	2020-09-29 12:17:14.000000000 +0200
++++ php-7.4.11/ext/pcre/php_pcre.c	2020-10-06 12:53:28.911922273 +0200
+@@ -3058,7 +3058,7 @@ static const zend_function_entry pcre_fu
  	PHP_FE_END
  };
  
@@ -34,10 +34,10 @@ diff -up php-7.4.1/ext/pcre/php_pcre.c.0014~ php-7.4.1/ext/pcre/php_pcre.c
  	STANDARD_MODULE_HEADER,
     "pcre",
  	pcre_functions,
-diff -up php-7.4.1/ext/reflection/php_reflection.c.0014~ php-7.4.1/ext/reflection/php_reflection.c
---- php-7.4.1/ext/reflection/php_reflection.c.0014~	2019-12-17 17:36:03.000000000 +0100
-+++ php-7.4.1/ext/reflection/php_reflection.c	2020-01-08 22:20:30.380225363 +0100
-@@ -6892,7 +6892,7 @@ PHP_MINFO_FUNCTION(reflection) /* {{{ */
+diff -up php-7.4.11/ext/reflection/php_reflection.c.0014~ php-7.4.11/ext/reflection/php_reflection.c
+--- php-7.4.11/ext/reflection/php_reflection.c.0014~	2020-09-29 12:17:09.000000000 +0200
++++ php-7.4.11/ext/reflection/php_reflection.c	2020-10-06 12:53:28.915255617 +0200
+@@ -6950,7 +6950,7 @@ PHP_MINFO_FUNCTION(reflection) /* {{{ */
  	php_info_print_table_end();
  } /* }}} */
  
@@ -46,9 +46,9 @@ diff -up php-7.4.1/ext/reflection/php_reflection.c.0014~ php-7.4.1/ext/reflectio
  	STANDARD_MODULE_HEADER,
  	"Reflection",
  	reflection_ext_functions,
-diff -up php-7.4.1/ext/simplexml/simplexml.c.0014~ php-7.4.1/ext/simplexml/simplexml.c
---- php-7.4.1/ext/simplexml/simplexml.c.0014~	2019-12-17 17:35:59.000000000 +0100
-+++ php-7.4.1/ext/simplexml/simplexml.c	2020-01-08 22:20:30.380225363 +0100
+diff -up php-7.4.11/ext/simplexml/simplexml.c.0014~ php-7.4.11/ext/simplexml/simplexml.c
+--- php-7.4.11/ext/simplexml/simplexml.c.0014~	2020-09-29 12:17:07.000000000 +0200
++++ php-7.4.11/ext/simplexml/simplexml.c	2020-10-06 12:53:28.915255617 +0200
 @@ -2654,7 +2654,7 @@ static const zend_module_dep simplexml_d
  };
  /* }}} */
@@ -58,9 +58,9 @@ diff -up php-7.4.1/ext/simplexml/simplexml.c.0014~ php-7.4.1/ext/simplexml/simpl
  	STANDARD_MODULE_HEADER_EX, NULL,
  	simplexml_deps,
  	"SimpleXML",
-diff -up php-7.4.1/ext/spl/php_spl.c.0014~ php-7.4.1/ext/spl/php_spl.c
---- php-7.4.1/ext/spl/php_spl.c.0014~	2019-12-17 17:36:06.000000000 +0100
-+++ php-7.4.1/ext/spl/php_spl.c	2020-01-08 22:20:30.380225363 +0100
+diff -up php-7.4.11/ext/spl/php_spl.c.0014~ php-7.4.11/ext/spl/php_spl.c
+--- php-7.4.11/ext/spl/php_spl.c.0014~	2020-09-29 12:17:11.000000000 +0200
++++ php-7.4.11/ext/spl/php_spl.c	2020-10-06 12:53:28.915255617 +0200
 @@ -1042,7 +1042,7 @@ PHP_RSHUTDOWN_FUNCTION(spl) /* {{{ */
  
  /* {{{ spl_module_entry
@@ -70,9 +70,9 @@ diff -up php-7.4.1/ext/spl/php_spl.c.0014~ php-7.4.1/ext/spl/php_spl.c
  	STANDARD_MODULE_HEADER,
  	"SPL",
  	spl_functions,
-diff -up php-7.4.1/ext/standard/basic_functions.c.0014~ php-7.4.1/ext/standard/basic_functions.c
---- php-7.4.1/ext/standard/basic_functions.c.0014~	2019-12-17 17:36:07.000000000 +0100
-+++ php-7.4.1/ext/standard/basic_functions.c	2020-01-08 22:20:30.381225363 +0100
+diff -up php-7.4.11/ext/standard/basic_functions.c.0014~ php-7.4.11/ext/standard/basic_functions.c
+--- php-7.4.11/ext/standard/basic_functions.c.0014~	2020-09-29 12:17:11.000000000 +0200
++++ php-7.4.11/ext/standard/basic_functions.c	2020-10-06 12:53:28.915255617 +0200
 @@ -3448,7 +3448,7 @@ static const zend_module_dep standard_de
  };
  /* }}} */
@@ -82,10 +82,10 @@ diff -up php-7.4.1/ext/standard/basic_functions.c.0014~ php-7.4.1/ext/standard/b
  	STANDARD_MODULE_HEADER_EX,
  	NULL,
  	standard_deps,
-diff -up php-7.4.1/Zend/zend_signal.c.0014~ php-7.4.1/Zend/zend_signal.c
---- php-7.4.1/Zend/zend_signal.c.0014~	2019-12-17 17:36:11.000000000 +0100
-+++ php-7.4.1/Zend/zend_signal.c	2020-01-08 22:20:30.381225363 +0100
-@@ -387,7 +387,7 @@ static void zend_signal_globals_ctor(zen
+diff -up php-7.4.11/Zend/zend_signal.c.0014~ php-7.4.11/Zend/zend_signal.c
+--- php-7.4.11/Zend/zend_signal.c.0014~	2020-09-29 12:17:14.000000000 +0200
++++ php-7.4.11/Zend/zend_signal.c	2020-10-06 12:53:28.915255617 +0200
+@@ -386,7 +386,7 @@ static void zend_signal_globals_ctor(zen
  }
  /* }}} */
  
@@ -94,7 +94,7 @@ diff -up php-7.4.1/Zend/zend_signal.c.0014~ php-7.4.1/Zend/zend_signal.c
  {
  	int signo;
  	struct sigaction sa;
-@@ -409,7 +409,7 @@ void zend_signal_init(void) /* {{{ */
+@@ -408,7 +408,7 @@ void zend_signal_init(void) /* {{{ */
  
  /* {{{ zend_signal_startup
   * alloc zend signal globals */
