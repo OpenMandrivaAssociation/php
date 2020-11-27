@@ -1,8 +1,11 @@
+# Build system bug
+%global debug_package %{nil}
+
 %define _build_pkgcheck_set %{nil}
 %define _build_pkgcheck_srpm %{nil}
 
 # LTO causes a build failure because something forces a linking step of
-# libphp7_common to barf because libtool foolishly takes -flto out of
+# libphp8_common to barf because libtool foolishly takes -flto out of
 # compiler flags
 #define _disable_lto 1
 
@@ -14,19 +17,19 @@
 %{?_with_libmagic: %{expand: %%global build_libmagic 1}}
 %{?_without_libmagic: %{expand: %%global build_libmagic 0}}
 
-%define php7_common_major 5
-%define libname %mklibname php7_common %{php7_common_major}
+%define php8_common_major 5
+%define libname %mklibname php8_common %{php8_common_major}
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
 %define beta %{nil}
 
-Summary:	The PHP7 scripting language
+Summary:	The PHP scripting language
 Name:		php
-Version:	7.4.11
+Version:	8.0.0
 %if "%{beta}" != ""
-Release:	1
-Source0:	https://downloads.php.net/~cmb/php-%{version}%{beta}.tar.xz
+Release:	0.%{beta}.1
+Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
 %else
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
@@ -39,53 +42,14 @@ Source3:	php.crond
 Source4:	php-fpm.service
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
-# S7 comes from ext/fileinfo/create_data_file.php but could be removed someday
-Source7:	create_data_file.php
-Source9:        php-fpm-tmpfiles.conf
+Source9:	php-fpm-tmpfiles.conf
 Source10:	php.ini
-Patch0:		php-7.3.4-libtool-2.4.6.patch
-Patch1:		php-shared.diff
-Patch2:		php-mariadb-10.3.patch
-Patch3:		php-7.4.1-missing-symbols.patch
-Patch4:		https://src.fedoraproject.org/rpms/php/raw/master/f/php-7.4.0-phpize.patch
-Patch5:		php-phpbuilddir.diff
-# http://www.outoforder.cc/projects/apache/mod_transform/
-# http://www.outoforder.cc/projects/apache/mod_transform/patches/php7-apache2-filters.patch
-Patch6:		php5-apache2-filters.diff
-Patch8:		php-xmlrpc_epi.patch
-Patch10:	php-7.3.0rc1-compile.patch
-Patch11:	php-5.3.8-bdb-5.2.diff
-Patch12:	php-5.5.6-db-6.0.patch
-Patch13:	php-7.0.1-clang-warnings.patch
-Patch14:	php-7.2.0-visibility.patch
-#####################################################################
-# Stolen from PLD
-Patch20:	php-mail.diff
-Patch22:	php-dba-link.patch
-Patch23:	php-zlib-for-getimagesize.patch
-# for kolab2
-# P50 was rediffed from PLD (php-5.3.3-8.src.rpm) which merges the annotation and status-current patches
-Patch27:	php-imap-annotation+status-current.diff
-# P51 was taken from http://kolab.org/cgi-bin/viewcvs-kolab.cgi/server/php/patches/php-5.3.2/
-Patch28:	php-imap-myrights.diff
-Patch29:	php-5.3.x-fpm-0.6.5-shared.diff
-Patch30:	php-5.3.x-fpm-0.6.5-mdv_conf.diff
-#####################################################################
-# stolen from debian
-Patch50:	php-session.save_path.diff
-Patch51:	php-exif_nesting_level.diff
-#####################################################################
-# Stolen from fedora
-Patch102:	php-install.diff
-Patch105:	php-umask.diff
-# Fixes for extension modules
-Patch113:	php-libc-client.diff
-Patch114:	php-no_pam_in_c-client.diff
-# Fix bugs
-Patch121:	php-bug43221.diff
-Patch123:	php-bug43589.diff
+Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
+Patch1:		php-8.0.0-rc1-libtool-2.4.6.patch
+Patch2:		php-8.0.0-systzdata-v19.patch
 
 BuildRequires:	autoconf
+BuildRequires:	autoconf-archive
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	byacc
@@ -180,11 +144,9 @@ Requires:	php-gettext >= %{EVRD}
 # As of 7.4, php-hash seems to be builtin-only
 %rename 	php-hash
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -193,6 +155,7 @@ Requires:	php-xmlreader >= %{EVRD}
 Requires:	php-xmlwriter >= %{EVRD}
 Requires:	php-zlib >= %{EVRD}
 Requires:	php-xml >= %{EVRD}
+Obsoletes:	php-json < %{EVRD}
 Provides:	php = %{EVRD}
 Provides:	/usr/bin/php
 
@@ -203,7 +166,7 @@ systems, so writing a database-enabled script with PHP7 is fairly simple. The
 most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains a command-line (CLI) version of php. You must also
-install libphp7_common. If you need apache module support, you also need to
+install libphp8_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
 %package	dbg
@@ -215,11 +178,9 @@ Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -237,7 +198,7 @@ systems, so writing a database-enabled script with PHP7 is fairly simple. The
 most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains a debugging version of php. You must also
-install libphp7_common. If you need apache module support, you also need to
+install libphp8_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
 %package	cgi
@@ -249,11 +210,9 @@ Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -265,6 +224,7 @@ Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 Provides:	php-fcgi = %{EVRD}
 Obsoletes:	php-fcgi < %{EVRD}
+Obsoletes:	php-json < %{EVRD}
 
 %description	cgi
 PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
@@ -273,7 +233,7 @@ systems, so writing a database-enabled script with PHP7 is fairly simple. The
 most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains a standalone (CGI) version of php with FastCGI support.
-You must also install libphp7_common. If you need apache module support, you
+You must also install libphp8_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
 %package -n	%{libname}
@@ -460,33 +420,6 @@ spell libraries:
    A plugin system allows to add custom spell support.
    see www.abisource.com/enchant/
 
-%package	exif
-Summary:	EXIF extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-Requires:	php-mbstring >= %{EVRD}
-
-%description	exif
-This is a dynamic shared object (DSO) for PHP that will add EXIF tags support
-in image files.
-
-With the exif extension you are able to work with image meta data. For example,
-you may use exif functions to read meta data of pictures taken from digital
-cameras by working with information stored in the headers of the JPEG and TIFF
-images.
-
-%package	fileinfo
-Summary:	Fileinfo extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	fileinfo
-This extension allows retrieval of information regarding vast majority of file.
-This information may include dimensions, quality, length etc...
-
-Additionally it can also be used to retrieve the mime type for a particular
-file and for text files proper language encoding.
-
 %package	filter
 Summary:	Extension for safely dealing with input parameters
 Group:		Development/PHP
@@ -604,14 +537,6 @@ Internationalization support.
 
 Internationalization extension implements ICU library functionality in PHP.
 
-%package	json
-Summary:	JavaScript Object Notation
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	json
-Support for JSON (JavaScript Object Notation) serialization.
-
 %package	ldap
 Summary:	LDAP extension module for PHP
 Group:		Development/PHP
@@ -651,7 +576,8 @@ encodings for convenience.
 Summary:	MySQL database module for PHP
 Group:		Development/PHP
 Requires:	%{libname} >= %{EVRD}
-Obsoletes:	%{name}-mysql < %{EVRD}
+%rename	%{name}-mysql
+Requires:	%{name}-mysqlnd = %{EVRD}
 
 %description	mysqli
 This is a dynamic shared object (DSO) for PHP that will add MySQL database
@@ -738,7 +664,7 @@ Read the documentation at http://www.php.net/pdo for more information.
 %package	pdo_dblib
 Summary:	Sybase Interface driver for PDO
 Group:		Development/PHP
-Requires:       freetds >= 0.63
+Requires:	   freetds >= 0.63
 Requires:	php-pdo >= %{EVRD}
 Requires:	%{libname} >= %{EVRD}
 
@@ -774,13 +700,13 @@ Call Level Interface (DB2 CLI) library. PDO_ODBC currently supports three
 different "flavours" of database drivers:
  
  o ibm-db2  - Supports access to IBM DB2 Universal Database, Cloudscape, and
-              Apache Derby servers through the free DB2 client.
+			  Apache Derby servers through the free DB2 client.
 
  o unixODBC - Supports access to database servers through the unixODBC driver
-              manager and the database's own ODBC drivers.
+			  manager and the database's own ODBC drivers.
 
  o generic  - Offers a compile option for ODBC driver managers that are not
-              explicitly supported by PDO_ODBC.
+			  explicitly supported by PDO_ODBC.
 
 %package	pdo_pgsql
 Summary:	PostgreSQL interface driver for PDO
@@ -1059,19 +985,6 @@ Requires:	%{libname} >= %{EVRD}
 XMLReader represents a reader that provides non-cached, forward-only access to
 XML data. It is based upon the xmlTextReader api from libxml
 
-%package	xmlrpc
-Summary:	Xmlrpc extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	xmlrpc
-This is a dynamic shared object (DSO) for PHP that will add XMLRPC support.
-
-These functions can be used to write XML-RPC servers and clients. You can find
-more information about XML-RPC at http://www.xmlrpc.com/, and more
-documentation on this extension and its functions at
-http://xmlrpc-epi.sourceforge.net/.
-
 %package	xmlwriter
 Summary:	Provides fast, non-cached, forward-only means to write XML data
 Group:		Development/PHP
@@ -1114,11 +1027,9 @@ Requires:	php-filter >= %{EVRD}
 Requires:	php-ftp >= %{EVRD}
 Requires:	php-gettext >= %{EVRD}
 Requires:	php-ini >= %{version}
-Requires:	php-json >= %{EVRD}
 Requires:	php-openssl >= %{EVRD}
 Requires:	php-posix >= %{EVRD}
 Requires:	php-session >= %{EVRD}
-# Suggests:	php-suhosin >= 0.9.33
 Requires:	php-sysvsem >= %{EVRD}
 Requires:	php-sysvshm >= %{EVRD}
 Requires:	php-timezonedb >= 3:2009.10
@@ -1136,7 +1047,7 @@ systems, so writing a database-enabled script with PHP7 is fairly simple. The
 most common use of PHP7 coding is probably as a replacement for CGI scripts.
 
 This package contains the FastCGI Process Manager. You must also install
-libphp7_common.
+libphp8_common.
 
 %package -n	apache-mod_php
 Summary:	The PHP HTML-embedded scripting language for use with apache
@@ -1151,7 +1062,6 @@ Requires:	%{name}-filter = %{EVRD}
 Requires:	%{name}-ftp = %{EVRD}
 Requires:	%{name}-gettext = %{EVRD}
 Requires:	%{name}-ini >= %{version}
-Requires:	%{name}-json = %{EVRD}
 Requires:	%{name}-openssl = %{EVRD}
 Requires:	%{name}-pcre = %{EVRD}
 Requires:	%{name}-posix = %{EVRD}
@@ -1163,7 +1073,7 @@ Requires:	%{name}-xmlwriter = %{EVRD}
 Requires:	%{name}-zlib = %{EVRD}
 Requires:	%{name}-xml = %{EVRD}
 Requires:	%{name}-timezonedb >= 3:2009.10
-# Suggests:	%{name}-suhosin >= 0.9.29
+Obsoletes:	php-json < %{EVRD}
 Conflicts:	%{name}-suhosin < 0.9.29
 Conflicts:	apache-mpm-worker >= 2.4.0
 # mod_php with the event mpm is not an recommended by php devs, but
@@ -1198,68 +1108,20 @@ export LC_ALL=en_US.utf-8
 export LANG=en_US.utf-8
 export LANGUAGE=en_US.utf-8
 export LANGUAGES=en_US.utf-8
-%setup -qn %{name}-%{version}%{beta}
+%autosetup -p1 -n %{name}-%{version}%{beta}
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
-    echo "ERROR: the %{_datadir}/misc/magic.mgc file is needed"
-    exit 1
+	echo "ERROR: the %{_datadir}/misc/magic.mgc file is needed"
+	exit 1
 fi
 %endif
-
-# the ".droplet" suffix is here to nuke the backups later..., we don't want those in php-devel
-# (same goes for the more common "~" suffix)
-
-%patch0 -p1 -b .libtool246~
-%patch1 -p1 -b .shared.droplet
-%patch2 -p1 -b .mariadb~
-%patch3 -p1 -b .missingsym~
-%patch4 -p1 -b .phpize~
-%patch5 -p1 -b .phpbuilddir.droplet
-%patch6 -p1 -b .apache2-filters.droplet
-%patch8 -p1 -b .xmlrpc_epi_header
-%patch10 -p1 -b .compile~
-%patch11 -p1 -b .bdb-5.2.droplet
-%patch12 -p1 -b .db60~
-%patch13 -p1 -b .clangwarn~
-%patch14 -p1 -b .0014~
-
-#####################################################################
-# Stolen from PLD
-# FIXME needs porting
-#patch20 -p1 -b .mail.droplet
-%patch22 -p1 -b .dba-link.droplet
-%patch23 -p1 -b .zlib-for-getimagesize.droplet
-# for kolab2
-# FIXME needs porting
-#patch27 -p1 -b .imap-annotation.droplet
-#patch28 -p1 -b .imap-myrights.droplet
-# fpm stuff
-%patch29 -p1 -b .shared-fpm.droplet
-%patch30 -p1 -b .fpmmdv.droplet
-
-#####################################################################
-# stolen from debian
-%patch50 -p1 -b .session.save_path.droplet
-%patch51 -p1 -b .exif_nesting_level.droplet
-
-#####################################################################
-# Stolen from fedora
-%patch102 -p1 -b .install.droplet
-%patch105 -p1 -b .umask.droplet
-%patch113 -p1 -b .libc-client-php.droplet
-%patch114 -p1 -b .no_pam_in_c-client.droplet
-
-# upstream fixes
-%patch121 -p0 -b .bug43221.droplet
-%patch123 -p0 -b .bug43589.droplet
 
 cp %{SOURCE2} maxlifetime
 cp %{SOURCE3} php.crond
 cp %{SOURCE4} php-fpm.service
 cp %{SOURCE5} php-fpm.sysconf
 cp %{SOURCE6} php-fpm.logrotate
-cp %{SOURCE7} create_data_file.php
 
 # lib64 hack
 perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
@@ -1272,9 +1134,9 @@ find -name "*.inc" | xargs chmod 644
 find -name "*.php*" | xargs chmod 644
 find -name "*README*" | xargs chmod 644
 
-# php7_module -> php_module to ease upgrades
-find -type f |xargs sed -i -e 's,php7_module,php_module,g'
-sed -i -e 's,APLOG_USE_MODULE(php7,APLOG_USE_MODULE(php,g' sapi/apache2handler/*
+# php8_module -> php_module to ease upgrades
+find -type f |xargs sed -i -e 's,php8_module,php_module,g'
+sed -i -e 's,APLOG_USE_MODULE(php8,APLOG_USE_MODULE(php,g' sapi/apache2handler/*
 
 mkdir -p php-devel/extensions
 mkdir -p php-devel/sapi
@@ -1310,15 +1172,27 @@ rm -rf ext/pcre/pcrelib
 rm -rf ext/pdo_sqlite/sqlite
 rm -rf ext/xmlrpc/libxmlrpc
 
+scripts/dev/genfiles
+
 # Included ltmain.sh is obsolete and breaks lto
-rm -f ltmain.sh
+rm -f ltmain.sh build/ltmain.sh build/libtool.m4
+# including a local libtool.m4 is just wrong, let aclocal
+# pick the right version
+sed -i -e '/libtool.m4/d' configure.ac
 libtoolize --force
-aclocal
+cat $(aclocal --print-ac-dir)/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
+touch configure.ac
+./buildconf --force
+
+# We have newer versions of this in aclocal repos
+rm -f build/ax_check_compile_flag.m4 \
+	build/ax_func_which_gethostbyname_r.m4 \
+	build/ax_gcc_func_attribute.m4
 
 %build
 %serverbuild
 
-cp -f %{_datadir}/libtool/build-aux/config.* .
+#cp -f %{_datadir}/libtool/build-aux/config.* .
 
 # it does not work with -fPIE and someone added that to the serverbuild macro...
 CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
@@ -1332,21 +1206,28 @@ export RPM_OPT_FLAGS="${CFLAGS}"
 cat > php-devel/buildext <<EOF
 #!/bin/bash
 exec %{__cc} -Wall -fPIC -shared $CFLAGS \\
-    -I. \`%{_bindir}/php-config --includes\` \\
-    -I%{_includedir}/libxml2 \\
-    -I%{_includedir}/freetype \\
-    -I%{_includedir}/openssl \\
-    -I%{_usrsrc}/php-devel/ext \\
-    -I%{_includedir}/\$1 \\
-    \$4 \$2 -o \$1.so \$3 -lc
+	-I. \`%{_bindir}/php-config --includes\` \\
+	-I%{_includedir}/libxml2 \\
+	-I%{_includedir}/freetype \\
+	-I%{_includedir}/openssl \\
+	-I%{_usrsrc}/php-devel/ext \\
+	-I%{_includedir}/\$1 \\
+	\$4 \$2 -o \$1.so \$3 -lc
 EOF
 
 chmod 755 php-devel/buildext
 
 rm -f configure
 rm -rf autom4te.cache
+sed -i -e '/PHP_AUTOCONF/iaclocal -I build' buildconf
 ./buildconf --force
+cp -f %{_datadir}/libtool/build-aux/* .
 cp -f %{_bindir}/libtool .
+
+if grep LT_INIT configure; then
+	echo "autoconf ended up putting a literal LT_INIT into configure, this will break things"
+	exit 1
+fi
 
 # Do this patch with a perl hack...
 perl -pi -e "s|'\\\$install_libdir'|'%{_libdir}'|" ltmain.sh
@@ -1359,150 +1240,116 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 # -fuse-ld=gold is a workaround for a very weird bug showing with lld 9.0.1
 # and php 7.4.1: "cannot apply additional memory protection after relocation"
 # Check if we can get rid of this after lld 10 is released.
-SAFE_LDFLAGS=`echo %{ldflags} -fuse-ld=gold|sed -e 's|-Wl,--no-undefined||g'`
+SAFE_LDFLAGS=`echo %{build_ldflags}|sed -e 's|-Wl,--no-undefined||g'`
 export EXTRA_LIBS="-lz"
 export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
 
-# Configure php7
+# Configure php8
 # FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
-for i in fpm cgi cli apxs; do
-./configure \
-    `[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=apache --with-fpm-group=apache` \
-    `[ $i = cgi ] && echo --disable-cli` \
-    `[ $i = cli ] && echo --disable-cgi --enable-cli` \
-    `[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
-    --build=%{_build} \
-    --prefix=%{_prefix} \
-    --exec-prefix=%{_prefix} \
-    --bindir=%{_bindir} \
-    --sbindir=%{_sbindir} \
-    --sysconfdir=%{_sysconfdir} \
-    --datadir=%{_datadir} \
-    --includedir=%{_includedir} \
-    --libdir=%{_libdir} \
-    --libexecdir=%{_libexecdir} \
-    --localstatedir=/var/lib \
-    --mandir=%{_mandir} \
-    --enable-rtld-now \
-    --enable-shared=yes \
-    --enable-static=no \
-    --with-external-pcre \
-    --with-libdir=%{_lib} \
-    --with-config-file-path=%{_sysconfdir} \
-    --with-config-file-scan-dir=%{_sysconfdir}/php.d \
-    --disable-debug  \
-    --enable-inline-optimization \
-    --with-zlib=%{_prefix} \
-    --with-pdo-odbc=unixODBC \
-    --with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
-    --with-openssl=shared,%{_prefix} \
-    --without-pear \
-    --enable-bcmath=shared \
-    --with-bz2=shared,%{_prefix} \
-    --enable-calendar=shared \
-    --enable-ctype=shared \
-    --with-curl=shared,%{_prefix} \
-    --enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
-    --enable-dom=shared,%{_prefix} \
-    --with-enchant=shared,%{_prefix} \
-    --enable-exif=shared \
-    --enable-fileinfo=shared \
-    --enable-filter=shared \
-    --enable-intl=shared \
-    --enable-json=shared \
-    --with-openssl-dir=%{_prefix} --enable-ftp=shared \
-    --with-zlib-dir=%{_prefix} \
-    --with-gettext=shared,%{_prefix} \
-    --with-gmp=shared,%{_prefix} \
-    --with-iconv=shared \
-    --with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
-    --with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
-    --enable-mbstring=shared,%{_prefix} --enable-mbregex \
-    --with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
-    --with-mysqli=shared,mysqlnd \
-    --enable-mysqlnd=shared,%{_prefix} \
-    --with-unixODBC=shared,%{_prefix} \
-    --enable-pcntl=shared \
-    --enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
-    --with-pgsql=shared,%{_prefix} \
-    --enable-phar=shared \
-    --enable-posix=shared \
-    --with-pspell=shared,%{_prefix} \
-    --with-readline=shared,%{_prefix} \
-    --enable-session=shared,%{_prefix} \
-    --enable-shmop=shared,%{_prefix} \
-    --enable-simplexml \
-    --with-snmp=shared,%{_prefix} \
-    --enable-soap=shared,%{_prefix} \
-    --enable-sockets=shared,%{_prefix} \
-    --with-sqlite3=shared,%{_prefix} \
-    --enable-sysvmsg=shared,%{_prefix} \
-    --enable-sysvsem=shared,%{_prefix} \
-    --enable-sysvshm=shared,%{_prefix} \
-    --with-tidy=shared,%{_prefix} \
-    --enable-tokenizer=shared,%{_prefix} \
-    --enable-xml=shared,%{_prefix} \
-    --enable-xmlreader=shared,%{_prefix} \
-    --with-xmlrpc=shared,%{_prefix} \
-    --enable-xmlwriter=shared,%{_prefix} \
-    --with-xsl=shared,%{_prefix} \
-    --enable-gd=shared --with-external-gd \
-    --with-zip=shared,%{_prefix} \
-    --with-mhash=shared \
-    || (cat config.log && exit 1)
+for i in fpm cgi cli embed apxs; do
+	mkdir build-$i
+	cd build-$i
+	ln -s %{_bindir}/libtool .
+../configure \
+	`[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=apache --with-fpm-group=apache --with-fpm-systemd --with-fpm-acl ` \
+	`[ $i = cgi ] && echo --disable-cli` \
+	`[ $i = cli ] && echo --disable-cgi --enable-cli` \
+	`[ $i = embed ] && echo --disable-cli --enable-embed=shared` \
+	`[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
+	--build=%{_build} \
+	--prefix=%{_prefix} \
+	--exec-prefix=%{_prefix} \
+	--bindir=%{_bindir} \
+	--sbindir=%{_sbindir} \
+	--sysconfdir=%{_sysconfdir} \
+	--datadir=%{_datadir} \
+	--includedir=%{_includedir} \
+	--libdir=%{_libdir} \
+	--libexecdir=%{_libexecdir} \
+	--localstatedir=/var/lib \
+	--mandir=%{_mandir} \
+	--enable-zts \
+	--enable-rtld-now \
+	--with-layout=GNU \
+	--with-external-pcre \
+	--with-libdir=%{_lib} \
+	--with-config-file-path=%{_sysconfdir} \
+	--with-config-file-scan-dir=%{_sysconfdir}/php.d \
+	--disable-debug  \
+	--with-zlib=%{_prefix} \
+	--with-pdo-odbc=unixODBC \
+	--with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
+	--with-openssl=shared,%{_prefix} \
+	--without-pear \
+	--enable-bcmath=shared \
+	--with-bz2=shared,%{_prefix} \
+	--enable-calendar=shared \
+	--enable-ctype=shared \
+	--with-curl=shared,%{_prefix} \
+	--enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
+	--enable-dom=shared,%{_prefix} \
+	--with-enchant=shared,%{_prefix} \
+	--with-exif=shared,%{_prefix} \
+	--enable-exif \
+	--enable-fileinfo \
+	--enable-filter=shared \
+	--enable-intl=shared \
+	--with-openssl-dir=%{_prefix} --enable-ftp=shared \
+	--with-zlib-dir=%{_prefix} \
+	--with-gettext=shared,%{_prefix} \
+	--with-gmp=shared,%{_prefix} \
+	--with-iconv=shared \
+	--with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
+	--with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
+	--enable-mbstring=shared,%{_prefix} --enable-mbregex \
+	--with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
+	--with-mysqli=shared,mysqlnd \
+	--enable-mysqlnd=shared,%{_prefix} \
+	--with-unixODBC=shared,%{_prefix} \
+	--enable-pcntl=shared \
+	--enable-pdo=shared,%{_prefix} --with-pdo-dblib=shared,%{_prefix} --with-pdo-mysql=shared,%{_prefix} --with-pdo-odbc=shared,unixODBC,%{_prefix} --with-pdo-pgsql=shared,%{_prefix} --with-pdo-sqlite=shared,%{_prefix} \
+	--with-pgsql=shared,%{_prefix} \
+	--enable-phar=shared \
+	--enable-posix=shared \
+	--with-pspell=shared,%{_prefix} \
+	--with-readline=shared,%{_prefix} \
+	--enable-session=shared,%{_prefix} \
+	--enable-shmop=shared,%{_prefix} \
+	--enable-simplexml \
+	--with-snmp=shared,%{_prefix} \
+	--enable-soap=shared,%{_prefix} \
+	--enable-sockets=shared,%{_prefix} \
+	--with-sqlite3=shared,%{_prefix} \
+	--enable-sysvmsg=shared,%{_prefix} \
+	--enable-sysvsem=shared,%{_prefix} \
+	--enable-sysvshm=shared,%{_prefix} \
+	--with-tidy=shared,%{_prefix} \
+	--enable-tokenizer=shared,%{_prefix} \
+	--enable-xml=shared,%{_prefix} \
+	--enable-xmlreader=shared,%{_prefix} \
+	--with-xmlrpc=shared,%{_prefix} \
+	--enable-xmlwriter=shared,%{_prefix} \
+	--with-xsl=shared,%{_prefix} \
+	--enable-gd=shared --with-external-gd \
+	--with-zip=shared,%{_prefix} \
+	--with-mhash=shared \
+	--with-system-tzdata \
+	|| (cat config.log && exit 1)
 
-cp -f Makefile Makefile.$i
-cp -f %{_bindir}/libtool .
+#cp -f Makefile Makefile.$i
+#cp -f %{_bindir}/libtool .
 
 # left for debugging purposes
-cp -f main/php_config.h php_config.h.$i
+#cp -f main/php_config.h php_config.h.$i
 
 # when all else failed...
-perl -pi -e "s|-prefer-non-pic -static||g" Makefile.$i
+#perl -pi -e "s|-prefer-non-pic -static||g" Makefile.$i
+%make_build
 
+cd ..
 done
-
-# remove all confusion...
-perl -pi -e "s|^#define CONFIGURE_COMMAND .*|#define CONFIGURE_COMMAND \"This is irrelevant, look inside the %{_docdir}/php-doc/configure_command file. urpmi is your friend, use it to install extensions not shown below.\"|g" main/build-defs.h
-cp config.nice configure_command; chmod 644 configure_command
-
-%make PHPDBG_EXTRA_LIBS="-lreadline" CXX=%{__cxx}
-
-%if %{build_libmagic}
-# keep in sync with latest system magic, the next best thing when system libmagic can't be used...
-sapi/cli/php create_data_file.php %{_datadir}/misc/magic.mgc > ext/fileinfo/data_file.c
-rm -rf ext/fileinfo/.libs ext/fileinfo/*.lo ext/fileinfo/*.la modules/fileinfo.so modules/fileinfo.la
-cp -p ext/fileinfo/data_file.c php-devel/extensions/fileinfo/data_file.c
-%make CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
-%endif
-
-# make php-cgi
-cp -af php_config.h.cgi main/php_config.h
-make -f Makefile.cgi sapi/cgi/php-cgi CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
-cp -af php_config.h.apxs main/php_config.h
-
-# make php-fpm
-cp -af php_config.h.fpm main/php_config.h
-make -f Makefile.fpm sapi/fpm/php-fpm CXX=%{__cxx} PHPDBG_EXTRA_LIBS="-lreadline"
-cp -af php_config.h.apxs main/php_config.h
-
-# make apache-mod_php
-mkdir mod_php
-cd mod_php
-cp -dpR ../php-devel/sapi/apache2handler/* .
-cp ../main/internal_functions.c .
-cp ../ext/date/lib/timelib_config.h .
-mv mod_php7.c mod_php.c
-find . -type f |xargs dos2unix
-apxs \
-	`apr-1-config --link-ld --libs` \
-	`xml2-config --cflags` \
-	-I. -I.. -I../main -I../Zend -I../TSRM \
-	-L../libs -lphp7_common \
-	-c mod_php.c sapi_apache2.c apache_config.c \
-	php_functions.c internal_functions.c
 
 %install
 
@@ -1515,51 +1362,18 @@ install -d %{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_sysconfdir}/cron.d
 install -d %{buildroot}/var/lib/php
 
-make -f Makefile.apxs install \
-	PHPDBG_EXTRA_LIBS="-lreadline" \
-	INSTALL_ROOT=%{buildroot} \
-	INSTALL_IT="\$(LIBTOOL) --mode=install install libphp7_common.la %{buildroot}%{_libdir}/"
+# Make apxs great again^H^H^H^H^H^H^H^H^H^H^Hhappy
+# during build-apxs install
+mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf
+cp %{_sysconfdir}/httpd/conf/httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
 
-# borked autopoo
-rm -f %{buildroot}%{_bindir}/php %{buildroot}%{_bindir}/php-cgi
-./libtool --silent --mode=install install sapi/cli/php %{buildroot}%{_bindir}/php
-./libtool --silent --mode=install install sapi/cgi/php-cgi %{buildroot}%{_bindir}/php-cgi
+for i in fpm cgi cli apxs embed; do
+	make -C build-$i install \
+		INSTALL_ROOT=%{buildroot}
+done
 
-# compat php-fcgi symink
-ln -s php-cgi %{buildroot}%{_bindir}/php-fcgi
-
-cp -dpR php-devel/* %{buildroot}%{_usrsrc}/php-devel/
-install -m0644 run-tests*.php %{buildroot}%{_usrsrc}/php-devel/
-install -m0644 main/internal_functions.c %{buildroot}%{_usrsrc}/php-devel/
-
-install -m0644 sapi/cli/php.1 %{buildroot}%{_mandir}/man1/
-install -m0644 scripts/man1/phpize.1 %{buildroot}%{_mandir}/man1/
-install -m0644 scripts/man1/php-config.1 %{buildroot}%{_mandir}/man1/
-
-# fpm
-install -d %{buildroot}/lib/systemd/system
-install -d %{buildroot}%{_sysconfdir}/logrotate.d
-install -d %{buildroot}%{_sysconfdir}/sysconfig
-install -d %{buildroot}%{_sysconfdir}/php-fpm.d
-install -d %{buildroot}%{_sbindir}
-install -d %{buildroot}%{_mandir}/man8
-install -d %{buildroot}/var/lib/php-fpm
-install -d %{buildroot}/var/log/php-fpm
-install -d %{buildroot}/run/php-fpm
-install -D -p -m 0644 %{SOURCE9} %{buildroot}%{_tmpfilesdir}/php-fpm.conf
-# a small bug here...
-echo "; place your config here" > %{buildroot}%{_sysconfdir}/php-fpm.d/default.conf
-
-./libtool --silent --mode=install install sapi/fpm/php-fpm %{buildroot}%{_sbindir}/php-fpm
-install -m0644 sapi/fpm/php-fpm.8 %{buildroot}%{_mandir}/man8/
-install -m0644 sapi/fpm/php-fpm.conf %{buildroot}%{_sysconfdir}/
-install -m0644 php-fpm.service %{buildroot}/lib/systemd/system/
-install -m0644 php-fpm.sysconf %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
-install -m0644 php-fpm.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
-
-perl -pi -e "s|^pid.*|pid = /run/php-fpm/php-fpm.pid|g" %{buildroot}%{_sysconfdir}/php-fpm.conf
-
-ln -snf extensions %{buildroot}%{_usrsrc}/php-devel/ext
+# This was only needed for make install - so drop it
+rm %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
 
 # extensions
 echo "extension = openssl.so"		> %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
@@ -1571,7 +1385,6 @@ echo "extension = ctype.so"		> %{buildroot}%{_sysconfdir}/php.d/12_ctype.ini
 echo "extension = curl.so"		> %{buildroot}%{_sysconfdir}/php.d/13_curl.ini
 echo "extension = dba.so"		> %{buildroot}%{_sysconfdir}/php.d/14_dba.ini
 echo "extension = dom.so"		> %{buildroot}%{_sysconfdir}/php.d/18_dom.ini
-echo "extension = exif.so"		> %{buildroot}%{_sysconfdir}/php.d/19_exif.ini
 echo "extension = filter.so"		> %{buildroot}%{_sysconfdir}/php.d/81_filter.ini
 echo "extension = ftp.so"		> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
 echo "extension = gd.so"		> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
@@ -1583,8 +1396,7 @@ echo "extension = imap.so"		> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
 echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
 echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
 echo "extension = mbstring.so"		> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
-echo "extension = fileinfo.so"		> %{buildroot}%{_sysconfdir}/php.d/32_fileinfo.ini
-echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqli.ini
+echo "extension = mysqlnd.so"		> %{buildroot}%{_sysconfdir}/php.d/37_mysqlnd.ini
 echo "extension = enchant.so"		> %{buildroot}%{_sysconfdir}/php.d/38_enchant.ini
 echo "extension = odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/39_odbc.ini
 echo "extension = pcntl.so"		> %{buildroot}%{_sysconfdir}/php.d/40_pcntl.ini
@@ -1594,7 +1406,7 @@ echo "extension = pdo_mysql.so"		> %{buildroot}%{_sysconfdir}/php.d/73_pdo_mysql
 echo "extension = pdo_odbc.so"		> %{buildroot}%{_sysconfdir}/php.d/75_pdo_odbc.ini
 echo "extension = pdo_pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/76_pdo_pgsql.ini
 echo "extension = pdo_sqlite.so"	> %{buildroot}%{_sysconfdir}/php.d/77_pdo_sqlite.ini
-echo "extension = mysqlnd.so"		> %{buildroot}%{_sysconfdir}/php.d/78_mysqlnd.ini
+echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/78_mysqli.ini
 echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
 echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
 echo "extension = pspell.so"		> %{buildroot}%{_sysconfdir}/php.d/44_pspell.ini
@@ -1613,10 +1425,8 @@ echo "extension = tidy.so"		> %{buildroot}%{_sysconfdir}/php.d/59_tidy.ini
 echo "extension = tokenizer.so"		> %{buildroot}%{_sysconfdir}/php.d/60_tokenizer.ini
 echo "extension = xml.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xml.ini
 echo "extension = xmlreader.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xmlreader.ini
-echo "extension = xmlrpc.so"		> %{buildroot}%{_sysconfdir}/php.d/62_xmlrpc.ini
 echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter.ini
 echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
-echo "extension = json.so"		> %{buildroot}%{_sysconfdir}/php.d/82_json.ini
 echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
 echo "extension = phar.so"		> %{buildroot}%{_sysconfdir}/php.d/84_phar.ini
 cat >%{buildroot}%{_sysconfdir}/php.d/85_opcache.ini <<"EOF"
@@ -1632,11 +1442,7 @@ EOF
 install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
 
-# mod_php
-install -d %{buildroot}%{_libdir}/apache
-install -d %{buildroot}%{_sysconfdir}/httpd/modules.d
-install -m 755 mod_php/.libs/*.so %{buildroot}%{_libdir}/apache/
-
+mkdir -p %{buildroot}%{_sysconfdir}/httpd/modules.d
 cat > %{buildroot}%{_sysconfdir}/httpd/modules.d/170_mod_php.conf << EOF
 LoadModule php_module %{_libdir}/apache/mod_php.so
 
@@ -1647,164 +1453,12 @@ AddType application/x-httpd-php-source .phps
 DirectoryIndex index.php index.phtml
 EOF
 
-# phar fixes
-if [ -L %{buildroot}%{_bindir}/phar ]; then
-    rm -f %{buildroot}%{_bindir}/phar
-    mv %{buildroot}%{_bindir}/phar.phar %{buildroot}%{_bindir}/phar
-fi
-
-# inis
-install -d -m 755 %{buildroot}%{_sysconfdir}/php.d
-install -d -m 755 %{buildroot}%{_libdir}/php/extensions
-install -d -m 755 %{buildroot}%{_datadir}/php
-
-sed -e 's,/usr/lib,%{_libdir},g' %{SOURCE10} >%{buildroot}%{_sysconfdir}/php.ini
-cp %{buildroot}%{_sysconfdir}/php.ini %{buildroot}%{_sysconfdir}/php-cgi-fcgi.ini
-
-# house cleaning
-rm -f %{buildroot}%{_bindir}/pear
-rm -f %{buildroot}%{_libdir}/*.*a
-
-# don't pack useless stuff
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bcmath
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/bz2
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/calendar
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ctype
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/curl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dba
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/dom
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/enchant
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ereg
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/exif
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/fileinfo
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/filter
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ftp
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gettext
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/gmp
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/hash
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/iconv
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/imap
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/intl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/json
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/ldap
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/libxml
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mbstring
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysql
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqli
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/mysqlnd
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/odbc
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/openssl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcntl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pcre
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_dblib
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_mysql
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_odbc
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_pgsql
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pdo_sqlite
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pgsql
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/phar
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/posix
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/pspell
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/readline
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/recode
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/shmop
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/snmp
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/soap
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sockets
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/spl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sqlite3
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/standard
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvmsg
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvsem
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/sysvshm
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tidy
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/tokenizer
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xml
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlreader
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlrpc
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xmlwriter
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/xsl
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zip
-rm -rf %{buildroot}%{_usrsrc}/php-devel/extensions/zlib
-
-# php-devel.i586: E: zero-length /usr/src/php-devel/extensions/pdo_firebird/EXPERIMENTAL
-find %{buildroot}%{_usrsrc}/php-devel -type f -size 0 -exec rm -f {} \;
-
-%if %{build_test}
-# do a make test
-export NO_INTERACTION=1
-export PHPRC="."
-export REPORT_EXIT_STATUS=2
-export TEST_PHP_DETAILED=0
-export TEST_PHP_ERROR_STYLE=EMACS
-export TEST_PHP_LOG_FORMAT=LEODC
-export PHP_INI_SCAN_DIR=/dev/null
-
-# FAILING TESTS:
-# unknown errors with ext/date/tests/oo_002.phpt probably because of php-5.2.5-systzdata.patch
-# http://bugs.php.net/bug.php?id=22414 (claimed to be fixed in 2003, but seems not)
-# unknown errors with ext/standard/tests/general_functions/phpinfo.phpt
-# unknown errors with ext/standard/tests/strings/setlocale_*
-disable_tests="ext/date/tests/oo_002.phpt \
-ext/standard/tests/file/bug22414.phpt \
-ext/standard/tests/general_functions/phpinfo.phpt \
-ext/standard/tests/strings/setlocale_basic1.phpt \
-ext/standard/tests/strings/setlocale_basic2.phpt \
-ext/standard/tests/strings/setlocale_basic3.phpt \
-ext/standard/tests/strings/setlocale_variation1.phpt \
-ext/standard/tests/strings/setlocale_variation3.phpt \
-ext/standard/tests/strings/setlocale_variation4.phpt \
-ext/standard/tests/strings/setlocale_variation5.phpt"
-
-[[ -n "$disable_tests" ]] && \
-for f in $disable_tests; do
-  [[ -f "$f" ]] && mv $f $f.disabled
-done
-
-cat >php-test.ini <<EOF
-[PHP]
-extension_dir="`pwd`/modules"
-EOF
-for i in modules/*.so; do
-	B="`basename $i`"
-	case "$B" in
-	opcache.so)
-		echo zend_extension=$B >>php-test.ini
-		;;
-	xsl.so)
-		# Unresolved symbols, need fixing
-		;;
-#	ctype.so|dom.so|openssl.so|zlib.so|ftp.so|gettext.so|posix.so|session.so|hash.so|sysvsem.so|sysvshm.so|tokenizer.so|xml.so|xmlreader.so|xmlwriter.so|filter.so|json.so)
-		# Apparently loaded by default without a need to mention them in the ini file
-#		;;
-	*)
-		echo extension=$B >>php-test.ini
-		;;
-	esac
-done
-cat >>php-test.ini <<EOF
-open_basedir="`pwd`"
-safe_mode=0
-output_buffering=0
-output_handler=0
-magic_quotes_runtime=0
-memory_limit=1G
-
-[Session]
-session.save_path="`pwd`"
-EOF
-
-TEST_PHP_EXECUTABLE=sapi/cli/php sapi/cli/php -n -c ./php-test.ini run-tests.php
-%endif
-
 %post bcmath
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %postun bcmath
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post bz2
@@ -1812,7 +1466,7 @@ fi
 
 %postun bz2
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post calendar
@@ -1820,7 +1474,7 @@ fi
 
 %postun calendar
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post cgi
@@ -1828,7 +1482,7 @@ fi
 
 %postun cgi
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post cli
@@ -1836,7 +1490,7 @@ fi
 
 %postun cli
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ctype
@@ -1844,7 +1498,7 @@ fi
 
 %postun ctype
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post curl
@@ -1852,7 +1506,7 @@ fi
 
 %postun curl
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post dba
@@ -1860,7 +1514,7 @@ fi
 
 %postun dba
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post devel
@@ -1868,7 +1522,7 @@ fi
 
 %postun devel
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post doc
@@ -1876,7 +1530,7 @@ fi
 
 %postun doc
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post dom
@@ -1884,7 +1538,7 @@ fi
 
 %postun dom
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post enchant
@@ -1892,23 +1546,7 @@ fi
 
 %postun enchant
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post exif
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun exif
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post fileinfo
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun fileinfo
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post filter
@@ -1916,7 +1554,7 @@ fi
 
 %postun filter
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ftp
@@ -1924,7 +1562,7 @@ fi
 
 %postun ftp
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gd
@@ -1932,7 +1570,7 @@ fi
 
 %postun gd
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gettext
@@ -1940,7 +1578,7 @@ fi
 
 %postun gettext
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post gmp
@@ -1948,7 +1586,7 @@ fi
 
 %postun gmp
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post hash
@@ -1956,7 +1594,7 @@ fi
 
 %postun hash
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post iconv
@@ -1964,7 +1602,7 @@ fi
 
 %postun iconv
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post imap
@@ -1972,7 +1610,7 @@ fi
 
 %postun imap
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post intl
@@ -1980,15 +1618,7 @@ fi
 
 %postun intl
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post json
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun json
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post ldap
@@ -1996,7 +1626,7 @@ fi
 
 %postun ldap
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mbstring
@@ -2004,15 +1634,7 @@ fi
 
 %postun mbstring
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mysqli
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mysqli
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post mysqlnd
@@ -2020,7 +1642,15 @@ fi
 
 %postun mysqlnd
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+fi
+
+%post mysqli
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+
+%postun mysqli
+if [ "$1" = "0" ]; then
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post odbc
@@ -2028,7 +1658,7 @@ fi
 
 %postun odbc
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post openssl
@@ -2036,7 +1666,7 @@ fi
 
 %postun openssl
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pcntl
@@ -2044,7 +1674,7 @@ fi
 
 %postun pcntl
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo
@@ -2052,7 +1682,7 @@ fi
 
 %postun pdo
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_dblib
@@ -2060,7 +1690,7 @@ fi
 
 %postun pdo_dblib
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_mysql
@@ -2068,7 +1698,7 @@ fi
 
 %postun pdo_mysql
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_odbc
@@ -2076,7 +1706,7 @@ fi
 
 %postun pdo_odbc
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_pgsql
@@ -2084,7 +1714,7 @@ fi
 
 %postun pdo_pgsql
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pdo_sqlite
@@ -2092,7 +1722,7 @@ fi
 
 %postun pdo_sqlite
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pgsql
@@ -2100,7 +1730,7 @@ fi
 
 %postun pgsql
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post phar
@@ -2108,7 +1738,7 @@ fi
 
 %postun phar
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post posix
@@ -2116,7 +1746,7 @@ fi
 
 %postun posix
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post pspell
@@ -2124,7 +1754,7 @@ fi
 
 %postun pspell
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post readline
@@ -2132,7 +1762,7 @@ fi
 
 %postun readline
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post recode
@@ -2140,7 +1770,7 @@ fi
 
 %postun recode
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %pre session
@@ -2151,7 +1781,7 @@ fi
 
 %postun session
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post shmop
@@ -2159,7 +1789,7 @@ fi
 
 %postun shmop
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post snmp
@@ -2167,7 +1797,7 @@ fi
 
 %postun snmp
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post soap
@@ -2175,7 +1805,7 @@ fi
 
 %postun soap
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sockets
@@ -2183,7 +1813,7 @@ fi
 
 %postun sockets
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sqlite3
@@ -2191,7 +1821,7 @@ fi
 
 %postun sqlite3
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvmsg
@@ -2199,7 +1829,7 @@ fi
 
 %postun sysvmsg
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvsem
@@ -2207,7 +1837,7 @@ fi
 
 %postun sysvsem
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post sysvshm
@@ -2215,7 +1845,7 @@ fi
 
 %postun sysvshm
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post tidy
@@ -2223,7 +1853,7 @@ fi
 
 %postun tidy
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post tokenizer
@@ -2231,7 +1861,7 @@ fi
 
 %postun tokenizer
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xml
@@ -2239,7 +1869,7 @@ fi
 
 %postun xml
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xmlreader
@@ -2247,15 +1877,7 @@ fi
 
 %postun xmlreader
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post xmlrpc
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun xmlrpc
-if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xmlwriter
@@ -2263,7 +1885,7 @@ fi
 
 %postun xmlwriter
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post xsl
@@ -2271,7 +1893,7 @@ fi
 
 %postun xsl
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post zip
@@ -2279,7 +1901,7 @@ fi
 
 %postun zip
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post zlib
@@ -2287,15 +1909,15 @@ fi
 
 %postun zlib
 if [ "$1" = "0" ]; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %post fpm
 %tmpfiles_create php-fpm
 %_post_service php-fpm
 if [ $1 = 1 ]; then
-    # Initial installation
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
+	# Initial installation
+	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %pre fpm
@@ -2304,16 +1926,16 @@ fi
 
 %preun fpm
 if [ $1 = 0 ]; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable php-fpm.service >/dev/null 2>&1 || :
-    /bin/systemctl stop php-fpm.service >/dev/null 2>&1 || :
+	# Package removal, not upgrade
+	/bin/systemctl --no-reload disable php-fpm.service >/dev/null 2>&1 || :
+	/bin/systemctl stop php-fpm.service >/dev/null 2>&1 || :
 fi
 
 %postun fpm
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 if [ $1 -ge 1 ]; then
-    # Package upgrade, not uninstall
-    /bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
+	# Package upgrade, not uninstall
+	/bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
 fi
 %_postun_userdel apache
 
@@ -2326,10 +1948,9 @@ if [ "$1" = "0" ]; then
 fi
 
 %files doc
-%doc php.ini-production php.ini-development configure_command
+%doc php.ini-production php.ini-development
 
 %files -n %{libname}
-%{_libdir}/libphp7_common.so.%{php7_common_major}*
 
 %files cli
 %attr(0755,root,root) %{_bindir}/php
@@ -2341,19 +1962,18 @@ fi
 
 %files cgi
 %attr(0755,root,root) %{_bindir}/php-cgi
-%attr(0755,root,root) %{_bindir}/php-fcgi
 %{_mandir}/man1/php-cgi.1*
 
 %files devel
 %doc README.* EXTENSIONS
 %attr(0755,root,root) %{_bindir}/php-config
 %attr(0755,root,root) %{_bindir}/phpize
-%attr(0755,root,root) %{_libdir}/libphp7_common.so
-%{_libdir}/php/build
-%{_usrsrc}/php-devel
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
+# FIXME incorrectly versioned, wrong directory
+%{_prefix}/lib/libphp.so
+%{_libdir}/build
 
 %files openssl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_openssl.ini
@@ -2395,14 +2015,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/38_enchant.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/enchant.so
 
-%files exif
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/19_exif.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/exif.so
-
-%files fileinfo
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/32_fileinfo.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/fileinfo.so
-
 %files filter
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/81_filter.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/filter.so
@@ -2439,10 +2051,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_intl.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/intl.so
 
-%files json
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/82_json.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/json.so
-
 %files ldap
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/28_ldap.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/ldap.so
@@ -2451,13 +2059,13 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/29_mbstring.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mbstring.so
 
-%files mysqli
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqli.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
-
 %files mysqlnd
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_mysqlnd.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/37_mysqlnd.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/mysqlnd.so
+
+%files mysqli
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_mysqli.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/mysqli.so
 
 %files odbc
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/39_odbc.ini
@@ -2502,7 +2110,8 @@ fi
 %files phar
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/84_phar.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/phar.so
-%attr(0755,root,root) %{_bindir}/phar
+%attr(0755,root,root) %{_bindir}/phar.phar
+%{_bindir}/phar
 %{_mandir}/man1/phar.1*
 %{_mandir}/man1/phar.phar.1*
 
@@ -2577,10 +2186,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/63_xmlreader.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlreader.so
 
-%files xmlrpc
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/62_xmlrpc.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/xmlrpc.so
-
 %files xmlwriter
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/64_xmlwriter.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/xmlwriter.so
@@ -2595,27 +2200,31 @@ fi
 
 %files fpm
 %doc sapi/fpm/LICENSE
-/lib/systemd/system/php-fpm.service
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
-%attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
-%attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
+# FIXME restore
+#/lib/systemd/system/php-fpm.service
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf.default
+%{_sysconfdir}/php-fpm.d
+#%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
+#%attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
+#%attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
+#%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
 %attr(0755,root,root) %{_sbindir}/php-fpm
 %attr(0644,root,root) %{_mandir}/man8/php-fpm.8*
-%attr(0711,apache,apache) %dir /var/lib/php-fpm
-%attr(0711,apache,apache) %dir /var/log/php-fpm
-%attr(0711,apache,apache) %dir /run/php-fpm
-%{_tmpfilesdir}/php-fpm.conf
+#%attr(0711,apache,apache) %dir /var/lib/php-fpm
+#%attr(0711,apache,apache) %dir /var/log/php-fpm
+#%attr(0711,apache,apache) %dir /run/php-fpm
+#%{_tmpfilesdir}/php-fpm.conf
+%{_datadir}/fpm
 
 %files -n apache-mod_php
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/modules.d/*.conf
 %attr(0755,root,root) %{_libdir}/apache/*.so
 
 %files -n php-ini
-%config(noreplace) %{_sysconfdir}/php.ini
-%config(noreplace) %{_sysconfdir}/php-cgi-fcgi.ini
+# FIXME restore
+#%config(noreplace) %{_sysconfdir}/php.ini
+#%config(noreplace) %{_sysconfdir}/php-cgi-fcgi.ini
 %dir %{_sysconfdir}/php.d
 %dir %{_libdir}/php
 %dir %{_libdir}/php/extensions
-%dir %{_datadir}/php
+#%dir %{_datadir}/php
