@@ -31,7 +31,7 @@ Version:	8.0.0
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -45,8 +45,8 @@ Source6:	php-fpm.logrotate
 Source9:	php-fpm-tmpfiles.conf
 Source10:	php.ini
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
-Patch1:		php-8.0.0-rc1-libtool-2.4.6.patch
-Patch2:		php-8.0.0-systzdata-v19.patch
+Patch1:		php-8.0.0-systzdata-v19.patch
+Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
