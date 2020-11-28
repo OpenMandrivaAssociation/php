@@ -82,6 +82,7 @@ BuildRequires:	pkgconfig(libpcre2-posix)
 BuildRequires:	pkgconfig(libpcre2-8)
 BuildRequires:	pkgconfig(libpcre2-16)
 BuildRequires:	pkgconfig(libpcre2-32)
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(xmlrpc)
 
 BuildRequires:	apache-devel >= 2.2.0
