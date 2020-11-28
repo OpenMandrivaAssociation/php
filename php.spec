@@ -31,7 +31,7 @@ Version:	8.0.0
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
 %else
-Release:	2
+Release:	3
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -1197,6 +1197,18 @@ rm -f build/ax_check_compile_flag.m4 \
 
 #cp -f %{_datadir}/libtool/build-aux/config.* .
 
+%ifarch %{aarch64}
+# FIXME workaround for bug:
+# As of clang 11.0.1-rc1, php 8.0.0, if built
+# with clang on aarch64, php crashes while building
+# the php-timezonedb package. php built with gcc works.
+export CC=gcc
+export CXX=g++
+%else
+export CC=%{__cc}
+export CXX=%{__cxx}
+%endif
+
 # it does not work with -fPIE and someone added that to the serverbuild macro...
 CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
 CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
@@ -1208,7 +1220,7 @@ export RPM_OPT_FLAGS="${CFLAGS}"
 
 cat > php-devel/buildext <<EOF
 #!/bin/bash
-exec %{__cc} -Wall -fPIC -shared $CFLAGS \\
+exec $CC -Wall -fPIC -shared $CFLAGS \\
 	-I. \`%{_bindir}/php-config --includes\` \\
 	-I%{_includedir}/libxml2 \\
 	-I%{_includedir}/freetype \\
