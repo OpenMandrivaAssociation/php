@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.0.2
+Version:	8.0.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
@@ -1120,12 +1120,6 @@ if ! [ -f %{_datadir}/misc/magic.mgc ]; then
 fi
 %endif
 
-cp %{SOURCE2} maxlifetime
-cp %{SOURCE3} php.crond
-cp %{SOURCE4} php-fpm.service
-cp %{SOURCE5} php-fpm.sysconf
-cp %{SOURCE6} php-fpm.logrotate
-
 # lib64 hack
 perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
 
@@ -1454,9 +1448,6 @@ opcache.fast_shutdown=1
 opcache.enable_cli=1
 EOF
 
-install -m0755 maxlifetime %{buildroot}%{_libdir}/php/maxlifetime
-install -m0644 php.crond %{buildroot}%{_sysconfdir}/cron.d/php
-
 mkdir -p %{buildroot}%{_sysconfdir}/httpd/modules.d
 cat > %{buildroot}%{_sysconfdir}/httpd/modules.d/170_mod_php.conf << EOF
 LoadModule php_module %{_libdir}/apache/mod_php.so
@@ -1467,6 +1458,16 @@ AddType application/x-httpd-php-source .phps
 
 DirectoryIndex index.php index.phtml
 EOF
+
+mkdir -p %{buildroot}/lib/systemd/system \
+	%{buildroot}%{_sysconfdir}/logrotate.d \
+	%{buildroot}%{_sysconfdir}/sysconfig
+
+install -m0755 %{SOURCE2} %{buildroot}%{_libdir}/php/maxlifetime
+install -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/cron.d/php
+cp %{SOURCE4} %{buildroot}/lib/systemd/system/php-fpm.service
+cp %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
+cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
 
 %post bcmath
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -2215,12 +2216,11 @@ fi
 
 %files fpm
 %doc sapi/fpm/LICENSE
-# FIXME restore
-#/lib/systemd/system/php-fpm.service
+/lib/systemd/system/php-fpm.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf.default
 %{_sysconfdir}/php-fpm.d
-#%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
-#%attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
+%attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
 #%attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
 #%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
 %attr(0755,root,root) %{_sbindir}/php-fpm
