@@ -1,13 +1,8 @@
-# Build system bug
-%global debug_package %{nil}
-
 %define _build_pkgcheck_set %{nil}
 %define _build_pkgcheck_srpm %{nil}
 
-# LTO causes a build failure because something forces a linking step of
-# libphp8_common to barf because libtool foolishly takes -flto out of
-# compiler flags
-#define _disable_lto 1
+# For empty debugsource package
+%undefine _empty_manifest_terminate_build
 
 %define build_test 0
 %{?_with_test: %{expand: %%global build_test 1}}
@@ -26,7 +21,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.0.3
+Version:	8.0.7
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
@@ -47,6 +42,7 @@ Source10:	php.ini
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
 Patch1:		php-8.0.0-systzdata-v19.patch
 Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
+Patch3:		php-8.0.7-openssl-3.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
@@ -1094,7 +1090,7 @@ simple. The most common use of PHP coding is probably as a replacement for CGI
 scripts. The %{name} module enables the apache web server to understand
 and process the embedded PHP language in web pages.
 
-This package contains PHP version 7. You'll also need to install the apache web
+This package contains PHP version 8. You'll also need to install the apache web
 server.
 
 
@@ -1447,6 +1443,9 @@ opcache.revalidate_freq=60
 opcache.fast_shutdown=1
 opcache.enable_cli=1
 EOF
+
+# Follow naming conventions
+mv %{buildroot}%{_libdir}/apache/libphp.so %{buildroot}%{_libdir}/apache/mod_php.so
 
 mkdir -p %{buildroot}%{_sysconfdir}/httpd/modules.d
 cat > %{buildroot}%{_sysconfdir}/httpd/modules.d/170_mod_php.conf << EOF

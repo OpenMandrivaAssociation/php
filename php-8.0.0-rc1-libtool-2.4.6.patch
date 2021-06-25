@@ -48,7 +48,7 @@ diff -up php-8.0.3/configure.ac.3~ php-8.0.3/configure.ac
 @@ -18,6 +14,8 @@ dnl ------------------------------------
  
  AC_PREREQ([2.68])
- AC_INIT([PHP],[8.0.3],[https://bugs.php.net],[php],[https://www.php.net])
+ AC_INIT([PHP],[8.0.7],[https://bugs.php.net],[php],[https://www.php.net])
 +AC_USE_SYSTEM_EXTENSIONS
 +LT_INIT
  AC_CONFIG_SRCDIR([main/php_version.h])
