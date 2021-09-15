@@ -21,7 +21,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.0.7
+Version:	8.0.10
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
@@ -1187,17 +1187,8 @@ rm -f build/ax_check_compile_flag.m4 \
 
 #cp -f %{_datadir}/libtool/build-aux/config.* .
 
-%ifarch %{aarch64}
-# FIXME workaround for bug:
-# As of clang 11.0.1-rc1, php 8.0.0, if built
-# with clang on aarch64, php crashes while building
-# the php-timezonedb package. php built with gcc works.
-export CC=gcc
-export CXX=g++
-%else
 export CC=%{__cc}
 export CXX=%{__cxx}
-%endif
 
 # it does not work with -fPIE and someone added that to the serverbuild macro...
 CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
