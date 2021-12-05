@@ -17,14 +17,14 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta %{nil}
+%define beta RC1
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.0.10
+Version:	8.1.1
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
-Source0:	https://downloads.php.net/~carusogabriel/php-%{version}%{beta}.tar.xz
+Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
 Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
@@ -40,9 +40,9 @@ Source6:	php-fpm.logrotate
 Source9:	php-fpm-tmpfiles.conf
 Source10:	php.ini
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
-Patch1:		php-8.0.0-systzdata-v19.patch
-Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
-Patch3:		php-8.0.7-openssl-3.patch
+Patch1:		php-8.1.0-systzdata-v21.patch
+Patch2:		php-8.1.1-mariadb.patch
+#Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
@@ -127,13 +127,13 @@ Epoch: 3
 %define postgresql_version %(pg_config &>/dev/null && pg_config 2>/dev/null | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null || echo 0)
 
 %description
-PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP7 is fairly simple. The
-most common use of PHP7 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
 
 %package	cli
-Summary:	PHP7 CLI interface
+Summary:	PHP CLI interface
 Group:		Development/Other
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
@@ -159,17 +159,17 @@ Provides:	php = %{EVRD}
 Provides:	/usr/bin/php
 
 %description	cli
-PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP7 is fairly simple. The
-most common use of PHP7 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
 
 This package contains a command-line (CLI) version of php. You must also
 install libphp8_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
 %package	dbg
-Summary:	Debugging version of the PHP7 CLI interface
+Summary:	Debugging version of the PHP CLI interface
 Group:		Development/Other
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
@@ -191,17 +191,17 @@ Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 
 %description	dbg
-PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP7 is fairly simple. The
-most common use of PHP7 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
 
 This package contains a debugging version of php. You must also
 install libphp8_common. If you need apache module support, you also need to
 install the apache-mod_php package.
 
 %package	cgi
-Summary:	PHP7 CGI interface
+Summary:	PHP CGI interface
 Group:		Development/Other
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
@@ -226,17 +226,17 @@ Obsoletes:	php-fcgi < %{EVRD}
 Obsoletes:	php-json < %{EVRD}
 
 %description	cgi
-PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP7 is fairly simple. The
-most common use of PHP7 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
 
 This package contains a standalone (CGI) version of php with FastCGI support.
 You must also install libphp8_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
 %package -n	%{libname}
-Summary:	Shared library for PHP7
+Summary:	Shared library for PHP
 Group:		Development/Other
 Provides:	php-pcre = %{EVRD}
 Provides:	php-simplexml = %{EVRD}
@@ -247,11 +247,11 @@ Requires(postun): systemd-units
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
-PHP7. You need this package if you install the php standalone package or a
+PHP. You need this package if you install the php standalone package or a
 webserver with php support (ie: apache-mod_php).
 
 %package	devel
-Summary:	Development package for PHP7
+Summary:	Development package for PHP
 Group:		Development/C
 Requires:	%{libname} >= %{EVRD}
 Requires:	autoconf automake libtool
@@ -271,7 +271,7 @@ Requires:	pkgconfig(openssl)
 
 
 %description	devel
-The php-devel package lets you compile dynamic extensions to PHP7. Included
+The php-devel package lets you compile dynamic extensions to PHP. Included
 here is the source for the php extensions. Instead of recompiling the whole php
 binary to add support for, say, oracle, install this package and use the new
 self-contained extensions support. For more information, read the file
@@ -1014,7 +1014,7 @@ This is a dynamic shared object (DSO) for PHP that will add zip support to
 create and read zip files using the libzip library.
 
 %package	fpm
-Summary:	PHP7 FastCGI Process Manager
+Summary:	PHP FastCGI Process Manager
 Group:		Development/Other
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -1040,10 +1040,10 @@ Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
 
 %description	fpm
-PHP7 is an HTML-embeddable scripting language. PHP7 offers built-in database
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
 integration for several commercial and non-commercial database management
-systems, so writing a database-enabled script with PHP7 is fairly simple. The
-most common use of PHP7 coding is probably as a replacement for CGI scripts.
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
 
 This package contains the FastCGI Process Manager. You must also install
 libphp8_common.
@@ -1082,10 +1082,10 @@ Provides:	mod_php = %{EVRD}
 BuildRequires:	dos2unix
 
 %description -n apache-mod_php
-PHP7 is an HTML-embedded scripting language. PHP7 attempts to make it easy for
-developers to write dynamically generated web pages. PHP7 also offers built-in
+PHP is an HTML-embedded scripting language. PHP attempts to make it easy for
+developers to write dynamically generated web pages. PHP also offers built-in
 database integration for several commercial and non-commercial database
-management systems, so writing a database-enabled web page with PHP7 is fairly
+management systems, so writing a database-enabled web page with PHP is fairly
 simple. The most common use of PHP coding is probably as a replacement for CGI
 scripts. The %{name} module enables the apache web server to understand
 and process the embedded PHP language in web pages.
@@ -1107,7 +1107,7 @@ export LC_ALL=en_US.utf-8
 export LANG=en_US.utf-8
 export LANGUAGE=en_US.utf-8
 export LANGUAGES=en_US.utf-8
-%autosetup -p1 -n %{name}-%{version}%{beta}
+%autosetup -p1 -n %{name}-%{?beta:src-php-}%{version}%{beta}
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
@@ -1168,19 +1168,16 @@ rm -rf ext/xmlrpc/libxmlrpc
 scripts/dev/genfiles
 
 # Included ltmain.sh is obsolete and breaks lto
-rm -f ltmain.sh build/ltmain.sh build/libtool.m4
+#rm -f ltmain.sh build/ltmain.sh build/libtool.m4
 # including a local libtool.m4 is just wrong, let aclocal
 # pick the right version
-sed -i -e '/libtool.m4/d' configure.ac
+#sed -i -e '/libtool.m4/d' configure.ac
 libtoolize --force
+# Replace outdated crappy force-included versions of auto* macros
 cat $(aclocal --print-ac-dir)/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
+cp -f %{_datadir}/aclocal/{ax_check_compile_flag,ax_func_which_gethostbyname_r,ax_gcc_func_attribute}.m4 build/
 touch configure.ac
 ./buildconf --force
-
-# We have newer versions of this in aclocal repos
-rm -f build/ax_check_compile_flag.m4 \
-	build/ax_func_which_gethostbyname_r.m4 \
-	build/ax_gcc_func_attribute.m4
 
 %build
 %serverbuild
@@ -1215,7 +1212,10 @@ chmod 755 php-devel/buildext
 
 rm -f configure
 rm -rf autom4te.cache
-sed -i -e '/PHP_AUTOCONF/iaclocal -I build' buildconf
+libtoolize --force
+cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
+touch configure.ac
+#sed -i -e '/PHP_AUTOCONF/iaclocal -I build' buildconf
 ./buildconf --force
 cp -f %{_datadir}/libtool/build-aux/* .
 cp -f %{_bindir}/libtool .
