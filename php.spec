@@ -17,12 +17,12 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
-%define beta RC1
+#define beta RC1
 
 Summary:	The PHP scripting language
 Name:		php
 Version:	8.1.1
-%if "%{beta}" != ""
+%if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
@@ -1107,7 +1107,7 @@ export LC_ALL=en_US.utf-8
 export LANG=en_US.utf-8
 export LANGUAGE=en_US.utf-8
 export LANGUAGES=en_US.utf-8
-%autosetup -p1 -n %{name}-%{?beta:src-php-}%{version}%{beta}
+%autosetup -p1 -n %{name}-%{?beta:src-php-}%{version}%{?beta:%{beta}}
 
 %if %{build_libmagic}
 if ! [ -f %{_datadir}/misc/magic.mgc ]; then
