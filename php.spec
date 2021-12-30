@@ -17,6 +17,11 @@
 
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
 
+%ifarch %{aarch64}
+# Workaround for link time bug in lld 13.0.0
+%global optflags %{optflags} -fuse-ld=bfd
+%endif
+
 #define beta RC1
 
 Summary:	The PHP scripting language
