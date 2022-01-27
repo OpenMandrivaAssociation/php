@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.1.1
+Version:	8.1.2
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
@@ -46,7 +46,6 @@ Source9:	php-fpm-tmpfiles.conf
 Source10:	php.ini
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
 Patch1:		php-8.1.0-systzdata-v21.patch
-Patch2:		php-8.1.1-mariadb.patch
 #Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
 
 BuildRequires:	autoconf
