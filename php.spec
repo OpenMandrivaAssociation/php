@@ -26,12 +26,12 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.1.3
+Version:	8.1.7
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	2
+Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -128,7 +128,7 @@ Epoch: 3
 # stupid postgresql... stupid build system...
 # this is needed due to the postgresql packaging and due to bugs like this:
 # https://qa.mandriva.com/show_bug.cgi?id=52527
-%define postgresql_version %(pg_config &>/dev/null && pg_config 2>/dev/null | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null || echo 0)
+%define postgresql_version %(pg_config &>/dev/null && pg_config 2>/dev/null | grep "^VERSION" | awk '{ print $4 }' 2>/dev/null |sed -E 's,(alpha|beta|rc).*,,' || echo 0)
 
 %description
 PHP is an HTML-embeddable scripting language. PHP offers built-in database
@@ -1120,19 +1120,18 @@ if ! [ -f %{_datadir}/misc/magic.mgc ]; then
 fi
 %endif
 
-# lib64 hack
-perl -p -i -e "s|/usr/lib|%{_libdir}|" php.crond
-
 # nuke bogus checks becuase i fixed this years ago in our recode package
 rm -f ext/recode/config9.m4
 
 # Change perms otherwise rpm would get fooled while finding requires
 find -name "*.inc" | xargs chmod 644
-find -name "*.php*" | xargs chmod 644
+# Can't use xargs here because of spaces in filenames
+find -name "*.php*" -exec chmod 644 {} \;
 find -name "*README*" | xargs chmod 644
 
 # php8_module -> php_module to ease upgrades
-find -type f |xargs sed -i -e 's,php8_module,php_module,g'
+# Can't use xargs here because of spaces in filenames
+find -type f -exec sed -i -e 's,php8_module,php_module,g' {} \;
 sed -i -e 's,APLOG_USE_MODULE(php8,APLOG_USE_MODULE(php,g' sapi/apache2handler/*
 
 mkdir -p php-devel/extensions
@@ -1459,6 +1458,10 @@ mkdir -p %{buildroot}/lib/systemd/system \
 
 install -m0755 %{SOURCE2} %{buildroot}%{_libdir}/php/maxlifetime
 install -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/cron.d/php
+%if "%{_libdir}" != "/usr/lib"
+sed -i -e "s|/usr/lib|%{_libdir}|" %{buildroot}%{_sysconfdir}/cron.d/php
+%endif
+
 cp %{SOURCE4} %{buildroot}/lib/systemd/system/php-fpm.service
 cp %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
 cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
