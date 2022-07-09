@@ -2,7 +2,7 @@
 %define _build_pkgcheck_srpm %{nil}
 
 # For empty debugsource package
-%undefine _empty_manifest_terminate_build
+%global _debugsource_template %{nil}
 
 %define build_test 0
 %{?_with_test: %{expand: %%global build_test 1}}
@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.1.7
+Version:	8.1.8
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
