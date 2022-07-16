@@ -239,6 +239,36 @@ This package contains a standalone (CGI) version of php with FastCGI support.
 You must also install libphp8_common. If you need apache module support, you
 also need to install the apache-mod_php package.
 
+%package openlitespeed
+Summary:	PHP module for the Openlitespeed web server
+Group:		Servers
+Requires:	openlitespeed
+Requires:	%{libname} >= %{EVRD}
+Requires:	php-ctype >= %{EVRD}
+Requires:	php-filter >= %{EVRD}
+Requires:	php-ftp >= %{EVRD}
+Requires:	php-gettext >= %{EVRD}
+Requires:	php-ini >= %{version}
+Requires:	php-openssl >= %{EVRD}
+Requires:	php-posix >= %{EVRD}
+Requires:	php-session >= %{EVRD}
+Requires:	php-sysvsem >= %{EVRD}
+Requires:	php-sysvshm >= %{EVRD}
+Requires:	php-timezonedb >= 3:2009.10
+Requires:	php-tokenizer >= %{EVRD}
+Requires:	php-xmlreader >= %{EVRD}
+Requires:	php-xmlwriter >= %{EVRD}
+Requires:	php-zlib >= %{EVRD}
+Requires:	php-xml >= %{EVRD}
+
+%description openlitespeed
+PHP is an HTML-embeddable scripting language. PHP offers built-in database
+integration for several commercial and non-commercial database management
+systems, so writing a database-enabled script with PHP is fairly simple. The
+most common use of PHP coding is probably as a replacement for CGI scripts.
+
+This package contains a PHP module for the openlitespeed web server.
+
 %package -n	%{libname}
 Summary:	Shared library for PHP
 Group:		Development/Other
@@ -1235,10 +1265,6 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
-# FIXME
-# -fuse-ld=gold is a workaround for a very weird bug showing with lld 9.0.1
-# and php 7.4.1: "cannot apply additional memory protection after relocation"
-# Check if we can get rid of this after lld 10 is released.
 SAFE_LDFLAGS=`echo %{build_ldflags}|sed -e 's|-Wl,--no-undefined||g'`
 export EXTRA_LIBS="-lz"
 export LDFLAGS="$SAFE_LDFLAGS"
@@ -1247,7 +1273,7 @@ export LDFLAGS="$SAFE_LDFLAGS"
 
 # Configure php8
 # FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
-for i in fpm cgi cli embed apxs; do
+for i in fpm cgi cli embed apxs litespeed; do
 	mkdir build-$i
 	cd build-$i
 	ln -s %{_bindir}/libtool .
@@ -1257,6 +1283,7 @@ for i in fpm cgi cli embed apxs; do
 	`[ $i = cli ] && echo --disable-cgi --enable-cli` \
 	`[ $i = embed ] && echo --disable-cli --enable-embed=shared` \
 	`[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
+	`[ $i = litespeed ] && echo --enable-litespeed` \
 	--build=%{_build} \
 	--prefix=%{_prefix} \
 	--exec-prefix=%{_prefix} \
@@ -1366,7 +1393,7 @@ install -d %{buildroot}/var/lib/php
 mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf
 cp %{_sysconfdir}/httpd/conf/httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
 
-for i in fpm cgi cli apxs embed; do
+for i in fpm cgi cli apxs embed litespeed; do
 	make -C build-$i install \
 		INSTALL_ROOT=%{buildroot}
 done
@@ -1976,6 +2003,9 @@ fi
 %files cgi
 %attr(0755,root,root) %{_bindir}/php-cgi
 %{_mandir}/man1/php-cgi.1*
+
+%files openlitespeed
+%attr(0755,root,root) %{_bindir}/lsphp
 
 %files devel
 %doc README.* EXTENSIONS
