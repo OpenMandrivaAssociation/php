@@ -22,7 +22,7 @@
 %global optflags %{optflags} -fuse-ld=bfd
 %endif
 
-%define beta RC4
+#define beta RC4
 
 Summary:	The PHP scripting language
 Name:		php
@@ -225,8 +225,6 @@ Requires:	php-xmlwriter >= %{EVRD}
 Requires:	php-zlib >= %{EVRD}
 Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
-Provides:	php-fcgi = %{EVRD}
-Obsoletes:	php-fcgi < %{EVRD}
 Obsoletes:	php-json < %{EVRD}
 
 %description	cgi
@@ -1072,6 +1070,7 @@ Requires:	php-xmlwriter >= %{EVRD}
 Requires:	php-zlib >= %{EVRD}
 Requires:	php-xml >= %{EVRD}
 Provides:	php = %{EVRD}
+%rename php-fcgi
 
 %description	fpm
 PHP is an HTML-embeddable scripting language. PHP offers built-in database
