@@ -31,7 +31,7 @@ Version:	8.2.0
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -39,7 +39,6 @@ License:	PHP License
 URL:		http://www.php.net
 Source2:	maxlifetime
 Source3:	php.crond
-Source4:	php-fpm.service
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
 Source9:	php-fpm-tmpfiles.conf
@@ -47,6 +46,8 @@ Source10:	php.ini
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
 Patch1:		php-8.1.0-systzdata-v21.patch
 #Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
+# Based on https://wiki.php.net/rfc/socketactivation
+Patch3:		php-fpm-socket-activation.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
@@ -1488,9 +1489,29 @@ install -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/cron.d/php
 sed -i -e "s|/usr/lib|%{_libdir}|" %{buildroot}%{_sysconfdir}/cron.d/php
 %endif
 
-cp %{SOURCE4} %{buildroot}/lib/systemd/system/php-fpm.service
+mkdir -p %{buildroot}%{_unitdir}
+cp build-fpm/sapi/fpm/php-fpm.service %{buildroot}%{_unitdir}/php-fpm.service
 cp %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
 cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
+mkdir -p %{buildroot}%{_tmpfilesdir}
+cp %{SOURCE9} %{buildroot}%{_tmpfilesdir}/php-fpm.conf
+
+cp %{buildroot}%{_sysconfdir}/php-fpm.conf.default %{buildroot}%{_sysconfdir}/php-fpm.conf
+cp %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf.default %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
+
+# /var/lib/log is too weird to exist
+mkdir -p %{buildroot}%{_localstatedir}/log/php-fpm
+sed -i -e 's,;error_log.*,error_log = %{_localstatedir}/log/php-fpm/php-fpm.log,' %{buildroot}%{_sysconfdir}/php-fpm.conf*
+
+# And a UNIX socket tends to be more secure
+sed -i -e 's,^listen.*,listen = /run/php-fpm/php.sock,' %{buildroot}%{_sysconfdir}/php-fpm.d/*.conf*
+
+# Let's try to reduce overhead too...
+cat >>%{buildroot}%{_unitdir}/php-fpm.service <<EOF
+
+[Socket]
+ListenStream = /run/php-fpm/php.sock
+EOF
 
 %post bcmath
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -1952,7 +1973,7 @@ if [ "$1" = "0" ]; then
 fi
 
 %post fpm
-%tmpfiles_create php-fpm
+%tmpfiles_create_package php-fpm %{S:9}
 %_post_service php-fpm
 if [ $1 = 1 ]; then
 	# Initial installation
@@ -2242,19 +2263,20 @@ fi
 
 %files fpm
 %doc sapi/fpm/LICENSE
-/lib/systemd/system/php-fpm.service
+%{_unitdir}/php-fpm.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf.default
-%{_sysconfdir}/php-fpm.d
+%attr(0644,root,root) %config %{_sysconfdir}/php-fpm.conf
+%dir %{_sysconfdir}/php-fpm.d
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/www.conf.default
+%attr(0644,root,root) %config %{_sysconfdir}/php-fpm.d/www.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
 %attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
-#%attr(0755,root,root) %dir %{_sysconfdir}/php-fpm.d
-#%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/default.conf
 %attr(0755,root,root) %{_sbindir}/php-fpm
 %attr(0644,root,root) %{_mandir}/man8/php-fpm.8*
 #%attr(0711,apache,apache) %dir /var/lib/php-fpm
-#%attr(0711,apache,apache) %dir /var/log/php-fpm
+%attr(0711,apache,apache) %dir %{_localstatedir}/log/php-fpm
 #%attr(0711,apache,apache) %dir /run/php-fpm
-#%{_tmpfilesdir}/php-fpm.conf
+%{_tmpfilesdir}/php-fpm.conf
 %{_datadir}/fpm
 
 %files -n apache-mod_php

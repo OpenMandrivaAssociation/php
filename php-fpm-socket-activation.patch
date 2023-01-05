@@ -1,0 +1,118 @@
+diff -up php-8.2.0/sapi/fpm/fpm/fpm_sockets.c.omv~ php-8.2.0/sapi/fpm/fpm/fpm_sockets.c
+--- php-8.2.0/sapi/fpm/fpm/fpm_sockets.c.omv~	2023-01-04 21:49:31.521304136 +0100
++++ php-8.2.0/sapi/fpm/fpm/fpm_sockets.c	2023-01-04 21:57:30.857518530 +0100
+@@ -17,6 +17,8 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <unistd.h>
++#include <systemd/sd-daemon.h>
++#include <systemd/sd-journal.h>
+ 
+ #include "zlog.h"
+ #include "fpm_arrays.h"
+@@ -32,6 +34,7 @@ struct listening_socket_s {
+ 	int refcount;
+ 	int sock;
+ 	int type;
++	int preserve;
+ 	char *key;
+ };
+ 
+@@ -66,7 +69,7 @@ static void fpm_sockets_cleanup(int whic
+ 
+ 	for (i = 0; i < sockets_list.used; i++, ls++) {
+ 		if (which != FPM_CLEANUP_PARENT_EXEC) {
+-			close(ls->sock);
++			if (ls->preserve != 1) close(ls->sock); /* avoid close if systemd-provided socket */
+ 		} else { /* on PARENT EXEC we want socket fds to be inherited through environment variable */
+ 			char fd[32];
+ 			char *tmpenv_value;
+@@ -96,7 +99,7 @@ static void fpm_sockets_cleanup(int whic
+ 
+ 		if (which == FPM_CLEANUP_PARENT_EXIT_MAIN) {
+ 			if (ls->type == FPM_AF_UNIX) {
+-				unlink(ls->key);
++				if (ls->preserve != 1) unlink(ls->key); /* avoid unlink if systemd-provided socket */
+ 			}
+ 		}
+ 		free(ls->key);
+@@ -136,7 +139,7 @@ static int fpm_get_in_port(struct sockad
+ }
+ /* }}} */
+ 
+-static int fpm_sockets_hash_op(int sock, struct sockaddr *sa, char *key, int type, int op) /* {{{ */
++static int fpm_sockets_hash_op(int sock, struct sockaddr *sa, char *key, int type, int op, int preserve) /* {{{ */
+ {
+ 	if (key == NULL) {
+ 		switch (type) {
+@@ -193,6 +196,7 @@ static int fpm_sockets_hash_op(int sock,
+ 			ls->type = type;
+ 			ls->sock = sock;
+ 			ls->key = strdup(key);
++			ls->preserve = preserve;
+ 
+ 			return 0;
+ 		}
+@@ -276,13 +280,13 @@ static int fpm_sockets_get_listening_soc
+ {
+ 	int sock;
+ 
+-	sock = fpm_sockets_hash_op(0, sa, 0, wp->listen_address_domain, FPM_GET_USE_SOCKET);
++	sock = fpm_sockets_hash_op(0, sa, 0, wp->listen_address_domain, FPM_GET_USE_SOCKET, /* (systemd) preserve= */ 0);
+ 	if (sock >= 0) {
+ 		return sock;
+ 	}
+ 
+ 	sock = fpm_sockets_new_listening_socket(wp, sa, socklen);
+-	fpm_sockets_hash_op(sock, sa, 0, wp->listen_address_domain, FPM_STORE_USE_SOCKET);
++	fpm_sockets_hash_op(sock, sa, 0, wp->listen_address_domain, FPM_STORE_USE_SOCKET, /* (systemd) preserve= */ 0);
+ 
+ 	return sock;
+ }
+@@ -420,7 +424,10 @@ static zend_result fpm_socket_setfib_ini
+ 
+ int fpm_sockets_init_main(void)
+ {
++	int sd_sock_count;
+ 	unsigned i, lq_len;
++	struct sockaddr_un address;
++	socklen_t address_len;
+ 	struct fpm_worker_pool_s *wp;
+ 	char envname[32];
+ 	char sockpath[256];
+@@ -437,6 +444,26 @@ int fpm_sockets_init_main(void)
+ 	}
+ #endif
+ 
++	/* Is systemd providing any sockets? */
++	sd_sock_count = sd_listen_fds(0);
++	if (sd_sock_count < 0) sd_sock_count = 0; /* can return -errno, so set to zero */
++
++	/* For each systemd-provided socket, get type and address and store it */
++	for (i = SD_LISTEN_FDS_START; i < SD_LISTEN_FDS_START + sd_sock_count; i++) {
++		int type, fd_no;
++
++		fd_no = i;
++		address_len = sizeof(struct sockaddr_un);
++		if (getsockname(fd_no, (struct sockaddr *)&address, &address_len)) {
++			zlog(ZLOG_ERROR, "error getting sockname from systemd-provided socket: fd=%d", fd_no);
++			continue;
++		}
++
++		type = fpm_sockets_domain_from_address(((struct sockaddr *)&address)->sa_data);
++		zlog(ZLOG_NOTICE, "using systemd-provided socket fd=%d, \"%s\"", fd_no, ((struct sockaddr *)&address)->sa_data);
++		fpm_sockets_hash_op(fd_no, (struct sockaddr *)&address, 0, type, FPM_STORE_SOCKET, /* (systemd) preserve= */ 1);
++	}
++
+ 	/* import inherited sockets */
+ 	for (i = 0; i < FPM_ENV_SOCKET_SET_MAX; i++) {
+ 		fpm_sockets_get_env_name(envname, i);
+@@ -466,7 +493,7 @@ int fpm_sockets_init_main(void)
+ 				fd_no = atoi(eq + 1);
+ 				type = fpm_sockets_domain_from_address(sockpath);
+ 				zlog(ZLOG_NOTICE, "using inherited socket fd=%d, \"%s\"", fd_no, sockpath);
+-				fpm_sockets_hash_op(fd_no, 0, sockpath, type, FPM_STORE_SOCKET);
++				fpm_sockets_hash_op(fd_no, 0, sockpath, type, FPM_STORE_SOCKET, /* (systemd) preserve= */ 0);
+ 			}
+ 
+ 			if (comma) {
