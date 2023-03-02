@@ -28,10 +28,10 @@ Summary:	The PHP scripting language
 Name:		php
 Version:	8.2.3
 %if 0%{?beta:1}
-Release:	0.%{beta}1
+Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	1
+Release:	3
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -47,7 +47,8 @@ Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
 Patch1:		php-8.1.0-systzdata-v21.patch
 #Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
 # Based on https://wiki.php.net/rfc/socketactivation
-Patch3:		php-fpm-socket-activation.patch
+# Seems to be abandoned upstream
+#Patch3:		php-fpm-socket-activation.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
@@ -871,6 +872,8 @@ Summary:	Session extension module for PHP
 Group:		Development/PHP
 Requires(pre,postun): rpm-helper
 Requires:	%{libname} >= %{EVRD}
+Requires:	www-user
+Requires(pre):	www-user
 
 %description	session
 This is a dynamic shared object (DSO) for PHP that will add session support.
@@ -1049,6 +1052,8 @@ create and read zip files using the libzip library.
 %package	fpm
 Summary:	PHP FastCGI Process Manager
 Group:		Development/Other
+Requires:	www-user
+Requires(pre):	www-user
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre): rpm-helper
@@ -1278,7 +1283,7 @@ for i in fpm cgi cli embed apxs litespeed; do
 	cd build-$i
 	ln -s %{_bindir}/libtool .
 ../configure \
-	`[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=apache --with-fpm-group=apache --with-fpm-systemd --with-fpm-acl ` \
+	`[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-fpm-systemd --with-fpm-acl ` \
 	`[ $i = cgi ] && echo --disable-cli` \
 	`[ $i = cli ] && echo --disable-cgi --enable-cli` \
 	`[ $i = embed ] && echo --disable-cli --enable-embed=shared` \
@@ -1506,12 +1511,19 @@ sed -i -e 's,;error_log.*,error_log = %{_localstatedir}/log/php-fpm/php-fpm.log,
 # And a UNIX socket tends to be more secure
 sed -i -e 's,^listen.*,listen = /run/php-fpm/php.sock,' %{buildroot}%{_sysconfdir}/php-fpm.d/*.conf*
 
-# Let's try to reduce overhead too...
-cat >>%{buildroot}%{_unitdir}/php-fpm.service <<EOF
+# Don't run as root
+sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
 
+%if 0
+# Socket activation (see Patch3)
+cat >>%{buildroot}%{_unitdir}/php-fpm.socket <<EOF
 [Socket]
 ListenStream = /run/php-fpm/php.sock
+
+[Install]
+WantedBy = sockets.target
 EOF
+%endif
 
 %post bcmath
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -1833,9 +1845,6 @@ if [ "$1" = "0" ]; then
 	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%pre session
-%_pre_useradd apache /var/www /bin/sh
-
 %post session
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -1980,11 +1989,8 @@ if [ $1 = 1 ]; then
 	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
-%pre fpm
-%_preun_service php-fpm
-%_pre_useradd apache /var/www /bin/sh
-
 %preun fpm
+%_preun_service php-fpm
 if [ $1 = 0 ]; then
 	# Package removal, not upgrade
 	/bin/systemctl --no-reload disable php-fpm.service >/dev/null 2>&1 || :
@@ -1997,7 +2003,6 @@ if [ $1 -ge 1 ]; then
 	# Package upgrade, not uninstall
 	/bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
 fi
-%_postun_userdel apache
 
 %post -n apache-mod_php
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -2199,7 +2204,7 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/php
 %attr(0755,root,root) %{_libdir}/php/extensions/session.so
 %attr(0755,root,root) %{_libdir}/php/maxlifetime
-%attr(01733,apache,apache) %dir /var/lib/php
+%attr(01733,www,www) %dir /var/lib/php
 
 %files shmop
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/48_shmop.ini
@@ -2273,9 +2278,9 @@ fi
 %attr(0644,root,root) %{_sysconfdir}/logrotate.d/php-fpm
 %attr(0755,root,root) %{_sbindir}/php-fpm
 %attr(0644,root,root) %{_mandir}/man8/php-fpm.8*
-#%attr(0711,apache,apache) %dir /var/lib/php-fpm
-%attr(0711,apache,apache) %dir %{_localstatedir}/log/php-fpm
-#%attr(0711,apache,apache) %dir /run/php-fpm
+#%attr(0711,www,www) %dir /var/lib/php-fpm
+%attr(0711,www,www) %dir %{_localstatedir}/log/php-fpm
+#%attr(0711,www,www) %dir /run/php-fpm
 %{_tmpfilesdir}/php-fpm.conf
 %{_datadir}/fpm
 
