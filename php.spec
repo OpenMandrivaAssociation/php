@@ -26,12 +26,12 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.2.5
+Version:	8.2.6
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	2
+Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
