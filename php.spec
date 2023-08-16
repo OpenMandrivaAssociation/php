@@ -28,10 +28,10 @@ Summary:	The PHP scripting language
 Name:		php
 Version:	8.2.9
 %if 0%{?beta:1}
-Release:	0.%{beta}1
+Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -103,7 +103,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	gpm-devel
 BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
-BuildRequires:	openldap-devel
+BuildRequires:	pkgconfig(ldap)
 BuildRequires:	sasl-devel
 BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
@@ -1523,6 +1523,16 @@ ListenStream = /run/php-fpm/php.sock
 [Install]
 WantedBy = sockets.target
 EOF
+%endif
+
+%if ! %{cross_compiling}
+%check
+# Make sure it at least does some basic stuff
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH
+if [ "$(echo '<?php echo 1+1;?>' |%{buildroot}%{_bindir}/php)" != 2 ]; then
+	echo "Basic sanity check failed"
+	exit 1
+fi
 %endif
 
 %post bcmath
