@@ -1529,7 +1529,9 @@ EOF
 %check
 # Make sure it at least does some basic stuff
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH
-if [ "$(echo '<?php echo 1+1;?>' |%{buildroot}%{_bindir}/php)" != 2 ]; then
+# The "tail -n1" part is to make sure we don't fall over warnings
+# php prints because of missing configs, timezone definitions etc.
+if [ "$(echo '<?php echo 1+1;?>' |%{buildroot}%{_bindir}/php |tail -n1)" != 2 ]; then
 	echo "Basic sanity check failed"
 	exit 1
 fi
