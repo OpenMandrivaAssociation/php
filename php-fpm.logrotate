@@ -2,7 +2,7 @@
     rotate 5
     monthly
     missingok
-    create 640 apache apache
+    create 640 www www
     notifempty
     nocompress
     postrotate
