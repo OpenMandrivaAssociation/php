@@ -22,16 +22,16 @@
 %global optflags %{optflags} -fuse-ld=bfd
 %endif
 
-#define beta RC4
+%define beta RC3
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.2.9
+Version:	8.3.0
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	3
+Release:	1
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -49,6 +49,7 @@ Patch1:		php-8.1.0-systzdata-v21.patch
 # Based on https://wiki.php.net/rfc/socketactivation
 # Seems to be abandoned upstream
 #Patch3:		php-fpm-socket-activation.patch
+Patch4:		php-8.3.0-cldemote-clang.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
