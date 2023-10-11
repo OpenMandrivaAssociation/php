@@ -22,7 +22,7 @@
 %global optflags %{optflags} -fuse-ld=bfd
 %endif
 
-%define beta RC3
+%define beta RC4
 
 Summary:	The PHP scripting language
 Name:		php
