@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.3.0
+Version:	8.3.1
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
@@ -275,10 +275,10 @@ Summary:	Shared library for PHP
 Group:		Development/Other
 Provides:	php-pcre = %{EVRD}
 Provides:	php-simplexml = %{EVRD}
-Requires:	systemd-units
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+Requires:	systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
