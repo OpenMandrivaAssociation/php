@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.3.1
+Version:	8.3.2
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
@@ -1505,7 +1505,10 @@ cp %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf.default %{buildroot}%{_sysconfd
 mkdir -p %{buildroot}%{_localstatedir}/log/php-fpm
 sed -i -e 's,;error_log.*,error_log = %{_localstatedir}/log/php-fpm/php-fpm.log,' %{buildroot}%{_sysconfdir}/php-fpm.conf*
 
-# And a UNIX socket tends to be more secure
+# Read configs for all php instances as well as php-fpm...
+sed -i -e '/^include=/iinclude=%{_sysconfdir}/php.d/*.conf' %{buildroot}%{_sysconfdir}/php-fpm.conf*
+
+# A UNIX socket tends to be more secure
 sed -i -e 's,^listen.*,listen = /run/php-fpm/php.sock,' %{buildroot}%{_sysconfdir}/php-fpm.d/*.conf*
 
 # Don't run as root
