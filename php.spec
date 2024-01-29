@@ -31,7 +31,7 @@ Version:	8.3.2
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	1
+Release:	2
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -43,6 +43,8 @@ Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
 Source9:	php-fpm-tmpfiles.conf
 Source10:	php.ini
+Source20:	nginx-php.conf
+Source21:	nginx-http-php.conf
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
 Patch1:		php-8.1.0-systzdata-v21.patch
 #Patch2:		php-8.0.0-rc1-libtool-2.4.6.patch
@@ -1130,6 +1132,17 @@ This package contains PHP version 8. You'll also need to install the apache web
 server.
 
 
+%package nginx
+Summary:	PHP integration for NGINX web servers
+Group:		Servers
+Supplements:	nginx
+Requires:	%{name}-fpm = %{EVRD}
+Requires:	nginx
+
+%description nginx
+PHP integration for NGINX web servers
+
+
 %package -n	php-ini
 Summary:	INI files for PHP
 Group:		Development/Other
@@ -1513,6 +1526,16 @@ sed -i -e 's,^listen.*,listen = /run/php-fpm/php.sock,' %{buildroot}%{_sysconfdi
 
 # Don't run as root
 sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
+
+# NGINX integration
+mkdir -p %{buildroot}%{_sysconfdir}/nginx/http.conf.d
+cp %{S:20} %{buildroot}%{_sysconfdir}/nginx/php.conf
+cp %{S:21} %{buildroot}%{_sysconfdir}/nginx/http.conf.d/php.conf
+
+# Increase memory limit to make stuff like nextcloud happy
+cat >%{buildroot}%{_sysconfdir}/php.d/00_memory.ini <<EOF
+memory_limit = 1G
+EOF
 
 %if 0
 # Socket activation (see Patch3)
@@ -2308,3 +2331,7 @@ fi
 %dir %{_libdir}/php
 %dir %{_libdir}/php/extensions
 #%dir %{_datadir}/php
+
+%files nginx
+%{_sysconfdir}/nginx/php.conf
+%{_sysconfdir}/nginx/http.conf.d/php.conf
