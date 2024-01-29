@@ -2324,9 +2324,7 @@ fi
 %attr(0755,root,root) %{_libdir}/apache/*.so
 
 %files -n php-ini
-# FIXME restore
-#%config(noreplace) %{_sysconfdir}/php.ini
-#%config(noreplace) %{_sysconfdir}/php-cgi-fcgi.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/00_memory.ini
 %dir %{_sysconfdir}/php.d
 %dir %{_libdir}/php
 %dir %{_libdir}/php/extensions
