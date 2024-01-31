@@ -1537,6 +1537,15 @@ sed -i -e '/^include=/iinclude=%{_sysconfdir}/php.d/*.conf' %{buildroot}%{_sysco
 # A UNIX socket tends to be more secure
 sed -i -e 's,^listen.*,listen = /run/php-fpm/php.sock,' %{buildroot}%{_sysconfdir}/php-fpm.d/*.conf*
 
+# Allow way more php-fpm processes, since we want to be compatible
+# with fairly complex web apps. For example, nextcloud seems to want
+# to spawn a php process for every background process (e.g. for every
+# file being uploaded)
+sed -i -e 's,^pm\.max_children =.*,pm.max_children = 1024,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
+sed -i -e 's,^pm\.start_servers =.*,pm.start_servers = 32,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
+sed -i -e 's,^pm\.min_spare_servers =.*,pm.min_spare_servers = 16,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
+sed -i -e 's,^pm\.max_spare_servers =.*,pm.max_spare_servers = 128,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
+
 # Don't run as root
 sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
 
