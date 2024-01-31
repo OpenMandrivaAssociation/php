@@ -31,7 +31,7 @@ Version:	8.3.2
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	2
+Release:	3
 Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -88,6 +88,7 @@ BuildRequires:	pkgconfig(libpcre2-8)
 BuildRequires:	pkgconfig(libpcre2-16)
 BuildRequires:	pkgconfig(libpcre2-32)
 BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	pkgconfig(libsodium)
 BuildRequires:	pkgconfig(xmlrpc)
 BuildRequires:	pkgconfig(libacl)
 BuildRequires:	apache-base
@@ -932,6 +933,16 @@ The socket extension implements a low-level interface to the socket
 communication functions based on the popular BSD sockets, providing the
 possibility to act as a socket server as well as a client.
 
+%package	sodium
+Summary:	Sodium encryption extension module for PHP
+Group:		Development/PHP
+Requires:	%{libname} >= %{EVRD}
+
+%description	sodium
+This is a dynamic shared object (DSO) for PHP that will add Sodium encryption support.
+
+The sodium extension implements an interface to the Sodium cryptography library.
+
 %package	sqlite3
 Summary:	SQLite database bindings for PHP
 Group:		Development/PHP
@@ -1333,6 +1344,7 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--enable-dom=shared,%{_prefix} \
 	--with-enchant=shared,%{_prefix} \
 	--with-exif=shared,%{_prefix} \
+	--with-sodium=shared,%{_prefix} \
 	--enable-exif \
 	--enable-fileinfo \
 	--enable-filter=shared \
@@ -1458,6 +1470,7 @@ echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
 echo "extension = soap.so"		> %{buildroot}%{_sysconfdir}/php.d/51_soap.ini
 echo "extension = sockets.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sockets.ini
+echo "extension = sodium.so"		> %{buildroot}%{_sysconfdir}/php.d/52_sodium.ini
 echo "extension = sqlite3.so"		> %{buildroot}%{_sysconfdir}/php.d/78_sqlite3.ini
 echo "extension = sysvmsg.so"		> %{buildroot}%{_sysconfdir}/php.d/56_sysvmsg.ini
 echo "extension = sysvsem.so"		> %{buildroot}%{_sysconfdir}/php.d/57_sysvsem.ini
@@ -1560,469 +1573,9 @@ if [ "$(echo '<?php echo 1+1;?>' |%{buildroot}%{_bindir}/php |tail -n1)" != 2 ];
 fi
 %endif
 
-%post bcmath
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun bcmath
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post bz2
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun bz2
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post calendar
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun calendar
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post cgi
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun cgi
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post cli
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun cli
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post ctype
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun ctype
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post curl
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun curl
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post dba
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun dba
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post devel
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun devel
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post doc
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun doc
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post dom
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun dom
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post enchant
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun enchant
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post filter
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun filter
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post ftp
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun ftp
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post gd
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun gd
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post gettext
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun gettext
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post gmp
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun gmp
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post hash
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun hash
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post iconv
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun iconv
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post imap
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun imap
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post intl
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun intl
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post ldap
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun ldap
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mbstring
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mbstring
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mysqlnd
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mysqlnd
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post mysqli
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun mysqli
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post odbc
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun odbc
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post openssl
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun openssl
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pcntl
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pcntl
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo_dblib
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo_dblib
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo_mysql
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo_mysql
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo_odbc
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo_odbc
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo_pgsql
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo_pgsql
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pdo_sqlite
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pdo_sqlite
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pgsql
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pgsql
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post phar
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun phar
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post posix
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun posix
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post pspell
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun pspell
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post readline
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun readline
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post recode
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun recode
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post session
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun session
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post shmop
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun shmop
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post snmp
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun snmp
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post soap
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun soap
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post sockets
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sockets
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post sqlite3
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sqlite3
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post sysvmsg
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sysvmsg
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post sysvsem
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sysvsem
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post sysvshm
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun sysvshm
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post tidy
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun tidy
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post tokenizer
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun tokenizer
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post xml
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun xml
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post xmlreader
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun xmlreader
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post xmlwriter
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun xmlwriter
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post xsl
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun xsl
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post zip
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun zip
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
-%post zlib
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun zlib
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
-
 %post fpm
 %tmpfiles_create_package php-fpm %{S:9}
 %_post_service php-fpm
-if [ $1 = 1 ]; then
-	# Initial installation
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
 
 %preun fpm
 %_preun_service php-fpm
@@ -2033,18 +1586,9 @@ if [ $1 = 0 ]; then
 fi
 
 %postun fpm
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 if [ $1 -ge 1 ]; then
 	# Package upgrade, not uninstall
 	/bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
-fi
-
-%post -n apache-mod_php
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-
-%postun -n apache-mod_php
-if [ "$1" = "0" ]; then
-	/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %files doc
@@ -2256,6 +1800,10 @@ fi
 %files sockets
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sockets.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/sockets.so
+
+%files sodium
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/52_sodium.ini
+%attr(0755,root,root) %{_libdir}/php/extensions/sodium.so
 
 %files sqlite3
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/78_sqlite3.ini
