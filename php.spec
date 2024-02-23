@@ -26,7 +26,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.3.2
+Version:	8.3.3
 %if 0%{?beta:1}
 Release:	0.%{beta}.1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
@@ -66,11 +66,9 @@ BuildRequires:	openssl
 BuildRequires:	systemd
 BuildRequires:	re2c >= 0.13.4
 
-BuildRequires:	pkgconfig(enchant)
-BuildRequires:	pkgconfig(expat)
+BuildRequires:	pkgconfig(enchant-2)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libcurl)
-BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -298,7 +296,7 @@ Requires:	openssl
 Requires:	re2c >= 0.9.11
 Requires:	tcl
 Requires:	pam-devel
-Requires:	pkgconfig(libpcre)
+Requires:	pkgconfig(libpcre2-posix)
 Requires:	pkgconfig(libxml-2.0)
 Requires:	pkgconfig(libxslt)
 Requires:	pkgconfig(openssl)
