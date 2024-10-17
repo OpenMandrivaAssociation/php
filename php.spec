@@ -36,7 +36,7 @@ Source0:	http://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
 License:	PHP License
-URL:		http://www.php.net
+URL:		https://www.php.net
 Source2:	maxlifetime
 Source3:	php.crond
 Source5:	php-fpm.sysconf
