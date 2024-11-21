@@ -1,36 +1,21 @@
-diff -up php-src-php-8.3.0RC3/Zend/zend_cpuinfo.h.omv~ php-src-php-8.3.0RC3/Zend/zend_cpuinfo.h
---- php-src-php-8.3.0RC3/Zend/zend_cpuinfo.h.omv~	2023-09-27 16:06:09.571818837 +0200
-+++ php-src-php-8.3.0RC3/Zend/zend_cpuinfo.h	2023-09-27 16:20:56.232946983 +0200
-@@ -265,7 +265,16 @@ static inline int zend_cpu_supports_clde
- #if PHP_HAVE_BUILTIN_CPU_INIT
+diff -up php-8.4.1/Zend/zend_cpuinfo.h.3~ php-8.4.1/Zend/zend_cpuinfo.h
+--- php-8.4.1/Zend/zend_cpuinfo.h.3~	2024-11-21 19:45:58.787896144 +0100
++++ php-8.4.1/Zend/zend_cpuinfo.h	2024-11-21 19:55:11.302381325 +0100
+@@ -266,7 +266,16 @@ static inline int zend_cpu_supports_clde
+ #ifdef PHP_HAVE_BUILTIN_CPU_INIT
  	__builtin_cpu_init();
  #endif
 +#if defined(__clang__) && defined(__x86_64__)
-+	// bit 25 of the ECX register in sub-leaf 07H of CPUID
-+	uint32_t op = 7, eax, ebx, ecx, edx;
-+	asm volatile("cpuid\n"
-+			: "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx)
-+			: "a" (op));
-+	return ecx & 0x2000000;
++    // bit 25 of the ECX register in sub-leaf 07H of CPUID
++    uint32_t op = 7, eax, ebx, ecx, edx;
++    asm volatile("cpuid\n"
++               : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx)
++               : "a" (op));
++    return ecx & 0x2000000;
 +#else
  	return __builtin_cpu_supports("cldemote");
 +#endif
  }
  #endif
  
-diff -up php-src-php-8.3.0RC3/ext/opcache/jit/zend_jit.c.omv~ php-src-php-8.3.0RC3/ext/opcache/jit/zend_jit.c
---- php-src-php-8.3.0RC3/ext/opcache/jit/zend_jit.c.omv~	2023-09-27 16:10:35.339889481 +0200
-+++ php-src-php-8.3.0RC3/ext/opcache/jit/zend_jit.c	2023-09-27 16:24:18.910338199 +0200
-@@ -158,7 +158,11 @@ static uint32_t zend_jit_trace_find_exit
- #pragma GCC target("cldemote")
- // check cldemote by CPUID when JIT startup
- static int cpu_support_cldemote = 0;
--static inline void shared_cacheline_demote(uintptr_t start, size_t size) {
-+static inline
-+#ifdef __x86_64__
-+__attribute__((target("cldemote")))
-+#endif
-+void shared_cacheline_demote(uintptr_t start, size_t size) {
-     uintptr_t cache_line_base = start & ~0x3F;
-     do {
-         _cldemote((void *)cache_line_base);
+diff -up php-8.4.1/ext/opcache/jit/zend_jit.c.3~ php-8.4.1/ext/opcache/jit/zend_jit.c

@@ -1,43 +1,9 @@
-# License: MIT
-# http://opensource.org/licenses/MIT
-
-Add support for use of the system timezone database, rather
-than embedding a copy.  Discussed upstream but was not desired.
-
-History:
-r21: adapt for timelib 2021.03 (in 8.1.0)
-r20: adapt for timelib 2020.03 (in 8.0.10RC1)
-r19: adapt for timelib 2020.02 (in 8.0.0beta2)
-r18: adapt for autotool change in 7.3.3RC1
-r17: adapt for timelib 2018.01 (in 7.3.2RC1)
-r16: adapt for timelib 2017.06 (in 7.2.3RC1)
-r15: adapt for timelib 2017.05beta7 (in 7.2.0RC1)
-r14: improve check for valid tz file
-r13: adapt for upstream changes to use PHP allocator
-r12: adapt for upstream changes for new zic
-r11: use canonical names to avoid more case sensitivity issues
-     round lat/long from zone.tab towards zero per builtin db
-r10: make timezone case insensitive
-r9: fix another compile error without --with-system-tzdata configured (Michael Heimpold)
-r8: fix compile error without --with-system-tzdata configured
-r7: improve check for valid timezone id to exclude directories
-r6: fix fd leak in r5, fix country code/BC flag use in
-    timezone_identifiers_list() using system db,
-    fix use of PECL timezonedb to override system db,
-r5: reverts addition of "System/Localtime" fake tzname.
-    updated for 5.3.0, parses zone.tab to pick up mapping between
-    timezone name, country code and long/lat coords
-r4: added "System/Localtime" tzname which uses /etc/localtime
-r3: fix a crash if /usr/share/zoneinfo doesn't exist (Raphael Geissert)
-r2: add filesystem trawl to set up name alias index
-r1: initial revision
-
-diff -up php-8.0.0beta3/ext/date/config0.m4.systzdata php-8.0.0beta3/ext/date/config0.m4
---- php-8.0.0beta3/ext/date/config0.m4.systzdata	2020-09-01 19:13:26.000000000 +0200
-+++ php-8.0.0beta3/ext/date/config0.m4	2020-09-02 08:07:51.039979873 +0200
+diff -up php-8.4.1/ext/date/config0.m4.2~ php-8.4.1/ext/date/config0.m4
+--- php-8.4.1/ext/date/config0.m4.2~	2024-11-21 19:39:14.924537485 +0100
++++ php-8.4.1/ext/date/config0.m4	2024-11-21 19:45:29.197653245 +0100
 @@ -4,6 +4,19 @@ AC_CHECK_HEADERS([io.h])
  dnl Check for strtoll, atoll
- AC_CHECK_FUNCS(strtoll atoll)
+ AC_CHECK_FUNCS([strtoll atoll])
  
 +PHP_ARG_WITH(system-tzdata, for use of system timezone data,
 +[  --with-system-tzdata[=DIR]      to specify use of system timezone data],
@@ -55,9 +21,9 @@ diff -up php-8.0.0beta3/ext/date/config0.m4.systzdata php-8.0.0beta3/ext/date/co
  AX_CHECK_COMPILE_FLAG([-Wno-implicit-fallthrough],
    [PHP_DATE_CFLAGS="$PHP_DATE_CFLAGS -Wno-implicit-fallthrough"],,
    [-Werror])
-diff -up php-8.0.0beta3/ext/date/lib/parse_tz.c.systzdata php-8.0.0beta3/ext/date/lib/parse_tz.c
---- php-8.0.0beta3/ext/date/lib/parse_tz.c.systzdata	2020-09-01 19:13:26.000000000 +0200
-+++ php-8.0.0beta3/ext/date/lib/parse_tz.c	2020-09-02 08:07:51.039979873 +0200
+diff -up php-8.4.1/ext/date/lib/parse_tz.c.2~ php-8.4.1/ext/date/lib/parse_tz.c
+--- php-8.4.1/ext/date/lib/parse_tz.c.2~	2024-11-20 10:48:35.000000000 +0100
++++ php-8.4.1/ext/date/lib/parse_tz.c	2024-11-21 19:39:14.924537485 +0100
 @@ -26,9 +26,22 @@
  #include "timelib.h"
  #include "timelib_private.h"

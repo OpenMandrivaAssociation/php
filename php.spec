@@ -21,12 +21,11 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.3.13
+Version:	8.4.1
+Release:	%{?beta:0.%{beta}.}1
 %if 0%{?beta:1}
-Release:	0.%{beta}1
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
-Release:	1
 Source0:	https://ch1.php.net/distributions/php-%{version}.tar.xz
 %endif
 Group:		Development/PHP
@@ -47,6 +46,7 @@ Patch1:		php-8.1.0-systzdata-v21.patch
 # Seems to be abandoned upstream
 #Patch3:		php-fpm-socket-activation.patch
 Patch4:		php-8.3.0-cldemote-clang.patch
+Patch5:		php-8.4.1-detect-httpd.patch
 
 BuildRequires:	autoconf
 BuildRequires:	autoconf-archive

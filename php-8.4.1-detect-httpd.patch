@@ -1,0 +1,11 @@
+diff -up php-8.4.1/sapi/apache2handler/config.m4.omv~ php-8.4.1/sapi/apache2handler/config.m4
+--- php-8.4.1/sapi/apache2handler/config.m4.omv~	2024-11-21 20:37:45.547745482 +0100
++++ php-8.4.1/sapi/apache2handler/config.m4	2024-11-21 20:38:20.578233673 +0100
+@@ -33,6 +33,7 @@ if test "$PHP_APXS2" != "no"; then
+ 
+   APXS_INCLUDEDIR=$($APXS -q INCLUDEDIR)
+   APXS_HTTPD=$($APXS -q SBINDIR)/$($APXS -q TARGET)
++  AS_IF([test ! -x "$APXS_HTTPD"], [APXS_HTTPD="${APXS_HTTPD}-prefork"])
+   AS_IF([test ! -x "$APXS_HTTPD"], [AC_MSG_ERROR(m4_text_wrap([
+     $APXS_HTTPD executable not found. Please, install Apache HTTP Server
+     command-line utility.

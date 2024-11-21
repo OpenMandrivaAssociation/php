@@ -1,21 +1,23 @@
-diff -up php-8.0.0rc1/ext/dba/config.m4.1~ php-8.0.0rc1/ext/dba/config.m4
---- php-8.0.0rc1/ext/dba/config.m4.1~	2020-10-06 13:36:20.844629618 +0200
-+++ php-8.0.0rc1/ext/dba/config.m4	2020-10-06 13:39:05.965454221 +0200
-@@ -308,7 +308,7 @@ AC_DEFUN([PHP_DBA_DB_CHECK],[
-         ]])],[
-           AC_EGREP_CPP(yes,[
+diff -up php-8.4.1/ext/dba/config.m4.1~ php-8.4.1/ext/dba/config.m4
+--- php-8.4.1/ext/dba/config.m4.1~	2024-11-21 19:36:37.963196077 +0100
++++ php-8.4.1/ext/dba/config.m4	2024-11-21 19:38:52.524347644 +0100
+@@ -339,7 +339,7 @@ AC_DEFUN([PHP_DBA_DB_CHECK],[
+           [$3;])],
+           [AC_EGREP_CPP([yes], [
  #include "$THIS_INCLUDE"
 -#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR == 5)
 +#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR >= 5)
              yes
  #endif
            ],[
-@@ -429,7 +429,7 @@ if test "$PHP_DB4" != "no"; then
-       break
-     fi
+@@ -477,6 +477,10 @@ if test "$PHP_DB4" != "no"; then
    done
--  PHP_DBA_DB_CHECK(4, db-5.3 db-5.1 db-5.0 db-4.8 db-4.7 db-4.6 db-4.5 db-4.4 db-4.3 db-4.2 db-4.1 db-4.0 db-4 db4 db, [(void)db_create((DB**)0, (DB_ENV*)0, 0)])
-+  PHP_DBA_DB_CHECK(4, db-18.1 db-6.2 db-6.1 db-6.0 db-5.3 db-5.1 db-5.0 db-4.8 db-4.7 db-4.6 db-4.5 db-4.4 db-4.3 db-4.2 db-4.1 db-4.0 db-4 db4 db, [(void)db_create((DB**)0, (DB_ENV*)0, 0)])
- fi
- PHP_DBA_STD_RESULT(db4,Berkeley DB4)
- 
+   PHP_DBA_DB_CHECK([4],
+     [
++      db-18.1
++      db-6.2
++      db-6.1
++      db-6.0
+       db-5.3
+       db-5.1
+       db-5.0
