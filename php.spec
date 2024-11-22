@@ -87,9 +87,7 @@ BuildRequires:	pkgconfig(libacl)
 BuildRequires:	apache-base
 
 BuildRequires:	apache-devel >= 2.2.0
-BuildRequires:	aspell-devel
 BuildRequires:	bzip2-devel
-BuildRequires:	c-client-devel >= 2007
 BuildRequires:	db-devel
 BuildRequires:	elfutils-devel
 BuildRequires:	freetds-devel >= 0.63
@@ -540,18 +538,6 @@ your system. Note that the iconv function on some systems may not work as you
 expect. In such case, it'd be a good idea to install the GNU libiconv library.
 It will most likely end up with more consistent results.
 
-%package	imap
-Summary:	IMAP extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	imap
-This is a dynamic shared object (DSO) for PHP that will add IMAP support.
-
-These functions are not limited to the IMAP protocol, despite their name. The
-underlying c-client library also supports NNTP, POP3 and local mailbox access
-methods.
-
 %package	intl
 Summary:	Internationalization extension module for PHP
 Group:		Development/PHP
@@ -815,18 +801,6 @@ POSIX.1 for example defined the open(), read(), write() and close() functions,
 too, which traditionally have been part of PHP 3 for a long time. Some more
 system specific functions have not been available before, though, and this
 module tries to remedy this by providing easy access to these functions.
-
-%package	pspell
-Summary:	Pspell extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	pspell
-This is a dynamic shared object (DSO) for PHP that will add pspell support to
-PHP.
-
-These functions allow you to check the spelling of a word and offer
-suggestions.
 
 %package	readline
 Summary:	Readline extension module for PHP
@@ -1347,7 +1321,6 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--with-gettext=shared,%{_prefix} \
 	--with-gmp=shared,%{_prefix} \
 	--with-iconv=shared \
-	--with-imap=shared,%{_prefix} --with-imap-ssl=%{_prefix} \
 	--with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
 	--enable-mbstring=shared,%{_prefix} --enable-mbregex \
 	--with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
@@ -1359,7 +1332,6 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--with-pgsql=shared,%{_prefix} \
 	--enable-phar=shared \
 	--enable-posix=shared \
-	--with-pspell=shared,%{_prefix} \
 	--with-readline=shared,%{_prefix} \
 	--enable-session=shared,%{_prefix} \
 	--enable-shmop=shared,%{_prefix} \
@@ -1438,7 +1410,6 @@ echo "extension = gettext.so"		> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
 echo "extension = gmp.so"		> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
 #echo "extension = hash.so"		> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
 echo "extension = iconv.so"		> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
-echo "extension = imap.so"		> %{buildroot}%{_sysconfdir}/php.d/27_imap.ini
 echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
 echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
 echo "extension = mbstring.so"		> %{buildroot}%{_sysconfdir}/php.d/29_mbstring.ini
@@ -1455,7 +1426,6 @@ echo "extension = pdo_sqlite.so"	> %{buildroot}%{_sysconfdir}/php.d/77_pdo_sqlit
 echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/78_mysqli.ini
 echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
 echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
-echo "extension = pspell.so"		> %{buildroot}%{_sysconfdir}/php.d/44_pspell.ini
 echo "extension = readline.so"		> %{buildroot}%{_sysconfdir}/php.d/45_readline.ini
 #echo "extension = recode.so"		> %{buildroot}%{_sysconfdir}/php.d/46_recode.ini
 echo "extension = session.so"		> %{buildroot}%{_sysconfdir}/php.d/47_session.ini
@@ -1621,6 +1591,7 @@ fi
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
 %{_libdir}/build
+%{_libdir}/libphp.so
 
 %files openssl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_openssl.ini
@@ -1689,10 +1660,6 @@ fi
 %files iconv
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/26_iconv.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/iconv.so
-
-%files imap
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_imap.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/imap.so
 
 %files intl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/27_intl.ini
@@ -1765,10 +1732,6 @@ fi
 %files posix
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/43_posix.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/posix.so
-
-%files pspell
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/44_pspell.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/pspell.so
 
 %files readline
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/45_readline.ini
