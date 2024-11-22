@@ -1620,8 +1620,6 @@ fi
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
-# FIXME incorrectly versioned, wrong directory
-%{_prefix}/lib/libphp.so
 %{_libdir}/build
 
 %files openssl
