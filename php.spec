@@ -21,7 +21,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.4.12
+Version:	8.4.14
 Release:	%{?beta:0.%{beta}.}1
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
