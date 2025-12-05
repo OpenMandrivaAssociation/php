@@ -21,7 +21,7 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.4.14
+Version:	8.5.0
 Release:	%{?beta:0.%{beta}.}1
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
@@ -269,6 +269,10 @@ Summary:	Shared library for PHP
 Group:		Development/Other
 Provides:	php-pcre = %{EVRD}
 Provides:	php-simplexml = %{EVRD}
+# Used to be a plugin, is a hard requirement built into the core
+# starting with 8.5.0
+# https://www.php.net/ChangeLog-8.php#8.5.0
+Provides:	php-opcache = %{EVRD}
 
 %description -n	%{libname}
 This package provides the common files to run with different implementations of
@@ -635,14 +639,6 @@ to access several databases that have borrowed the semantics of the ODBC API to
 implement their own API. Instead of maintaining multiple database drivers that
 were all nearly identical, these drivers have been unified into a single set of
 ODBC functions.
-
-%package	opcache
-Summary:	Opcode cache for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	opcache
-Opcode cache for PHP
 
 %package	pcntl
 Summary:	Process Control extension module for PHP
@@ -1446,15 +1442,6 @@ echo "extension = xmlwriter.so"		> %{buildroot}%{_sysconfdir}/php.d/64_xmlwriter
 echo "extension = xsl.so"		> %{buildroot}%{_sysconfdir}/php.d/63_xsl.ini
 echo "extension = zip.so"		> %{buildroot}%{_sysconfdir}/php.d/83_zip.ini
 echo "extension = phar.so"		> %{buildroot}%{_sysconfdir}/php.d/84_phar.ini
-cat >%{buildroot}%{_sysconfdir}/php.d/85_opcache.ini <<"EOF"
-zend_extension = %{_libdir}/php/extensions/opcache.so
-opcache.memory_consumption=128
-opcache.interned_strings_buffer=8
-opcache.max_accelerated_files=4000
-opcache.revalidate_freq=60
-opcache.fast_shutdown=1
-opcache.enable_cli=1
-EOF
 
 # Follow naming conventions
 mv %{buildroot}%{_libdir}/apache/libphp.so %{buildroot}%{_libdir}/apache/mod_php.so
@@ -1590,8 +1577,8 @@ fi
 %{_includedir}/php
 %attr(0644,root,root) %{_mandir}/man1/php-config.1*
 %attr(0644,root,root) %{_mandir}/man1/phpize.1*
-%{_libdir}/build
 %{_libdir}/libphp.so
+%{_libdir}/php/build
 
 %files openssl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/21_openssl.ini
@@ -1684,10 +1671,6 @@ fi
 %files odbc
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/39_odbc.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/odbc.so
-
-%files opcache
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/85_opcache.ini
-%attr(0755,root,root) %{_libdir}/php/extensions/opcache.so
 
 %files pcntl
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/40_pcntl.ini
@@ -1828,7 +1811,7 @@ fi
 %attr(0711,www,www) %dir %{_localstatedir}/log/php-fpm
 #%attr(0711,www,www) %dir /run/php-fpm
 %{_tmpfilesdir}/php-fpm.conf
-%{_datadir}/fpm
+%{_datadir}/php/fpm
 
 %files -n apache-mod_php
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/modules.d/*.conf

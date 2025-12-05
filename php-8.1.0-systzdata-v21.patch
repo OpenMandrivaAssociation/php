@@ -1,10 +1,11 @@
-diff -up php-8.4.1/ext/date/config0.m4.2~ php-8.4.1/ext/date/config0.m4
---- php-8.4.1/ext/date/config0.m4.2~	2024-11-21 19:39:14.924537485 +0100
-+++ php-8.4.1/ext/date/config0.m4	2024-11-21 19:45:29.197653245 +0100
-@@ -4,6 +4,19 @@ AC_CHECK_HEADERS([io.h])
+diff -up php-8.5.0/ext/date/config0.m4.2~ php-8.5.0/ext/date/config0.m4
+--- php-8.5.0/ext/date/config0.m4.2~	2025-11-18 09:02:20.000000000 +0100
++++ php-8.5.0/ext/date/config0.m4	2025-12-05 14:29:38.570061228 +0100
+@@ -4,6 +4,20 @@ AC_CHECK_HEADERS([io.h])
  dnl Check for strtoll, atoll
  AC_CHECK_FUNCS([strtoll atoll])
  
++
 +PHP_ARG_WITH(system-tzdata, for use of system timezone data,
 +[  --with-system-tzdata[=DIR]      to specify use of system timezone data],
 +no, no)
@@ -19,11 +20,11 @@ diff -up php-8.4.1/ext/date/config0.m4.2~ php-8.4.1/ext/date/config0.m4
 +fi
 +
  AX_CHECK_COMPILE_FLAG([-Wno-implicit-fallthrough],
-   [PHP_DATE_CFLAGS="$PHP_DATE_CFLAGS -Wno-implicit-fallthrough"],,
-   [-Werror])
-diff -up php-8.4.1/ext/date/lib/parse_tz.c.2~ php-8.4.1/ext/date/lib/parse_tz.c
---- php-8.4.1/ext/date/lib/parse_tz.c.2~	2024-11-20 10:48:35.000000000 +0100
-+++ php-8.4.1/ext/date/lib/parse_tz.c	2024-11-21 19:39:14.924537485 +0100
+   [PHP_DATE_CFLAGS="$PHP_DATE_CFLAGS -Wno-implicit-fallthrough"])
+ 
+diff -up php-8.5.0/ext/date/lib/parse_tz.c.2~ php-8.5.0/ext/date/lib/parse_tz.c
+--- php-8.5.0/ext/date/lib/parse_tz.c.2~	2025-11-18 09:02:20.000000000 +0100
++++ php-8.5.0/ext/date/lib/parse_tz.c	2025-12-05 14:28:54.961306390 +0100
 @@ -26,9 +26,22 @@
  #include "timelib.h"
  #include "timelib_private.h"
