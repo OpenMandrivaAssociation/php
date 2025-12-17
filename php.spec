@@ -56,7 +56,9 @@ BuildRequires:	byacc
 BuildRequires:	file
 BuildRequires:	flex
 BuildRequires:	lemon
-BuildRequires:	libtool
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	openssl
 BuildRequires:	systemd
 BuildRequires:	re2c >= 0.13.4
