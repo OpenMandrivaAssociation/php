@@ -22,7 +22,7 @@
 Summary:	The PHP scripting language
 Name:		php
 Version:	8.5.3
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
@@ -56,7 +56,6 @@ BuildRequires:	byacc
 BuildRequires:	file
 BuildRequires:	flex
 BuildRequires:	lemon
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	openssl
@@ -102,7 +101,6 @@ BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
 BuildRequires:	pkgconfig(ldap)
 BuildRequires:	sasl-devel
-BuildRequires:	libtool-devel
 BuildRequires:	mbfl-devel >= 1.2.0
 BuildRequires:	mysql-devel >= 4.1.7
 BuildRequires:	lm_sensors-devel
@@ -285,7 +283,7 @@ webserver with php support (ie: apache-mod_php).
 Summary:	Development package for PHP
 Group:		Development/C
 Requires:	%{libname} >= %{EVRD}
-Requires:	autoconf automake libtool
+Requires:	autoconf automake slibtool
 Requires:	bison
 Requires:	byacc
 Requires:	chrpath
@@ -1196,17 +1194,14 @@ scripts/dev/genfiles
 # including a local libtool.m4 is just wrong, let aclocal
 # pick the right version
 #sed -i -e '/libtool.m4/d' configure.ac
-libtoolize --force
+slibtoolize --force
 # Replace outdated crappy force-included versions of auto* macros
-cat $(aclocal --print-ac-dir)/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
 cp -f %{_datadir}/aclocal/{ax_check_compile_flag,ax_func_which_gethostbyname_r,ax_gcc_func_attribute}.m4 build/
 touch configure.ac
 ./buildconf --force
 
 %build
 %serverbuild
-
-#cp -f %{_datadir}/libtool/build-aux/config.* .
 
 export CC=%{__cc}
 export CXX=%{__cxx}
@@ -1236,13 +1231,10 @@ chmod 755 php-devel/buildext
 
 rm -f configure
 rm -rf autom4te.cache
-libtoolize --force
-cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
+slibtoolize --force
 touch configure.ac
 #sed -i -e '/PHP_AUTOCONF/iaclocal -I build' buildconf
 ./buildconf --force
-cp -f %{_datadir}/libtool/build-aux/* .
-cp -f %{_bindir}/libtool .
 
 if grep LT_INIT configure; then
 	echo "autoconf ended up putting a literal LT_INIT into configure, this will break things"
@@ -1259,6 +1251,7 @@ export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
 SAFE_LDFLAGS=`echo %{build_ldflags}|sed -e 's|-Wl,--no-undefined||g'`
 export EXTRA_LIBS="-lz"
 export LDFLAGS="$SAFE_LDFLAGS"
+export LIBTOOL=rlibtool
 
 # never use "--disable-rpath", it does the opposite
 
@@ -1267,7 +1260,6 @@ export LDFLAGS="$SAFE_LDFLAGS"
 for i in fpm cgi cli embed apxs litespeed; do
 	mkdir build-$i
 	cd build-$i
-	ln -s %{_bindir}/libtool .
 ../configure \
 	`[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-fpm-systemd --with-fpm-acl ` \
 	`[ $i = cgi ] && echo --disable-cli` \
@@ -1354,15 +1346,7 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--with-system-tzdata \
 	|| (cat config.log && exit 1)
 
-#cp -f Makefile Makefile.$i
-#cp -f %{_bindir}/libtool .
-
-# left for debugging purposes
-#cp -f main/php_config.h php_config.h.$i
-
-# when all else failed...
-#perl -pi -e "s|-prefer-non-pic -static||g" Makefile.$i
-%make_build
+%make_build LIBTOOL=rclibtool
 
 cd ..
 done
