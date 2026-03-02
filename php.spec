@@ -22,7 +22,7 @@
 Summary:	The PHP scripting language
 Name:		php
 Version:	8.5.3
-Release:	%{?beta:0.%{beta}.}3
+Release:	%{?beta:0.%{beta}.}4
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
@@ -1471,6 +1471,11 @@ sed -i -e "s|/usr/lib|%{_libdir}|" %{buildroot}%{_sysconfdir}/cron.d/php
 
 mkdir -p %{buildroot}%{_unitdir}
 cp build-fpm/sapi/fpm/php-fpm.service %{buildroot}%{_unitdir}/php-fpm.service
+# Don't run as root
+sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
+# Create a template unit
+sed -e 's,/etc/php-fpm.conf,/etc/php-fpm-instances.d/%%i.conf,' %{buildroot}%{_unitdir}/php-fpm.service >%{buildroot}%{_unitdir}/php-fpm@.service
+mkdir -p %{buildroot}%{_sysconfdir}/php-fpm-instances.d
 cp %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
 cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
 mkdir -p %{buildroot}%{_tmpfilesdir}
@@ -1497,9 +1502,6 @@ sed -i -e 's,^pm\.max_children =.*,pm.max_children = 1024,' %{buildroot}%{_sysco
 sed -i -e 's,^pm\.start_servers =.*,pm.start_servers = 32,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
 sed -i -e 's,^pm\.min_spare_servers =.*,pm.min_spare_servers = 16,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
 sed -i -e 's,^pm\.max_spare_servers =.*,pm.max_spare_servers = 128,' %{buildroot}%{_sysconfdir}/php-fpm.d/www.conf
-
-# Don't run as root
-sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
 
 # NGINX integration
 mkdir -p %{buildroot}%{_sysconfdir}/nginx/http.conf.d
@@ -1533,24 +1535,6 @@ if [ "$(echo '<?php echo 1+1;?>' |%{buildroot}%{_bindir}/php |tail -n1)" != 2 ];
 	exit 1
 fi
 %endif
-
-%post fpm
-%tmpfiles_create_package php-fpm %{S:9}
-%_post_service php-fpm
-
-%preun fpm
-%_preun_service php-fpm
-if [ $1 = 0 ]; then
-	# Package removal, not upgrade
-	/bin/systemctl --no-reload disable php-fpm.service >/dev/null 2>&1 || :
-	/bin/systemctl stop php-fpm.service >/dev/null 2>&1 || :
-fi
-
-%postun fpm
-if [ $1 -ge 1 ]; then
-	# Package upgrade, not uninstall
-	/bin/systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
-fi
 
 %files doc
 %doc php.ini-production php.ini-development
@@ -1800,9 +1784,13 @@ fi
 %files fpm
 %doc sapi/fpm/LICENSE
 %{_unitdir}/php-fpm.service
+%{_unitdir}/php-fpm@.service
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.conf.default
 %attr(0644,root,root) %config %{_sysconfdir}/php-fpm.conf
+# Configuration loaded into /etc/php-fpm.conf
 %dir %{_sysconfdir}/php-fpm.d
+# Separate independent php instances, e.g. for grommunio-web
+%dir %{_sysconfdir}/php-fpm-instances.d
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-fpm.d/www.conf.default
 %attr(0644,root,root) %config %{_sysconfdir}/php-fpm.d/www.conf
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
