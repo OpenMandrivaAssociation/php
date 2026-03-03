@@ -22,7 +22,7 @@
 Summary:	The PHP scripting language
 Name:		php
 Version:	8.5.3
-Release:	%{?beta:0.%{beta}.}4
+Release:	%{?beta:0.%{beta}.}5
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
@@ -1475,6 +1475,8 @@ cp build-fpm/sapi/fpm/php-fpm.service %{buildroot}%{_unitdir}/php-fpm.service
 sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
 # Create a template unit
 sed -e 's,/etc/php-fpm.conf,/etc/php-fpm-instances.d/%%i.conf,' %{buildroot}%{_unitdir}/php-fpm.service >%{buildroot}%{_unitdir}/php-fpm@.service
+sed -i '/^\[Service\]/aEnvironmentFile=-%{_sysconfdir}/php-fpm-instances.d/%%i.env' %{buildroot}%{_unitdir}/php-fpm@.service
+sed -i 's/--nodaemonize/--nodaemonize $PHP_FPM_ARGS/' %{buildroot}%{_unitdir}/php-fpm@.service
 mkdir -p %{buildroot}%{_sysconfdir}/php-fpm-instances.d
 cp %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/php-fpm
 cp %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/php-fpm
