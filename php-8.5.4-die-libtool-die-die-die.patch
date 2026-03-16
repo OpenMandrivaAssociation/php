@@ -1,0 +1,14 @@
+diff -up php-8.5.4/ext/phar/Makefile.frag.omv~ php-8.5.4/ext/phar/Makefile.frag
+--- php-8.5.4/ext/phar/Makefile.frag.omv~	2026-03-15 05:05:55.213668353 +0100
++++ php-8.5.4/ext/phar/Makefile.frag	2026-03-15 05:07:29.786260801 +0100
+@@ -15,7 +15,9 @@ PHP_PHARCMD_EXECUTABLE = ` \
+ 		if test "x$(PHP_MODULES)" != "x"; then \
+ 		$(top_srcdir)/build/shtool echo -n -- " -d extension_dir=$(top_builddir)/modules"; \
+ 		for i in bz2 zlib phar; do \
+-			if test -f "$(top_builddir)/modules/$$i.la"; then \
++			if test -f "$(top_builddir)/modules/$$i.so"; then \
++				$(top_srcdir)/build/shtool echo -n -- " -d extension=$$i.so"; \
++			elif test -f "$(top_builddir)/modules/$$i.la"; then \
+ 				. $(top_builddir)/modules/$$i.la; $(top_srcdir)/build/shtool echo -n -- " -d extension=$$dlname"; \
+ 			fi; \
+ 		done; \
