@@ -98,6 +98,8 @@ BuildRequires:	pkgconfig(ldap)
 BuildRequires:	sasl-devel
 BuildRequires:	mysql-devel >= 4.1.7
 BuildRequires:	net-snmp-devel
+# net-snmp-config --libs pulls -lsensors; SNMP configure fails without it
+BuildRequires:	lm_sensors-devel
 BuildRequires:	net-snmp-mibs
 BuildRequires:	onig-devel >= 5.9.2
 BuildRequires:	pam-devel
