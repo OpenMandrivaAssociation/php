@@ -1395,7 +1395,7 @@ $joined = implode(',', $arr);
 $joined = str_replace('A', 'a', $joined);
 preg_match_all('/[0-9a-f]{8}/', $joined, $m);
 $acc += count($m[0]);
-$payload = json_encode(['n' => $acc, 't' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM), 's' => substr($joined, 0, 64)], JSON_THROW_ON_ERROR);
+$payload = json_encode(['n' => $acc, 't' => (string) time(), 's' => substr($joined, 0, 64)], JSON_THROW_ON_ERROR);
 json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
 $gen = function ($n) {
 	for ($i = 0; $i < $n; $i++) {
