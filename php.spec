@@ -1,9 +1,6 @@
 %define _build_pkgcheck_set %{nil}
 %define _build_pkgcheck_srpm %{nil}
 
-# For empty debugsource package
-%global _debugsource_template %{nil}
-
 %define build_test 0
 %{?_with_test: %{expand: %%global build_test 1}}
 %{?_without_test: %{expand: %%global build_test 0}}
@@ -21,8 +18,8 @@
 
 Summary:	The PHP scripting language
 Name:		php
-Version:	8.5.9
-Release:	%{?beta:0.%{beta}.}2
+Version:	8.5.10
+Release:	%{?beta:0.%{beta}.}1
 %if 0%{?beta:1}
 Source0:	https://github.com/php/php-src/archive/refs/tags/php-%{version}%{beta}.tar.gz
 %else
@@ -36,7 +33,6 @@ Source3:	php.crond
 Source5:	php-fpm.sysconf
 Source6:	php-fpm.logrotate
 Source9:	php-fpm-tmpfiles.conf
-Source10:	php.ini
 Source20:	nginx-php.conf
 Source21:	nginx-http-php.conf
 Patch0:		php-8.0.0-rc1-allow-newer-bdb.patch
@@ -53,7 +49,6 @@ BuildRequires:	autoconf
 BuildRequires:	autoconf-archive
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	byacc
 BuildRequires:	file
 BuildRequires:	flex
 BuildRequires:	lemon
@@ -84,7 +79,7 @@ BuildRequires:	pkgconfig(libpcre2-16)
 BuildRequires:	pkgconfig(libpcre2-32)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(libsodium)
-BuildRequires:	pkgconfig(xmlrpc)
+BuildRequires:	pkgconfig(liburiparser)
 BuildRequires:	pkgconfig(libacl)
 BuildRequires:	apache-base
 
@@ -97,27 +92,19 @@ BuildRequires:	gdbm-devel
 BuildRequires:	gd-devel >= 2.0.33
 BuildRequires:	gettext-devel
 BuildRequires:	gmp-devel
-BuildRequires:	gpm-devel
 BuildRequires:	icu-devel >= 49.0
 BuildRequires:	jpeg-devel
 BuildRequires:	pkgconfig(ldap)
 BuildRequires:	sasl-devel
-BuildRequires:	mbfl-devel >= 1.2.0
 BuildRequires:	mysql-devel >= 4.1.7
-BuildRequires:	lm_sensors-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	net-snmp-mibs
 BuildRequires:	onig-devel >= 5.9.2
 BuildRequires:	pam-devel
 BuildRequires:	postgresql-devel
 BuildRequires:	readline-devel
-BuildRequires:	recode-devel
-BuildRequires:	t1lib-devel
 BuildRequires:	tidy-devel
 BuildRequires:	unixODBC-devel >= 2.2.1
-BuildRequires:	xmlrpc-epi-devel
-# For _pre_useradd
-BuildRequires:	rpm-helper
 %if %{build_libmagic}
 BuildRequires:	magic-devel
 %endif
@@ -287,7 +274,6 @@ Group:		Development/C
 Requires:	%{libname} >= %{EVRD}
 Requires:	autoconf automake slibtool
 Requires:	bison
-Requires:	byacc
 Requires:	chrpath
 Requires:	dos2unix
 Requires:	flex
@@ -515,18 +501,6 @@ Requires:	%{libname} >= %{EVRD}
 %description	gmp
 This is a dynamic shared object (DSO) for PHP that will add arbitrary length
 number support using the GNU MP library.
-
-%package	hash
-Summary:	HASH Message Digest Framework
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	hash
-Native implementations of common message digest algorithms using a generic
-factory method.
-
-Message Digest (hash) engine. Allows direct or incremental processing of
-arbitrary length messages using a variety of hashing algorithms.
 
 %package	iconv
 Summary:	Iconv extension module for PHP
@@ -816,26 +790,9 @@ through command history. Because of the interactive nature of this library, it
 will be of little use for writing Web applications, but may be useful when
 writing scripts used from a command line.
 
-%package	recode
-Summary:	Recode extension module for PHP
-Group:		Development/PHP
-Requires:	%{libname} >= %{EVRD}
-
-%description	recode
-This is a dynamic shared object (DSO) for PHP that will add recode support
-using the recode library.
-
-This module contains an interface to the GNU Recode library. The GNU Recode
-library converts files between various coded character sets and surface
-encodings. When this cannot be achieved exactly, it may get rid of the
-offending characters or fall back on approximations. The library recognises or
-produces nearly 150 different character sets and is able to convert files
-between almost any pair. Most RFC 1345 character sets are supported.
-
 %package	session
 Summary:	Session extension module for PHP
 Group:		Development/PHP
-Requires(pre,postun): rpm-helper
 Requires:	%{libname} >= %{EVRD}
 Requires:	www-user
 Requires(pre):	www-user
@@ -1029,10 +986,6 @@ Summary:	PHP FastCGI Process Manager
 Group:		Development/Other
 Requires:	www-user
 Requires(pre):	www-user
-Requires(post): rpm-helper
-Requires(preun): rpm-helper
-Requires(pre): rpm-helper
-Requires(postun): rpm-helper
 Requires:	%{libname} >= %{EVRD}
 Requires:	php-ctype >= %{EVRD}
 Requires:	php-filter >= %{EVRD}
@@ -1065,7 +1018,6 @@ libphp8_common.
 %package -n	apache-mod_php
 Summary:	The PHP HTML-embedded scripting language for use with apache
 Group:		System/Servers
-Requires(pre,postun):	rpm-helper
 Requires:	%{libname} = %{EVRD}
 Requires:	apache-base >= 2.4.0
 Requires:	apache-modules >= 2.4.0
@@ -1141,9 +1093,6 @@ if ! [ -f %{_datadir}/misc/magic.mgc ]; then
 fi
 %endif
 
-# nuke bogus checks becuase i fixed this years ago in our recode package
-rm -f ext/recode/config9.m4
-
 # Change perms otherwise rpm would get fooled while finding requires
 find -name "*.inc" | xargs chmod 644
 # Can't use xargs here because of spaces in filenames
@@ -1184,10 +1133,9 @@ find php-devel -name "*.dsp" | xargs rm -f
 find php-devel -name "*.mak" | xargs rm -f
 find php-devel -name "*.w32" | xargs rm
 
-# maek sure using system libs
+# make sure using system libs
 rm -rf ext/pcre/pcrelib
 rm -rf ext/pdo_sqlite/sqlite
-rm -rf ext/xmlrpc/libxmlrpc
 
 scripts/dev/genfiles
 
@@ -1198,16 +1146,17 @@ touch configure.ac
 ./buildconf --force
 
 %build
-%serverbuild
+# Keep ${CFLAGS}/${CXXFLAGS}/${LDFLAGS} so a %%pgo pass can inject
+# -fprofile-generate/use. %serverbuild is currently a no-op.
+%set_build_flags
 
 export CC=%{__cc}
 export CXX=%{__cxx}
 
-# it does not work with -fPIE and someone added that to the serverbuild macro...
-CFLAGS=`echo $CFLAGS|sed -e 's|-fPIE||g'`
-CXXFLAGS=`echo $CXXFLAGS|sed -e 's|-fPIE||g'`
+# PIE breaks the engine
+CFLAGS=`echo ${CFLAGS:-%{optflags}} | sed -e 's|-fPIE||g'`
+CXXFLAGS=`echo ${CXXFLAGS:-%{optflags}} | sed -e 's|-fPIE||g'`
 
-#export CFLAGS="`echo ${CFLAGS} | sed s/O2/O0/` -fPIC -L%{_libdir} -fno-strict-aliasing"
 export CFLAGS="${CFLAGS} -fPIC -L%{_libdir} -fno-strict-aliasing"
 export CXXFLAGS="${CFLAGS}"
 export RPM_OPT_FLAGS="${CFLAGS}"
@@ -1245,15 +1194,25 @@ export oldstyleextdir=yes
 export EXTENSION_DIR="%{_libdir}/php/extensions"
 export PROG_SENDMAIL="%{_sbindir}/sendmail"
 export GD_SHARED_LIBADD="$GD_SHARED_LIBADD -lm"
-SAFE_LDFLAGS=`echo %{build_ldflags}|sed -e 's|-Wl,--no-undefined||g'`
+# Use $LDFLAGS (PGO injects -fprofile-generate/use there) rather than
+# re-expanding %{build_ldflags}, which is snapshotted without PGO flags.
+SAFE_LDFLAGS=`echo ${LDFLAGS:-%{build_ldflags}} | sed -e 's|-Wl,--no-undefined||g'`
 export EXTRA_LIBS="-lz"
 export LDFLAGS="$SAFE_LDFLAGS"
 
 # never use "--disable-rpath", it does the opposite
 
-# Configure php8
-# FIXME switch to external gd (--with-gd=shared,%_prefix) once php bug #60108 is fixed
+# Stay on ZTS. Cooker already ships TS modules, and internals is
+# moving toward ZTS-only (PHP 9 pre-RFC): FrankenPHP, ext-parallel,
+# and dropping the NTS/ZTS split. FPM/CLI still run single-threaded.
+# https://discourse.thephp.foundation/t/5754
 for i in fpm cgi cli embed apxs litespeed; do
+	# apxs needs httpd-prefork (apache-base). Skip if it is not
+	# installed so a local PGO test can still train FPM/CLI/CGI.
+	if [ "$i" = apxs ] && [ ! -x %{_bindir}/httpd-prefork ]; then
+		echo "Skipping apache SAPI: %{_bindir}/httpd-prefork not found"
+		continue
+	fi
 	mkdir build-$i
 	cd build-$i
 ../configure \
@@ -1279,11 +1238,11 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--enable-rtld-now \
 	--with-layout=GNU \
 	--with-external-pcre \
+	--with-external-uriparser \
 	--with-libdir=%{_lib} \
 	--with-config-file-path=%{_sysconfdir} \
 	--with-config-file-scan-dir=%{_sysconfdir}/php.d \
 	--disable-debug  \
-	--with-zlib=%{_prefix} \
 	--with-pdo-odbc=unixODBC \
 	--with-zlib=shared,%{_prefix} --with-zlib-dir=%{_prefix} \
 	--with-openssl=shared,%{_prefix} \
@@ -1296,20 +1255,18 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--enable-dba=shared --with-gdbm --with-db4 --with-cdb  \
 	--enable-dom=shared,%{_prefix} \
 	--with-enchant=shared,%{_prefix} \
-	--with-exif=shared,%{_prefix} \
 	--with-sodium=shared,%{_prefix} \
 	--enable-exif \
 	--enable-fileinfo \
 	--enable-filter=shared \
 	--enable-intl=shared \
 	--with-openssl-dir=%{_prefix} --enable-ftp=shared \
-	--with-zlib-dir=%{_prefix} \
 	--with-gettext=shared,%{_prefix} \
 	--with-gmp=shared,%{_prefix} \
 	--with-iconv=shared \
 	--with-ldap=shared,%{_prefix} --with-ldap-sasl=%{_prefix} \
 	--enable-mbstring=shared,%{_prefix} --enable-mbregex \
-	--with-mysql-sock=/run/mysqld/mysql.sock --with-zlib-dir=%{_prefix} \
+	--with-mysql-sock=/run/mysqld/mysql.sock \
 	--with-mysqli=shared,mysqlnd \
 	--enable-mysqlnd=shared,%{_prefix} \
 	--with-unixODBC=shared,%{_prefix} \
@@ -1333,12 +1290,10 @@ for i in fpm cgi cli embed apxs litespeed; do
 	--enable-tokenizer=shared,%{_prefix} \
 	--enable-xml=shared,%{_prefix} \
 	--enable-xmlreader=shared,%{_prefix} \
-	--with-xmlrpc=shared,%{_prefix} \
 	--enable-xmlwriter=shared,%{_prefix} \
 	--with-xsl=shared,%{_prefix} \
 	--enable-gd=shared --with-external-gd \
 	--with-zip=shared,%{_prefix} \
-	--with-mhash=shared \
 	--with-system-tzdata \
 	|| (cat config.log && exit 1)
 
@@ -1346,6 +1301,269 @@ for i in fpm cgi cli embed apxs litespeed; do
 
 cd ..
 done
+
+# Train the instrumented binaries on the Zend VM, JIT compiler, FPM
+# request path, and common extension C paths. Do not use `make test`
+# (slow/flaky) or PHP's `make prof-gen` (GCC .gcda flow).
+%pgo
+export LLVM_PROFILE_FILE="%{_pgo_profile_dir}/php-%%m-%%p.profraw"
+
+find_bin() {
+	_sapi="$1"
+	_name="$2"
+	_wrapper=
+	for _cand in \
+		"build-$_sapi/sapi/$_sapi/$_name" \
+		"build-$_sapi/sapi/$_sapi/.libs/$_name" \
+		"build-$_sapi/sapi/$_sapi/.libs/lt-$_name"; do
+		[ -x "$_cand" ] || continue
+		if [ "$(head -c 2 "$_cand" 2>/dev/null)" != "#!" ]; then
+			printf '%s\n' "$_cand"
+			return 0
+		fi
+		[ -n "$_wrapper" ] || _wrapper=$_cand
+	done
+	if [ -n "$_wrapper" ]; then
+		printf '%s\n' "$_wrapper"
+		return 0
+	fi
+	return 1
+}
+
+moddir_for() {
+	if ls "build-$1/modules/"*.so >/dev/null 2>&1; then
+		printf '%s\n' "build-$1/modules"
+	elif ls "build-$1/modules/.libs/"*.so >/dev/null 2>&1; then
+		printf '%s\n' "build-$1/modules/.libs"
+	fi
+}
+
+# Probe with CLI; emit -d extension=/abs/path.so for the given tree.
+collect_exts() {
+	_probe="$1"
+	_dir="$2"
+	_out=
+	[ -n "$_dir" ] || return 0
+	for _name in openssl zlib ctype filter tokenizer session iconv mbstring \
+		intl curl gd zip bz2 phar sodium sqlite3 pdo pdo_sqlite xml \
+		dom xmlreader xmlwriter xsl soap sockets posix bcmath gmp \
+		calendar ftp gettext shmop sysvsem sysvshm sysvmsg tidy \
+		enchant dba fileinfo; do
+		_so="$_dir/$_name.so"
+		[ -f "$_so" ] || continue
+		_so=$(readlink -f "$_so")
+		if "$_probe" -n $_out -d extension="$_so" -r 'exit(0);' >/dev/null 2>&1; then
+			_out="$_out -d extension=$_so"
+		fi
+	done
+	printf '%s\n' "$_out"
+}
+
+PHP=$(find_bin cli php) || {
+	echo "PGO: instrumented php CLI missing"
+	exit 1
+}
+FPM=$(find_bin fpm php-fpm) || {
+	echo "PGO: instrumented php-fpm missing"
+	exit 1
+}
+CGI=$(find_bin cgi php-cgi) || true
+
+cli_exts=$(collect_exts "$PHP" "$(moddir_for cli)")
+cgi_exts=$(collect_exts "$PHP" "$(moddir_for cgi)")
+fpm_exts=$(collect_exts "$PHP" "$(moddir_for fpm)")
+
+jit="-d opcache.enable=1 -d opcache.enable_cli=1 -d opcache.jit=tracing -d opcache.jit_buffer_size=64M -d memory_limit=1G"
+# FPM is not CLI; enable_cli does not apply. enable=1 is the web default.
+fpm_jit="-d opcache.enable=1 -d opcache.jit=tracing -d opcache.jit_buffer_size=64M -d memory_limit=1G"
+
+# Interpreter-heavy, then JIT-heavy. Both matter.
+"$PHP" -n -d memory_limit=1G Zend/bench.php
+"$PHP" -n -d memory_limit=1G Zend/micro_bench.php
+"$PHP" -n $jit Zend/bench.php
+"$PHP" -n $jit Zend/micro_bench.php
+
+cat > .pgo-trainer.php <<'EOF'
+<?php
+$acc = 0;
+$arr = [];
+for ($i = 0; $i < 8000; $i++) {
+	$arr[$i] = hash('xxh3', "k$i") . str_repeat(chr(65 + ($i % 26)), 3);
+}
+sort($arr);
+$joined = implode(',', $arr);
+$joined = str_replace('A', 'a', $joined);
+preg_match_all('/[0-9a-f]{8}/', $joined, $m);
+$acc += count($m[0]);
+$payload = json_encode(['n' => $acc, 't' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM), 's' => substr($joined, 0, 64)], JSON_THROW_ON_ERROR);
+json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+$gen = function ($n) {
+	for ($i = 0; $i < $n; $i++) {
+		yield $i * $i;
+	}
+};
+foreach ($gen(2000) as $v) {
+	$acc += $v;
+}
+$acc += strlen($joined);
+if (extension_loaded('mbstring')) {
+	$acc += mb_strlen($joined);
+	mb_convert_encoding($joined, 'UTF-8', 'UTF-8');
+	mb_strtolower($joined);
+}
+if (extension_loaded('openssl')) {
+	hash_hmac('sha256', $joined, 'pgo');
+	openssl_random_pseudo_bytes(16);
+}
+if (extension_loaded('intl')) {
+	Normalizer::normalize('Ångström', Normalizer::FORM_C);
+}
+echo $acc, "\n";
+EOF
+
+cat > .pgo-fcgi.php <<'EOF'
+<?php
+// Minimal FastCGI client: unix-socket, SCRIPT_FILENAME, N repeats.
+if ($argc < 3) {
+	fwrite(STDERR, "usage: pgo-fcgi.php SOCKET SCRIPT [REPEAT]\n");
+	exit(1);
+}
+$sock = $argv[1];
+$script = realpath($argv[2]);
+if ($script === false) {
+	fwrite(STDERR, "missing script {$argv[2]}\n");
+	exit(1);
+}
+$repeat = isset($argv[3]) ? max(1, (int) $argv[3]) : 1;
+
+function fcgi_rec(int $type, string $content, int $req = 1): string {
+	$len = strlen($content);
+	$pad = (8 - ($len % 8)) % 8;
+	return pack('CCnnCx', 1, $type, $req, $len, $pad) . $content . str_repeat("\0", $pad);
+}
+function fcgi_nv(string $n, string $v): string {
+	$nl = strlen($n);
+	$vl = strlen($v);
+	$h = ($nl < 128 ? chr($nl) : pack('N', $nl | 0x80000000))
+		. ($vl < 128 ? chr($vl) : pack('N', $vl | 0x80000000));
+	return $h . $n . $v;
+}
+
+$params = '';
+foreach ([
+	'SCRIPT_FILENAME' => $script,
+	'SCRIPT_NAME' => '/' . basename($script),
+	'REQUEST_METHOD' => 'GET',
+	'QUERY_STRING' => '',
+	'REQUEST_URI' => '/' . basename($script),
+	'DOCUMENT_ROOT' => dirname($script),
+	'SERVER_SOFTWARE' => 'pgo-trainer',
+	'SERVER_PROTOCOL' => 'HTTP/1.0',
+	'GATEWAY_INTERFACE' => 'CGI/1.1',
+	'REMOTE_ADDR' => '127.0.0.1',
+	'SERVER_NAME' => 'localhost',
+	'REDIRECT_STATUS' => '200',
+] as $k => $v) {
+	$params .= fcgi_nv($k, $v);
+}
+
+for ($i = 0; $i < $repeat; $i++) {
+	$fp = stream_socket_client('unix://' . $sock, $errno, $errstr, 5);
+	if (!$fp) {
+		fwrite(STDERR, "fcgi connect: $errstr\n");
+		exit(1);
+	}
+	fwrite($fp, fcgi_rec(1, pack('nCxxxxx', 1, 0)));
+	fwrite($fp, fcgi_rec(4, $params));
+	fwrite($fp, fcgi_rec(4, ''));
+	fwrite($fp, fcgi_rec(5, ''));
+	$ok = false;
+	while (!feof($fp)) {
+		$hdr = fread($fp, 8);
+		if ($hdr === false || strlen($hdr) < 8) {
+			break;
+		}
+		$u = unpack('Cver/Ctype/nreq/nclen/Cplen/Cres', $hdr);
+		$need = $u['clen'] + $u['plen'];
+		$got = '';
+		while ($need > 0 && !feof($fp)) {
+			$chunk = fread($fp, $need);
+			if ($chunk === false || $chunk === '') {
+				break;
+			}
+			$got .= $chunk;
+			$need -= strlen($chunk);
+		}
+		if ($u['type'] === 3) {
+			$ok = true;
+			break;
+		}
+	}
+	fclose($fp);
+	if (!$ok) {
+		fwrite(STDERR, "fcgi: no END_REQUEST\n");
+		exit(1);
+	}
+}
+EOF
+
+"$PHP" -n $jit $cli_exts .pgo-trainer.php
+
+if [ -n "$CGI" ]; then
+	"$CGI" -n $jit $cgi_exts -T 20 .pgo-trainer.php >/dev/null
+fi
+
+# FPM is the SAPI we actually ship for web. Train request startup
+# (many trainer hits) plus a couple of long VM/JIT runs. clear_env=no
+# so workers inherit LLVM_PROFILE_FILE; %p keeps worker profiles apart.
+fpm_sock=/tmp/php-pgo-$$.sock
+fpm_pidfile=/tmp/php-pgo-$$.pid
+fpm_log=/tmp/php-pgo-$$.log
+fpm_conf=/tmp/php-pgo-$$.conf
+cat > "$fpm_conf" <<EOF
+[global]
+pid = $fpm_pidfile
+error_log = $fpm_log
+daemonize = no
+
+[www]
+listen = $fpm_sock
+listen.mode = 0666
+pm = static
+pm.max_children = 2
+clear_env = no
+catch_workers_output = yes
+EOF
+
+fpm_pid=
+cleanup_fpm() {
+	if [ -n "$fpm_pid" ] && kill -0 "$fpm_pid" 2>/dev/null; then
+		kill -QUIT "$fpm_pid" 2>/dev/null || kill -TERM "$fpm_pid" 2>/dev/null || true
+		wait "$fpm_pid" 2>/dev/null || true
+	fi
+	rm -f "$fpm_sock" "$fpm_pidfile" "$fpm_conf" "$fpm_log" \
+		.pgo-trainer.php .pgo-fcgi.php
+}
+trap cleanup_fpm EXIT
+
+"$FPM" -n -F -R -y "$fpm_conf" $fpm_jit $fpm_exts &
+fpm_pid=$!
+
+_tries=0
+while [ ! -S "$fpm_sock" ]; do
+	_tries=$((_tries + 1))
+	if [ "$_tries" -gt 15 ] || ! kill -0 "$fpm_pid" 2>/dev/null; then
+		echo "PGO: php-fpm did not start"
+		[ -f "$fpm_log" ] && cat "$fpm_log"
+		exit 1
+	fi
+	sleep 1
+done
+
+here=$(pwd)
+"$PHP" -n .pgo-fcgi.php "$fpm_sock" "$here/.pgo-trainer.php" 40
+"$PHP" -n .pgo-fcgi.php "$fpm_sock" "$here/Zend/bench.php" 1
+"$PHP" -n .pgo-fcgi.php "$fpm_sock" "$here/Zend/micro_bench.php" 1
 
 %install
 
@@ -1358,18 +1576,21 @@ install -d %{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_sysconfdir}/cron.d
 install -d %{buildroot}/var/lib/php
 
-# Make apxs great again^H^H^H^H^H^H^H^H^H^H^Hhappy
-# during build-apxs install
-mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf
-cp %{_sysconfdir}/httpd/conf/httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
+# Make apxs happy during build-apxs install
+if [ -d build-apxs ]; then
+	mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf
+	cp %{_sysconfdir}/httpd/conf/httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
+fi
 
 for i in fpm cgi cli apxs embed litespeed; do
+	[ -d build-$i ] || continue
 	make -C build-$i install \
 		INSTALL_ROOT=%{buildroot} LIBTOOL=slibtool-shared
 done
 
-# This was only needed for make install - so drop it
-rm %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
+if [ -f %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf ]; then
+	rm %{buildroot}%{_sysconfdir}/httpd/conf/httpd.conf
+fi
 
 # extensions
 echo "extension = openssl.so"		> %{buildroot}%{_sysconfdir}/php.d/21_openssl.ini
@@ -1386,7 +1607,6 @@ echo "extension = ftp.so"		> %{buildroot}%{_sysconfdir}/php.d/22_ftp.ini
 echo "extension = gd.so"		> %{buildroot}%{_sysconfdir}/php.d/23_gd.ini
 echo "extension = gettext.so"		> %{buildroot}%{_sysconfdir}/php.d/24_gettext.ini
 echo "extension = gmp.so"		> %{buildroot}%{_sysconfdir}/php.d/25_gmp.ini
-#echo "extension = hash.so"		> %{buildroot}%{_sysconfdir}/php.d/54_hash.ini
 echo "extension = iconv.so"		> %{buildroot}%{_sysconfdir}/php.d/26_iconv.ini
 echo "extension = intl.so"		> %{buildroot}%{_sysconfdir}/php.d/27_intl.ini
 echo "extension = ldap.so"		> %{buildroot}%{_sysconfdir}/php.d/28_ldap.ini
@@ -1405,7 +1625,6 @@ echo "extension = mysqli.so"		> %{buildroot}%{_sysconfdir}/php.d/78_mysqli.ini
 echo "extension = pgsql.so"		> %{buildroot}%{_sysconfdir}/php.d/42_pgsql.ini
 echo "extension = posix.so"		> %{buildroot}%{_sysconfdir}/php.d/43_posix.ini
 echo "extension = readline.so"		> %{buildroot}%{_sysconfdir}/php.d/45_readline.ini
-#echo "extension = recode.so"		> %{buildroot}%{_sysconfdir}/php.d/46_recode.ini
 echo "extension = session.so"		> %{buildroot}%{_sysconfdir}/php.d/47_session.ini
 echo "extension = shmop.so"		> %{buildroot}%{_sysconfdir}/php.d/48_shmop.ini
 echo "extension = snmp.so"		> %{buildroot}%{_sysconfdir}/php.d/50_snmp.ini
@@ -1493,6 +1712,15 @@ cp %{S:21} %{buildroot}%{_sysconfdir}/nginx/http.conf.d/php.conf
 # Increase memory limit to make stuff like nextcloud happy
 cat >%{buildroot}%{_sysconfdir}/php.d/00_memory.ini <<EOF
 memory_limit = 1G
+EOF
+
+# Opcache is built into the engine as of 8.5. Tracing JIT on by default;
+# leave opcache.enable_cli at the upstream default (off) so short CLI
+# scripts do not pay JIT startup.
+cat >%{buildroot}%{_sysconfdir}/php.d/05_opcache.ini <<EOF
+opcache.enable=1
+opcache.jit=tracing
+opcache.jit_buffer_size=64M
 EOF
 
 %if 0
@@ -1608,10 +1836,6 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/25_gmp.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/gmp.so
 
-#files hash
-#attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/54_hash.ini
-#attr(0755,root,root) %{_libdir}/php/extensions/hash.so
-
 %files iconv
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/26_iconv.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/iconv.so
@@ -1687,10 +1911,6 @@ fi
 %files readline
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/45_readline.ini
 %attr(0755,root,root) %{_libdir}/php/extensions/readline.so
-
-#files recode
-#attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/46_recode.ini
-#attr(0755,root,root) %{_libdir}/php/extensions/recode.so
 
 %files session
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/47_session.ini
@@ -1791,6 +2011,7 @@ fi
 
 %files -n php-ini
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/00_memory.ini
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/05_opcache.ini
 %dir %{_sysconfdir}/php.d
 %dir %{_libdir}/php
 %dir %{_libdir}/php/extensions
