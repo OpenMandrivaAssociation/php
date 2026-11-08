@@ -1670,6 +1670,13 @@ sed -i -e "s|/usr/lib|%{_libdir}|" %{buildroot}%{_sysconfdir}/cron.d/php
 
 mkdir -p %{buildroot}%{_unitdir}
 cp build-fpm/sapi/fpm/php-fpm.service %{buildroot}%{_unitdir}/php-fpm.service
+# Type=notify already tells systemd the main PID. The upstream PIDFile= is
+# %{_localstatedir}/run/php-fpm.pid -- /var/lib/run/php-fpm.pid with OM's
+# localstatedir -- which php-fpm never writes (pid= is unset in php-fpm.conf),
+# so systemd logs "Can't open PID file" at every start; and the template unit
+# below inherited the same single path for every instance. Drop it before the
+# template is derived.
+sed -i '/^PIDFile=/d' %{buildroot}%{_unitdir}/php-fpm.service
 # Don't run as root
 sed -i -e '/Type=notify/iUser=www\nGroup=www' %{buildroot}%{_unitdir}/php-fpm.service
 # Create a template unit

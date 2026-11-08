@@ -6,6 +6,6 @@
     notifempty
     nocompress
     postrotate
-	/bin/kill -SIGUSR1 `cat /run/php-fpm/php-fpm.pid 2>/dev/null` > /dev/null 2>&1 || :
+	/usr/bin/systemctl kill --kill-whom=main --signal=USR1 php-fpm.service 'php-fpm@*.service' >/dev/null 2>&1 || :
     endscript
 }
