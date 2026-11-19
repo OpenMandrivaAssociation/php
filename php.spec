@@ -1206,6 +1206,8 @@ export LDFLAGS="$SAFE_LDFLAGS"
 # moving toward ZTS-only (PHP 9 pre-RFC): FrankenPHP, ext-parallel,
 # and dropping the NTS/ZTS split. FPM/CLI still run single-threaded.
 # https://discourse.thephp.foundation/t/5754
+# 8.6's embed SAPI links the CLI objects into libphp for do_php_cli(),
+# so that build must not pass --disable-cli.
 for i in fpm cgi cli embed apxs litespeed; do
 	# apxs needs httpd-prefork (apache-base). Skip if it is not
 	# installed so a local PGO test can still train FPM/CLI/CGI.
@@ -1219,7 +1221,7 @@ for i in fpm cgi cli embed apxs litespeed; do
 	`[ $i = fpm ] && echo --disable-cli --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-fpm-systemd --with-fpm-acl ` \
 	`[ $i = cgi ] && echo --disable-cli` \
 	`[ $i = cli ] && echo --disable-cgi --enable-cli` \
-	`[ $i = embed ] && echo --disable-cli --enable-embed=shared` \
+	`[ $i = embed ] && echo --disable-cgi --enable-cli --enable-embed=shared` \
 	`[ $i = apxs ] && echo --with-apxs2=%{_bindir}/apxs` \
 	`[ $i = litespeed ] && echo --enable-litespeed` \
 	--build=%{_build} \
